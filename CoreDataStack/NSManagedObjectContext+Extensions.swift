@@ -9,7 +9,6 @@
 import CoreData
 
 public extension NSManagedObjectContext {
-
     public func saveContextAndWait() -> Bool {
         var success = true
 

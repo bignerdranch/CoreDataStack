@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 extension NSError {
-    func errorByCombiningError(secondError: NSError) -> NSError {
+    public func errorByCombiningError(secondError: NSError) -> NSError {
         var userInfo: [NSObject:AnyObject]!
         var errors = [secondError]
         if let userInfo = userInfo where code == NSValidationMultipleErrorsError, let originalErrors = userInfo[NSDetailedErrorsKey] as? [NSError] {

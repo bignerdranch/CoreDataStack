@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-internal enum CoreDataStackType {
+public enum CoreDataStackType {
     case ThreadConfined
     case NestedMOC
 }
@@ -81,7 +81,7 @@ public class CoreDataStack: NSObject {
 }
 
 public class NestedMOCStack: CoreDataStack {
-    lazy var privateQueueContext: NSManagedObjectContext! = {
+    public lazy var privateQueueContext: NSManagedObjectContext! = {
         let coordinator = self.persistentStoreCoordinator
         let managedObjectContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
         managedObjectContext.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
