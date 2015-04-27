@@ -194,7 +194,7 @@ public class ThreadConfinementStack: CoreDataStack {
     // MARK: - Change Merging Notifications
 
     @objc private func mergeChangesFromBackgroundContextSaveNotification(notification: NSNotification) {
-        mainContext.performBlock() { [unowned self] in
+        mainContext.performBlockAndWait() { [unowned self] in
             self.mainContext.mergeChangesFromContextDidSaveNotification(notification)
         }
     }
