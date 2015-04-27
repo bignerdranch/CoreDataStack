@@ -44,9 +44,9 @@ public class CoreDataStack: NSObject {
         managedObjectModelName = modelName
     }
 
-    public required convenience init(modelName: String, inBundle bundle: NSBundle) {
+    public required convenience init(modelName: String, inBundle: NSBundle) {
         self.init(modelName: modelName)
-        self.bundle = bundle
+        bundle = inBundle
     }
 
     // MARK: - Public Functions
@@ -136,11 +136,15 @@ public class NestedMOCStack: CoreDataStack {
 }
 
 public class ThreadConfinementStack: CoreDataStack {
-    let backGroundQueue = dispatch_queue_create("com.bignerdranch.coredata.backgroundqueue", nil)
-    private var backgroundContextsNeedingRefresh = [(NSManagedObjectContext, dispatch_queue_t)]()
+    private var backgroundContextsNeedingRefresh = [NSManagedObjectContext]()
 
+    /**
+    Primary managed object context for main queue work.
+    
+    Will receive change updates from all worker managed object contexts.
+    */
     public lazy var mainContext: NSManagedObjectContext! = {
-        let moc = NSManagedObjectContext(concurrencyType: .ConfinementConcurrencyType)
+        let moc = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
         moc.persistentStoreCoordinator = self.persistentStoreCoordinator
         moc.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
         moc.name = "Main Context (Thread Confinement Pattern)"
@@ -151,41 +155,53 @@ public class ThreadConfinementStack: CoreDataStack {
             object: moc)
 
         return moc
-    }()
+        }()
 
-    public func newBackgroundContext(#automaticallyRefreshWithMainContextSaves: Bool) -> (context: NSManagedObjectContext, contextQueue: dispatch_queue_t) {
-        let queue = dispatch_queue_create("com.bignerdranch.coredata.workerqueue", nil)
+    /**
+    Creates a new background managed object context for performing work on a background queue.
+
+    :param: shouldReceiveUpdates A boolean value specifying if this background context
+                                    should be refreshed with save changes 
+                                    from the main queue managed object context. 
+                                    The main queue context will be updated with changes from this context
+                                    irrespective to this property value.
+                                    Default value is false.
+
+    :returns: NSManagedObjectContext The new background context.
+    */
+    public func newBackgroundContext(shouldReceiveUpdates: Bool = false) -> NSManagedObjectContext {
         var context: NSManagedObjectContext!
-        dispatch_sync(queue) { [unowned self] in
-            context = NSManagedObjectContext(concurrencyType: .ConfinementConcurrencyType)
-            context.persistentStoreCoordinator = self.persistentStoreCoordinator
-            context.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
-            context.name = "Background Context (Thread Confinement Pattern)"
 
-            // Refresh the main MOC with the background MOC's Changes
-            NSNotificationCenter.defaultCenter().addObserver(self,
-                selector: "mergeChangesFromBackgroundContextSaveNotification:",
-                name: NSManagedObjectContextDidSaveNotification,
-                object: context)
+        context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+        context.persistentStoreCoordinator = persistentStoreCoordinator
+        context.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
+        context.name = "Background Context (Thread Confinement Pattern)"
 
-            // Optionally refresh this worker moc whenever the main MOC saves.
-            if automaticallyRefreshWithMainContextSaves {
-                self.backgroundContextsNeedingRefresh.append((context, queue))
-            }
+        // Refresh the main MOC with the background MOC's Changes
+        NSNotificationCenter.defaultCenter().addObserver(self,
+            selector: "mergeChangesFromBackgroundContextSaveNotification:",
+            name: NSManagedObjectContextDidSaveNotification,
+            object: context)
+
+        // Optionally refresh this worker moc whenever the main MOC saves.
+        if shouldReceiveUpdates {
+            backgroundContextsNeedingRefresh.append(context)
         }
 
-        return (context, queue)
+        return context
     }
 
+    // MARK: - Change Merging Notifications
+
     @objc private func mergeChangesFromBackgroundContextSaveNotification(notification: NSNotification) {
-        dispatch_sync(dispatch_get_main_queue()) {
+        mainContext.performBlock() { [unowned self] in
             self.mainContext.mergeChangesFromContextDidSaveNotification(notification)
         }
     }
 
     @objc private func mergeChangedFromMainQueueContextSaveNotification(notification: NSNotification) {
-        for (context, queue) in self.backgroundContextsNeedingRefresh {
-            dispatch_async(queue) {
+        for context in backgroundContextsNeedingRefresh {
+            context.performBlockAndWait() {
                 context.mergeChangesFromContextDidSaveNotification(notification)
             }
         }
