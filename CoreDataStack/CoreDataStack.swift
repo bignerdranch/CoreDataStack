@@ -38,8 +38,6 @@ public class CoreDataStack: NSObject {
 
     // MARK: - Lifecycle
 
-    // TODO: rcedwards Make this failable
-
     public required init(modelName: String) {
         managedObjectModelName = modelName
     }
