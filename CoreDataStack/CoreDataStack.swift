@@ -14,6 +14,14 @@ public enum CoreDataStackType {
     case NestedMOC
 }
 
+/**
+Base class for creating SQLite backed CoreData stacks.
+
+More or less an abstract base class since the persistentStoreCoordinator is a private property.
+
+See NestedMOCStack and ThreadConfinementStack.
+*/
+
 public class CoreDataStack: NSObject {
 
     private let managedObjectModelName: String
@@ -38,19 +46,35 @@ public class CoreDataStack: NSObject {
 
     // MARK: - Lifecycle
 
-    // TODO: rcedwards Make this failable
+    /**
+    Creates a SQLite backed CoreData stack for a give model in the current NSBundle.
 
+    :param: modelName String Name of the xcdatamodel for the CoreData Stack.
+
+    :returns: CoreDataStack Newly created stack.
+    */
     public required init(modelName: String) {
         managedObjectModelName = modelName
     }
 
-    public required convenience init(modelName: String, inBundle bundle: NSBundle) {
+    /**
+    Convenience to supply a bundle other than the current bundle
+
+    :param: modelName Name of the xcdatamodel for the CoreData Stack.
+    :param: inBundle NSBundle that contains the XCDataModel.
+
+    :returns: CoreDataStack Newly created stack.
+    */
+    public required convenience init(modelName: String, inBundle: NSBundle) {
         self.init(modelName: modelName)
-        self.bundle = bundle
+        bundle = inBundle
     }
 
     // MARK: - Public Functions
 
+    /**
+    Removes the SQLite store from disk and creates a fresh NSPersistentStore.
+    */
     public func resetPersistantStoreCoordinator() {
         persistentStoreCoordinator = nil
         var fileRemoveError: NSError?
@@ -74,13 +98,35 @@ public class CoreDataStack: NSObject {
             options: nil,
             error: &error) == nil {
             coordinator = nil
-             assertionFailure("Unresolved CoreData error while seeting PersistentStoreCoordinator \(error), \(error!.userInfo)")
+             assertionFailure("Unresolved CoreData error while setting PersistentStoreCoordinator \(error), \(error!.userInfo)")
         }
         return coordinator!
     }
 }
 
+
+/**
+Three layer CoreData stack comprised of:
+
+* A primary background queue context with a persistent store coordinator
+* A main queue context that is a child of the primary queue
+* A method for spawning many background worker contexts that are children of the main queue context
+
+Calling save() on any NSMangedObject context, belonging to the stack, will automatically bubble the changes all the way to the NSPersistentStore
+*/
+
 public class NestedMOCStack: CoreDataStack {
+    /**
+    Primary persisting background managed object context. This is the top level context that possess an
+    NSPersistentStoreCoordinator and saves changes to disk on a background thread.
+
+    Fetching, Inserting, Deleting or Updating managed objects should occur on a child of this context rather than directly.
+
+    NSBatchUpdateRequest and NSAsynchronousFetchRequest require a context with a persistent store connected directly,
+    if this was not the case this context would be marked private.
+
+    :returns: NSManagedObjectContext The primary persisting background context.
+    */
     public lazy var privateQueueContext: NSManagedObjectContext! = {
         let coordinator = self.persistentStoreCoordinator
         let managedObjectContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
@@ -91,6 +137,13 @@ public class NestedMOCStack: CoreDataStack {
         return managedObjectContext
         }()
 
+    /**
+    The main queue context for any work that will be performed on the main thread.
+    Its parent context is the primary private queue context that persist the data to disk.
+    Making a save() call on this context will automatically trigger a save on its parent via NSNotification.
+
+    :returns: NSManagedObjectContext The main queue context.
+    */
     public lazy var mainQueueContext: NSManagedObjectContext! = {
         let moc = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
         moc.parentContext = self.privateQueueContext
@@ -105,7 +158,13 @@ public class NestedMOCStack: CoreDataStack {
         return moc
         }()
 
-    // MARK: - Working MOCs
+    /**
+    Returns a new background worker managed object context as a child of the main queue context.
+    
+    Calling save() on this managed object context will automatically trigger a save on its parent context via NSNotification observing.
+
+    :returns: NSManagedObjectContext The new worker context.
+    */
     public func newBackgroundWorkerMOC() -> NSManagedObjectContext {
         let moc = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
         moc.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
@@ -121,6 +180,7 @@ public class NestedMOCStack: CoreDataStack {
     }
 
     // MARK: - Saving
+
     @objc private func stackMemberContextDidSaveNotification(notification: NSNotification) {
         var success = false
         if notification.object as? NSManagedObjectContext == mainQueueContext {
@@ -135,12 +195,26 @@ public class NestedMOCStack: CoreDataStack {
     }
 }
 
-public class ThreadConfinementStack: CoreDataStack {
-    let backGroundQueue = dispatch_queue_create("com.bignerdranch.coredata.backgroundqueue", nil)
-    private var backgroundContextsNeedingRefresh = [(NSManagedObjectContext, dispatch_queue_t)]()
+/**
+A CoreData stack comprised of:
 
+* One primary queue context with an NSPersistentStoreCoordinator
+* A method to create background worker contexts, also with the same NSPersistentStoreCoordinator
+
+The primary queue context is updated with all changes from worker contexts saves by performing a merge via mergeChangesFromContextDidSaveNotification.
+Worker contexts can opt in to getting refreshed when the main queue saves using the same mergeChangesFromContextDidSaveNotification. See func newBackgroundContext()
+*/
+
+public class ThreadConfinementStack: CoreDataStack {
+    private var backgroundContextsNeedingRefresh = [NSManagedObjectContext]()
+
+    /**
+    Primary managed object context for main queue work.
+    
+    Will receive change updates from all worker managed object contexts.
+    */
     public lazy var mainContext: NSManagedObjectContext! = {
-        let moc = NSManagedObjectContext(concurrencyType: .ConfinementConcurrencyType)
+        let moc = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
         moc.persistentStoreCoordinator = self.persistentStoreCoordinator
         moc.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
         moc.name = "Main Context (Thread Confinement Pattern)"
@@ -151,41 +225,53 @@ public class ThreadConfinementStack: CoreDataStack {
             object: moc)
 
         return moc
-    }()
+        }()
 
-    public func newBackgroundContext(#automaticallyRefreshWithMainContextSaves: Bool) -> (context: NSManagedObjectContext, contextQueue: dispatch_queue_t) {
-        let queue = dispatch_queue_create("com.bignerdranch.coredata.workerqueue", nil)
+    /**
+    Creates a new background managed object context for performing work on a background queue.
+
+    :param: shouldReceiveUpdates A boolean value specifying if this background context
+                                    should be refreshed with save changes 
+                                    from the main queue managed object context. 
+                                    The main queue context will be updated with changes from this context
+                                    irrespective to this property value.
+                                    Default value is false.
+
+    :returns: NSManagedObjectContext The new background context.
+    */
+    public func newBackgroundContext(shouldReceiveUpdates: Bool = false) -> NSManagedObjectContext {
         var context: NSManagedObjectContext!
-        dispatch_sync(queue) { [unowned self] in
-            context = NSManagedObjectContext(concurrencyType: .ConfinementConcurrencyType)
-            context.persistentStoreCoordinator = self.persistentStoreCoordinator
-            context.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
-            context.name = "Background Context (Thread Confinement Pattern)"
 
-            // Refresh the main MOC with the background MOC's Changes
-            NSNotificationCenter.defaultCenter().addObserver(self,
-                selector: "mergeChangesFromBackgroundContextSaveNotification:",
-                name: NSManagedObjectContextDidSaveNotification,
-                object: context)
+        context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+        context.persistentStoreCoordinator = persistentStoreCoordinator
+        context.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
+        context.name = "Background Context (Thread Confinement Pattern)"
 
-            // Optionally refresh this worker moc whenever the main MOC saves.
-            if automaticallyRefreshWithMainContextSaves {
-                self.backgroundContextsNeedingRefresh.append((context, queue))
-            }
+        // Refresh the main MOC with the background MOC's Changes
+        NSNotificationCenter.defaultCenter().addObserver(self,
+            selector: "mergeChangesFromBackgroundContextSaveNotification:",
+            name: NSManagedObjectContextDidSaveNotification,
+            object: context)
+
+        // Optionally refresh this worker moc whenever the main MOC saves.
+        if shouldReceiveUpdates {
+            backgroundContextsNeedingRefresh.append(context)
         }
 
-        return (context, queue)
+        return context
     }
 
+    // MARK: - Change Merging Notifications
+
     @objc private func mergeChangesFromBackgroundContextSaveNotification(notification: NSNotification) {
-        dispatch_sync(dispatch_get_main_queue()) {
+        mainContext.performBlockAndWait() { [unowned self] in
             self.mainContext.mergeChangesFromContextDidSaveNotification(notification)
         }
     }
 
     @objc private func mergeChangedFromMainQueueContextSaveNotification(notification: NSNotification) {
-        for (context, queue) in self.backgroundContextsNeedingRefresh {
-            dispatch_async(queue) {
+        for context in backgroundContextsNeedingRefresh {
+            context.performBlockAndWait() {
                 context.mergeChangesFromContextDidSaveNotification(notification)
             }
         }
