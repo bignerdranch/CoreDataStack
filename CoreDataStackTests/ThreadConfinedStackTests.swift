@@ -9,6 +9,7 @@
 import XCTest
 
 import CoreDataStack
+import CoreData
 
 class ThreadConfinedStackTests: XCTestCase {
 
@@ -17,6 +18,7 @@ class ThreadConfinedStackTests: XCTestCase {
     lazy var stack = {
         return ThreadConfinementStack(modelName: "TestModel", inBundle: NSBundle(forClass: CoreDataStackTests.self))
         }()
+
 
     // MARK: - Lifecycle
 
@@ -31,23 +33,110 @@ class ThreadConfinedStackTests: XCTestCase {
         super.tearDown()
     }
 
-    // MARK: - Tests
+    // MARK: - Main Context Refresh from Background Context Save
 
     func testBackgroundObjectCreation() {
+        let mainContext = stack.mainContext
+        let author = Author.newAuthorInContext(mainContext)
+        author.firstName = "Bob"
+        XCTAssertTrue(mainContext.saveContextAndWait(nil))
+
         let backgroundContext = stack.newBackgroundContext(shouldReceiveUpdates: false)
         backgroundContext.performBlockAndWait() {
-            let author = Author.newAuthorInContext(backgroundContext)
-            author.firstName = "John"
-            author.lastName = "Smith"
-            var error: NSError?
-            let success = backgroundContext.saveContextAndWait(&error)
-            XCTAssertTrue(success)
-            XCTAssertNil(error)
+            if let author = Author.allAuthorsInContext(backgroundContext).first {
+                author.lastName = "Smith"
+                XCTAssertTrue(backgroundContext.saveContextAndWait(nil))
+            } else {
+                XCTFail()
+            }
         }
 
+        if let lastName = author.lastName {
+            XCTAssertEqual(lastName, "Smith")
+        } else {
+            XCTFail()
+        }
+    }
+
+    // MARK: - Background Context Refresh from Main Context Save
+
+    func testReceivingUpdatesFromMainContext() {
+        let backgroundContext = stack.newBackgroundContext(shouldReceiveUpdates: true)
         let mainContext = stack.mainContext
-        XCTAssertNotNil(mainContext)
-        let authors = Author.allAuthorsInContext(mainContext)
-        XCTAssertEqual(authors.count, 1)
+
+        let author = Author.newAuthorInContext(mainContext)
+        XCTAssertTrue(mainContext.saveContextAndWait(nil))
+
+        //Update Test
+
+        backgroundContext.performBlockAndWait {
+            if let author = Author.allAuthorsInContext(backgroundContext).first {
+                author.firstName = "Joe"
+            } else {
+                XCTFail()
+            }
+        }
+
+        author.lastName = "Blah"
+        XCTAssertTrue(mainContext.saveContextAndWait(nil))
+
+        backgroundContext.performBlockAndWait() {
+            if let author = Author.allAuthorsInContext(backgroundContext).first, lastName = author.lastName {
+                XCTAssertEqual(lastName, "Blah", "Last name should have been updated here")
+            } else {
+                XCTFail()
+            }
+        }
+
+        // Delete Test
+
+        mainContext.deleteObject(author)
+        XCTAssertTrue(mainContext.saveContextAndWait(nil))
+
+        backgroundContext.performBlockAndWait() {
+            XCTAssertEqual(Author.allAuthorsInContext(backgroundContext).count, 0,
+            "Author object should have been removed here also.")
+        }
+    }
+
+    func testIgnoringMainContextChanges() {
+        let backgroundContext = stack.newBackgroundContext(shouldReceiveUpdates: false)
+        let mainContext = stack.mainContext
+
+        let author = Author.newAuthorInContext(mainContext)
+        XCTAssertTrue(mainContext.saveContextAndWait(nil))
+
+        // Update Test
+
+        backgroundContext.performBlockAndWait {
+            if let author = Author.allAuthorsInContext(backgroundContext).first {
+                author.firstName = "Joe"
+            } else {
+                XCTFail()
+            }
+        }
+
+        author.lastName = "Blah"
+        XCTAssertTrue(mainContext.saveContextAndWait(nil))
+
+        backgroundContext.performBlockAndWait() {
+            if let author = Author.allAuthorsInContext(backgroundContext).first {
+                XCTAssertNil(author.lastName,
+                    "Last name shouldn't have been propegated from main queue")
+            } else {
+                XCTFail()
+            }
+
+        }
+
+        // Delete Test
+        
+        mainContext.deleteObject(author)
+        XCTAssertTrue(mainContext.saveContextAndWait(nil))
+
+        backgroundContext.performBlockAndWait() {
+            XCTAssertEqual(Author.allAuthorsInContext(backgroundContext).count, 1,
+                "Object should be delete from main queue but still living in background.")
+        }
     }
 }
