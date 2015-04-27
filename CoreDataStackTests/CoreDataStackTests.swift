@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 Big Nerd Ranch. All rights reserved.
 //
 
-import UIKit
 import XCTest
 
 import CoreDataStack
@@ -28,10 +27,8 @@ class CoreDataStackTests: XCTestCase {
     }
 
     func testInitialization() {
-        let bundle = NSBundle(forClass: CoreDataStack.self)
-        let model = bundle.URLForResource("TestModel", withExtension: "momd")
-        XCTAssertNotNil(bundle)
-        XCTAssertNotNil(model)
+        XCTAssertNotNil(stack.mainQueueContext)
+        XCTAssertNotNil(stack.privateQueueContext)
     }
 
 }
