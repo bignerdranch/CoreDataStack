@@ -12,7 +12,7 @@ import CoreData
 @objc(Book)
 class Book: NSManagedObject {
 
-    @NSManaged var title: String
-    @NSManaged var authors: NSSet
+    @NSManaged var title: String?
+    @NSManaged var authors: Set<Author>
 
 }

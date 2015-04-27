@@ -12,9 +12,9 @@ import CoreData
 @objc(Author)
 class Author: NSManagedObject {
 
-    @NSManaged var firstName: String
-    @NSManaged var lastName: String
-    @NSManaged var books: NSSet
+    @NSManaged var firstName: String?
+    @NSManaged var lastName: String?
+    @NSManaged var books: Set<Book>
 
     class func newAuthorInContext(context: NSManagedObjectContext) -> Author {
         return NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: context) as! Author
