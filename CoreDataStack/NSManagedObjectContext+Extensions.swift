@@ -8,56 +8,51 @@
 
 import CoreData
 
+public typealias CoreDataSaveCompletion = (Bool, NSError?) -> Void
+
 public extension NSManagedObjectContext {
-    public func saveContextAndWait() -> Bool {
+    public func saveContextAndWait(error: NSErrorPointer) -> Bool {
         var success = true
-
-        let sharedSaveFlow: () -> Bool = {
-            var saveError: NSError?
-            if self.hasChanges && !self.save(&saveError) {
-                success = false
-                println("Failed to save managed object context")
-                if let error = saveError {
-                    println("Error: \(saveError)")
-                }
-            }
-            return success
-        }
-
         switch concurrencyType {
         case .ConfinementConcurrencyType:
-            success = sharedSaveFlow()
+            success = sharedSaveFlow(error)
         case .MainQueueConcurrencyType:
             fallthrough
         case .PrivateQueueConcurrencyType:
             self.performBlockAndWait { [unowned self] in
-                success = sharedSaveFlow()
+                success = self.sharedSaveFlow(error)
             }
         }
 
         return success
     }
 
-    public func saveContext() {
-        let sharedSaveFlow: () -> () = {
-            var saveError: NSError?
-            if self.hasChanges && !self.save(&saveError) {
-                println("Failed to save managed object context")
-                if let error = saveError {
-                    println("Error: \(saveError)")
-                }
-            }
-        }
-
+    public func saveContext(completion: CoreDataSaveCompletion? = nil) {
+        var error: NSError?
+        var success: Bool = true
         switch concurrencyType {
         case .ConfinementConcurrencyType:
-            sharedSaveFlow()
+            success = sharedSaveFlow(&error)
+            completion?(success, error)
         case .MainQueueConcurrencyType:
             fallthrough
         case .PrivateQueueConcurrencyType:
             self.performBlock { [unowned self] in
-                sharedSaveFlow()
+                success = self.sharedSaveFlow(&error)
+                completion?(success, error)
             }
         }
+    }
+
+    private func sharedSaveFlow(error: NSErrorPointer) -> Bool {
+        var success = true
+        if self.hasChanges && !self.save(error) {
+            success = false
+            println("Failed to save managed object context")
+            if let error = error.memory {
+                println("Error: \(error)")
+            }
+        }
+        return success
     }
 }
