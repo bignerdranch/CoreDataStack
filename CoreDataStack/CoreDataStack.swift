@@ -14,6 +14,12 @@ public enum CoreDataStackType {
     case NestedMOC
 }
 
+private class StackObservingContext: NSManagedObjectContext {
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+}
+
 /**
 Base class for creating SQLite backed CoreData stacks.
 
@@ -166,7 +172,7 @@ public class NestedMOCStack: CoreDataStack {
     :returns: NSManagedObjectContext The new worker context.
     */
     public func newBackgroundWorkerMOC() -> NSManagedObjectContext {
-        let moc = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+        let moc = StackObservingContext(concurrencyType: .PrivateQueueConcurrencyType)
         moc.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
         moc.parentContext = self.mainQueueContext
         moc.name = "Background Worker Context"
@@ -242,7 +248,7 @@ public class ThreadConfinementStack: CoreDataStack {
     public func newBackgroundContext(shouldReceiveUpdates: Bool = false) -> NSManagedObjectContext {
         var context: NSManagedObjectContext!
 
-        context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+        context = StackObservingContext(concurrencyType: .PrivateQueueConcurrencyType)
         context.persistentStoreCoordinator = persistentStoreCoordinator
         context.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
         context.name = "Background Context (Thread Confinement Pattern)"
