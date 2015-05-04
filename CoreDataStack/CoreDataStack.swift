@@ -212,7 +212,7 @@ Worker contexts can opt in to getting refreshed when the main queue saves using 
 */
 
 public class ThreadConfinementStack: CoreDataStack {
-    private var backgroundContextsNeedingRefresh = [NSManagedObjectContext]()
+    private var backgroundContextsNeedingRefresh = NSHashTable.weakObjectsHashTable()
 
     /**
     Primary managed object context for main queue work.
@@ -261,7 +261,7 @@ public class ThreadConfinementStack: CoreDataStack {
 
         // Optionally refresh this worker moc whenever the main MOC saves.
         if shouldReceiveUpdates {
-            backgroundContextsNeedingRefresh.append(context)
+            backgroundContextsNeedingRefresh.addObject(context)
         }
 
         return context
@@ -276,9 +276,13 @@ public class ThreadConfinementStack: CoreDataStack {
     }
 
     @objc private func mergeChangedFromMainQueueContextSaveNotification(notification: NSNotification) {
-        for context in backgroundContextsNeedingRefresh {
-            context.performBlockAndWait() {
-                context.mergeChangesFromContextDidSaveNotification(notification)
+        dispatch_sync(dispatch_queue_create("com.bignerdranch.coredatastack.locking.queue", nil)) { [unowned self] in
+            if let contexts = self.backgroundContextsNeedingRefresh.allObjects as? [NSManagedObjectContext] {
+                for context in contexts {
+                    context.performBlockAndWait() {
+                        context.mergeChangesFromContextDidSaveNotification(notification)
+                    }
+                }
             }
         }
     }
