@@ -14,6 +14,12 @@ public enum CoreDataStackType {
     case NestedMOC
 }
 
+private class StackObservingContext: NSManagedObjectContext {
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+}
+
 /**
 Base class for creating SQLite backed CoreData stacks.
 
@@ -166,7 +172,7 @@ public class NestedMOCStack: CoreDataStack {
     :returns: NSManagedObjectContext The new worker context.
     */
     public func newBackgroundWorkerMOC() -> NSManagedObjectContext {
-        let moc = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+        let moc = StackObservingContext(concurrencyType: .PrivateQueueConcurrencyType)
         moc.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
         moc.parentContext = self.mainQueueContext
         moc.name = "Background Worker Context"
@@ -206,7 +212,7 @@ Worker contexts can opt in to getting refreshed when the main queue saves using 
 */
 
 public class ThreadConfinementStack: CoreDataStack {
-    private var backgroundContextsNeedingRefresh = [NSManagedObjectContext]()
+    private var backgroundContextsNeedingRefresh = NSHashTable.weakObjectsHashTable()
 
     /**
     Primary managed object context for main queue work.
@@ -242,7 +248,7 @@ public class ThreadConfinementStack: CoreDataStack {
     public func newBackgroundContext(shouldReceiveUpdates: Bool = false) -> NSManagedObjectContext {
         var context: NSManagedObjectContext!
 
-        context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+        context = StackObservingContext(concurrencyType: .PrivateQueueConcurrencyType)
         context.persistentStoreCoordinator = persistentStoreCoordinator
         context.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
         context.name = "Background Context (Thread Confinement Pattern)"
@@ -255,7 +261,7 @@ public class ThreadConfinementStack: CoreDataStack {
 
         // Optionally refresh this worker moc whenever the main MOC saves.
         if shouldReceiveUpdates {
-            backgroundContextsNeedingRefresh.append(context)
+            backgroundContextsNeedingRefresh.addObject(context)
         }
 
         return context
@@ -270,9 +276,13 @@ public class ThreadConfinementStack: CoreDataStack {
     }
 
     @objc private func mergeChangedFromMainQueueContextSaveNotification(notification: NSNotification) {
-        for context in backgroundContextsNeedingRefresh {
-            context.performBlockAndWait() {
-                context.mergeChangesFromContextDidSaveNotification(notification)
+        dispatch_sync(dispatch_queue_create("com.bignerdranch.coredatastack.locking.queue", nil)) { [unowned self] in
+            if let contexts = self.backgroundContextsNeedingRefresh.allObjects as? [NSManagedObjectContext] {
+                for context in contexts {
+                    context.performBlockAndWait() {
+                        context.mergeChangesFromContextDidSaveNotification(notification)
+                    }
+                }
             }
         }
     }
