@@ -13,5 +13,3 @@ FOUNDATION_EXPORT double CoreDataStackVersionNumber;
 
 //! Project version string for CoreDataStack.
 FOUNDATION_EXPORT const unsigned char CoreDataStackVersionString[];
-
-#import "CoreDataStack-Swift.h"
