@@ -1,4 +1,4 @@
-# BNR CoreData Stack
+# BNR CoreData Stack - README is a Work in Progress
 
 ## Base CoreDataStack
 
