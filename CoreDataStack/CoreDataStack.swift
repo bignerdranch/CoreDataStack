@@ -10,8 +10,8 @@ import Foundation
 import CoreData
 
 public enum CoreDataStackType {
-    case ThreadConfined
-    case NestedMOC
+    case SharedStoreMOCStack
+    case NestedMOCStack
 }
 
 private class StackObservingContext: NSManagedObjectContext {
@@ -25,7 +25,7 @@ Base class for creating SQLite backed CoreData stacks.
 
 More or less an abstract base class since the persistentStoreCoordinator is a private property.
 
-See NestedMOCStack and ThreadConfinementStack.
+See NestedMOCStack and SharedStoreMOCStack.
 */
 
 public class CoreDataStack: NSObject {
@@ -124,7 +124,7 @@ Calling save() on any NSMangedObject context, belonging to the stack, will autom
 public class NestedMOCStack: CoreDataStack {
     /**
     Primary persisting background managed object context. This is the top level context that possess an
-    NSPersistentStoreCoordinator and saves changes to disk on a background thread.
+    NSPersistentStoreCoordinator and saves changes to disk on a background queue.
 
     Fetching, Inserting, Deleting or Updating managed objects should occur on a child of this context rather than directly.
 
@@ -144,7 +144,7 @@ public class NestedMOCStack: CoreDataStack {
         }()
 
     /**
-    The main queue context for any work that will be performed on the main thread.
+    The main queue context for any work that will be performed on the main queue.
     Its parent context is the primary private queue context that persist the data to disk.
     Making a save() call on this context will automatically trigger a save on its parent via NSNotification.
 
@@ -211,7 +211,7 @@ The primary queue context is updated with all changes from worker contexts saves
 Worker contexts can opt in to getting refreshed when the main queue saves using the same mergeChangesFromContextDidSaveNotification. See func newBackgroundContext()
 */
 
-public class ThreadConfinementStack: CoreDataStack {
+public class SharedStoreMOCStack: CoreDataStack {
     private var backgroundContextsNeedingRefresh = NSHashTable.weakObjectsHashTable()
 
     /**
@@ -223,7 +223,7 @@ public class ThreadConfinementStack: CoreDataStack {
         let moc = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
         moc.persistentStoreCoordinator = self.persistentStoreCoordinator
         moc.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
-        moc.name = "Main Context (Thread Confinement Pattern)"
+        moc.name = "Main Context (Shared Store MOC Pattern)"
 
         NSNotificationCenter.defaultCenter().addObserver(self,
             selector: "mergeChangedFromMainQueueContextSaveNotification:",
@@ -251,7 +251,7 @@ public class ThreadConfinementStack: CoreDataStack {
         context = StackObservingContext(concurrencyType: .PrivateQueueConcurrencyType)
         context.persistentStoreCoordinator = persistentStoreCoordinator
         context.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
-        context.name = "Background Context (Thread Confinement Pattern)"
+        context.name = "Background Context (Shared Store MOC Pattern)"
 
         // Refresh the main MOC with the background MOC's Changes
         NSNotificationCenter.defaultCenter().addObserver(self,

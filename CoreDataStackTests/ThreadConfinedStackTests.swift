@@ -16,7 +16,7 @@ class ThreadConfinedStackTests: XCTestCase {
     // MARK: - Properties
 
     lazy var stack = {
-        return ThreadConfinementStack(modelName: "TestModel", inBundle: NSBundle(forClass: CoreDataStackTests.self))
+        return SharedStoreMOCStack(modelName: "TestModel", inBundle: NSBundle(forClass: CoreDataStackTests.self))
         }()
 
 
