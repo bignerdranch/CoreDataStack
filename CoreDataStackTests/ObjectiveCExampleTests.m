@@ -14,8 +14,8 @@
 
 @interface ObjectiveCExampleTests : XCTestCase
 
-@property (nonatomic, strong) NestedMOCStack *nestedStack;
-@property (nonatomic, strong) SharedStoreMOCStack *sharedStoreStack;
+@property (nonatomic, strong) NestedContextStack *nestedStack;
+@property (nonatomic, strong) SharedCoordinatorStack *sharedCoordinatorStack;
 
 @end
 
@@ -28,11 +28,11 @@
     XCTestExpectation *ex2 = [self expectationWithDescription:@"Callback 2"];
 
     NSBundle *bundle = [NSBundle bundleForClass:self.class];
-    self.nestedStack = [[NestedMOCStack alloc] initWithModelName:@"TestModel" inBundle:bundle callback:^(BOOL success, NSError *error) {
+    self.nestedStack = [[NestedContextStack alloc] initWithModelName:@"TestModel" inBundle:bundle callback:^(BOOL success, NSError *error) {
         XCTAssertTrue(success);
         [ex1 fulfill];
     }];
-    self.sharedStoreStack = [[SharedStoreMOCStack alloc] initWithModelName:@"TestModel" inBundle:bundle callback:^(BOOL success, NSError *error) {
+    self.sharedCoordinatorStack = [[SharedCoordinatorStack alloc] initWithModelName:@"TestModel" inBundle:bundle callback:^(BOOL success, NSError *error) {
         XCTAssertTrue(success);
         [ex2 fulfill];
     }];
@@ -50,10 +50,10 @@
 }
 
 - (void)testSharedStoreInitialization {
-    XCTAssertNotNil(self.sharedStoreStack);
-    XCTAssertNotNil(self.sharedStoreStack.mainContext);
+    XCTAssertNotNil(self.sharedCoordinatorStack);
+    XCTAssertNotNil(self.sharedCoordinatorStack.mainContext);
 
-    NSManagedObjectContext *worker = [self.sharedStoreStack newBackgroundContextWithShouldReceiveUpdates:YES];
+    NSManagedObjectContext *worker = [self.sharedCoordinatorStack newBackgroundContextWithShouldReceiveUpdates:YES];
     XCTAssertNotNil(worker);
 }
 

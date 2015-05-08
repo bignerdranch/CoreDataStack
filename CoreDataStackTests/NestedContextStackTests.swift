@@ -1,6 +1,6 @@
 //
-//  CoreDataStackTests.swift
-//  CoreDataStackTests
+//  NestedContextStackTests.swift
+//  NestedContextStackTests
 //
 //  Created by Robert Edwards on 4/24/15.
 //  Copyright (c) 2015 Big Nerd Ranch. All rights reserved.
@@ -12,13 +12,13 @@ import CoreDataStack
 
 class CoreDataStackTests: XCTestCase {
 
-    var stack: NestedMOCStack!
+    var stack: NestedContextStack!
 
     override func setUp() {
         super.setUp()
 
         let expectation = expectationWithDescription("callback")
-        stack = NestedMOCStack(modelName: "TestModel", inBundle: NSBundle(forClass: CoreDataStackTests.self)) { (success, error) in
+        stack = NestedContextStack(modelName: "TestModel", inBundle: NSBundle(forClass: CoreDataStackTests.self)) { (success, error) in
             XCTAssertTrue(success)
             expectation.fulfill()
         }

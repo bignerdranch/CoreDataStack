@@ -1,6 +1,6 @@
 //
-//  ThreadConfinedStackTests.swift
-//  CoreDataStack
+//  SharedCoordinatorStackTests.swift
+//  SharedCoordinatorStackTests
 //
 //  Created by Robert Edwards on 4/27/15.
 //  Copyright (c) 2015 Big Nerd Ranch. All rights reserved.
@@ -11,11 +11,11 @@ import XCTest
 import CoreDataStack
 import CoreData
 
-class ThreadConfinedStackTests: XCTestCase {
+class SharedCoordinatorStackTests: XCTestCase {
 
     // MARK: - Properties
 
-    var stack: SharedStoreMOCStack!
+    var stack: SharedCoordinatorStack!
 
     // MARK: - Lifecycle
 
@@ -23,7 +23,7 @@ class ThreadConfinedStackTests: XCTestCase {
         super.setUp()
 
         let ex1 = expectationWithDescription("callback")
-        stack = SharedStoreMOCStack(modelName: "TestModel", inBundle: NSBundle(forClass: ThreadConfinedStackTests.self)) { (success, error) in
+        stack = SharedCoordinatorStack(modelName: "TestModel", inBundle: NSBundle(forClass: SharedCoordinatorStackTests.self)) { (success, error) in
             XCTAssertTrue(success)
             ex1.fulfill()
         }

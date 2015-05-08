@@ -11,9 +11,13 @@ import CoreData
 
 public typealias CoreDataSetupCallback = (success: Bool, error: NSError?) -> Void
 
+/**
+Enum values representing the various stack types available in the CoreDataStack library.
+
+*/
 public enum CoreDataStackType {
-    case SharedStoreMOCStack
-    case NestedMOCStack
+    case NestedContextStack
+    case SharedCoordinatorStack
 }
 
 /**
@@ -32,7 +36,7 @@ Base class for creating SQLite backed CoreData stacks.
 
 More or less an abstract base class since the persistentStoreCoordinator is a private property.
 
-See NestedMOCStack and SharedStoreMOCStack.
+See NestedContextStack SharedCoordinatorStack, SharedStoreStack...
 */
 public class CoreDataStack: NSObject {
 
@@ -133,7 +137,7 @@ Three layer CoreData stack comprised of:
 
 Calling save() on any NSMangedObject context, belonging to the stack, will automatically bubble the changes all the way to the NSPersistentStore
 */
-public class NestedMOCStack: CoreDataStack {
+public class NestedContextStack: CoreDataStack {
     /**
     Primary persisting background managed object context. This is the top level context that possess an
     NSPersistentStoreCoordinator and saves changes to disk on a background queue.
@@ -222,7 +226,7 @@ A CoreData stack comprised of:
 The primary queue context is updated with all changes from worker contexts saves by performing a merge via mergeChangesFromContextDidSaveNotification.
 Worker contexts can opt in to getting refreshed when the main queue saves using the same mergeChangesFromContextDidSaveNotification. See func newBackgroundContext()
 */
-public class SharedStoreMOCStack: CoreDataStack {
+public class SharedCoordinatorStack: CoreDataStack {
     private var backgroundContextsNeedingRefresh = NSHashTable.weakObjectsHashTable()
 
     /**
@@ -234,7 +238,7 @@ public class SharedStoreMOCStack: CoreDataStack {
         let moc = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
         moc.persistentStoreCoordinator = self.persistentStoreCoordinator
         moc.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
-        moc.name = "Main Context (Shared Store MOC Pattern)"
+        moc.name = "Main Context (Shared Coordinator Pattern)"
 
         NSNotificationCenter.defaultCenter().addObserver(self,
             selector: "mergeChangedFromMainQueueContextSaveNotification:",
@@ -262,7 +266,7 @@ public class SharedStoreMOCStack: CoreDataStack {
         context = StackObservingContext(concurrencyType: .PrivateQueueConcurrencyType)
         context.persistentStoreCoordinator = persistentStoreCoordinator
         context.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
-        context.name = "Background Context (Shared Store MOC Pattern)"
+        context.name = "Background Context (Shared Coordinator Pattern)"
 
         // Refresh the main MOC with the background MOC's Changes
         NSNotificationCenter.defaultCenter().addObserver(self,
