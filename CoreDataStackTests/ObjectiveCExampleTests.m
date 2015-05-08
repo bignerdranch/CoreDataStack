@@ -24,9 +24,19 @@
 - (void)setUp {
     [super setUp];
 
+    XCTestExpectation *ex1 = [self expectationWithDescription:@"Callback 1"];
+    XCTestExpectation *ex2 = [self expectationWithDescription:@"Callback 2"];
+
     NSBundle *bundle = [NSBundle bundleForClass:self.class];
-    self.nestedStack = [[NestedMOCStack alloc] initWithModelName:@"TestModel" inBundle:bundle];
-    self.sharedStoreStack = [[SharedStoreMOCStack alloc] initWithModelName:@"TestModel" inBundle:bundle];
+    self.nestedStack = [[NestedMOCStack alloc] initWithModelName:@"TestModel" inBundle:bundle callback:^(BOOL success, NSError *error) {
+        XCTAssertTrue(success);
+        [ex1 fulfill];
+    }];
+    self.sharedStoreStack = [[SharedStoreMOCStack alloc] initWithModelName:@"TestModel" inBundle:bundle callback:^(BOOL success, NSError *error) {
+        XCTAssertTrue(success);
+        [ex2 fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:10 handler:nil];
 }
 
 - (void)testNestedInitializaton {

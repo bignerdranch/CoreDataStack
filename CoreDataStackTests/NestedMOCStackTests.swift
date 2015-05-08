@@ -12,13 +12,17 @@ import CoreDataStack
 
 class CoreDataStackTests: XCTestCase {
 
-    lazy var stack = {
-        return NestedMOCStack(modelName: "TestModel", inBundle: NSBundle(forClass: CoreDataStackTests.self))
-    }()
+    var stack: NestedMOCStack!
 
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+
+        let expectation = expectationWithDescription("callback")
+        stack = NestedMOCStack(modelName: "TestModel", inBundle: NSBundle(forClass: CoreDataStackTests.self)) { (success, error) in
+            XCTAssertTrue(success)
+            expectation.fulfill()
+        }
+        waitForExpectationsWithTimeout(10, handler: nil)
     }
     
     override func tearDown() {

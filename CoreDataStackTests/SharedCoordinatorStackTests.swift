@@ -15,21 +15,34 @@ class ThreadConfinedStackTests: XCTestCase {
 
     // MARK: - Properties
 
-    lazy var stack = {
-        return SharedStoreMOCStack(modelName: "TestModel", inBundle: NSBundle(forClass: CoreDataStackTests.self))
-        }()
-
+    var stack: SharedStoreMOCStack!
 
     // MARK: - Lifecycle
 
     override func setUp() {
         super.setUp()
 
-        stack.resetPersistantStoreCoordinator()
+        let ex1 = expectationWithDescription("callback")
+        stack = SharedStoreMOCStack(modelName: "TestModel", inBundle: NSBundle(forClass: ThreadConfinedStackTests.self)) { (success, error) in
+            XCTAssertTrue(success)
+            ex1.fulfill()
+        }
+
+        // Some testing methods assume a clean store so cleaning it out on setup is required also.
+
+        let ex2 = expectationWithDescription("reset callback")
+        stack.resetPersistantStoreCoordinator() { (success, error) in
+            XCTAssertTrue(success)
+            if let error = error where !success {
+                println(error)
+            }
+            ex2.fulfill()
+        }
+
+        waitForExpectationsWithTimeout(10, handler: nil)
     }
-    
+
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
 

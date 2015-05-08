@@ -9,11 +9,18 @@
 import Foundation
 import CoreData
 
+public typealias CoreDataSetupCallback = (success: Bool, error: NSError?) -> Void
+
 public enum CoreDataStackType {
     case SharedStoreMOCStack
     case NestedMOCStack
 }
 
+/**
+Private subclass of NSManagedObject used to remove itself from NSNotificationCenter, 
+as an observer of peer and/or parent contexts save notifications.
+
+*/
 private class StackObservingContext: NSManagedObjectContext {
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
@@ -27,53 +34,69 @@ More or less an abstract base class since the persistentStoreCoordinator is a pr
 
 See NestedMOCStack and SharedStoreMOCStack.
 */
-
 public class CoreDataStack: NSObject {
 
     private let managedObjectModelName: String
     private var bundle: NSBundle = NSBundle.mainBundle()
-    private var applicationDocumentsDirectory: NSURL = {
-        let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
-        return urls[urls.count-1] as! NSURL
-        }()
-
-    private lazy var sqliteFileURL: NSURL = {
-        return self.applicationDocumentsDirectory.URLByAppendingPathComponent("\(self.managedObjectModelName).sqlite")
-        }()
-
     private lazy var managedObjectModel: NSManagedObjectModel = {
         let modelURL: NSURL! = self.bundle.URLForResource(self.managedObjectModelName, withExtension: "momd")
         return NSManagedObjectModel(contentsOfURL: modelURL)!
         }()
-
-    private lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator! = {
-        return self.createPersistantStoreCoordinator()
-        }()
+    private lazy var storeURL: NSURL = {
+        return NSPersistentStoreCoordinator.urlForSQLiteStore(modelName: self.managedObjectModelName)
+    }()
+    private var persistentStoreCoordinator: NSPersistentStoreCoordinator!
 
     // MARK: - Lifecycle
 
     /**
     Creates a SQLite backed CoreData stack for a give model in the current NSBundle.
 
-    :param: modelName String Name of the xcdatamodel for the CoreData Stack.
+    :param: modelName String Name of the xcdatamodel for the CoreData Stack.    
+    :param: callback The persistent store cooridiator will be setup asynchronously. This callback serves as notificaton that your stack is fully intialized. _Important_ access to this class is not safe until after this callback has fired.
 
     :returns: CoreDataStack Newly created stack.
     */
-    public required init(modelName: String) {
+    public required init(modelName: String, callback: CoreDataSetupCallback) {
         managedObjectModelName = modelName
+
+        super.init()
+
+        NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(managedObjectModel, storeFileURL: nil) { (result) in
+            switch result {
+            case .Success(let coordinator):
+                self.persistentStoreCoordinator = coordinator
+                callback(success: true, error: nil)
+            case .Failure(let error):
+                callback(success: false, error: error)
+            }
+        }
     }
 
     /**
-    Convenience to supply a bundle other than the current bundle
+    Creates a SQLite backed CoreData stack for a give model in the supplyed NSBundle.
 
     :param: modelName Name of the xcdatamodel for the CoreData Stack.
     :param: inBundle NSBundle that contains the XCDataModel.
+    :param: callback The persistent store cooridiator will be setup asynchronously. This callback serves as notificaton that your stack is fully intialized. _Important_ access to this class is not safe until after this callback has fired.
 
     :returns: CoreDataStack Newly created stack.
     */
-    public required convenience init(modelName: String, inBundle: NSBundle) {
-        self.init(modelName: modelName)
+    public required init(modelName: String, inBundle: NSBundle, callback: CoreDataSetupCallback) {
         bundle = inBundle
+        managedObjectModelName = modelName
+
+        super.init()
+
+        NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(managedObjectModel, storeFileURL: nil) { (result) in
+            switch result {
+            case .Success(let coordinator):
+                self.persistentStoreCoordinator = coordinator
+                callback(success: true, error: nil)
+            case .Failure(let error):
+                callback(success: false, error: error)
+            }
+        }
     }
 
     // MARK: - Public Functions
@@ -81,32 +104,22 @@ public class CoreDataStack: NSObject {
     /**
     Removes the SQLite store from disk and creates a fresh NSPersistentStore.
     */
-    public func resetPersistantStoreCoordinator() {
+    public func resetPersistantStoreCoordinator(setupCallback: CoreDataSetupCallback) {
         persistentStoreCoordinator = nil
         var fileRemoveError: NSError?
-        if !NSFileManager.defaultManager().removeItemAtURL(sqliteFileURL, error: &fileRemoveError) {
-            assertionFailure("Failure removing the old SQLite Store: \(fileRemoveError)")
+        if !NSFileManager.defaultManager().removeItemAtURL(storeURL, error: &fileRemoveError) {
+            setupCallback(success: false, error: fileRemoveError)
         } else {
-            persistentStoreCoordinator = createPersistantStoreCoordinator()
+            NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(managedObjectModel, storeFileURL: storeURL) { (result: SetupResult) in
+                switch result {
+                case .Success (let coordinator):
+                    self.persistentStoreCoordinator = coordinator
+                    setupCallback(success: true, error: nil)
+                case .Failure (let error):
+                    setupCallback(success: false, error: error)
+                }
+            }
         }
-    }
-
-    // MARK: - Private Functions
-
-    private func createPersistantStoreCoordinator() -> NSPersistentStoreCoordinator {
-        var coordinator: NSPersistentStoreCoordinator? = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
-        let storeOptions = [NSMigratePersistentStoresAutomaticallyOption: true,
-            NSInferMappingModelAutomaticallyOption: true];
-        var error: NSError? = nil
-        if coordinator!.addPersistentStoreWithType(NSSQLiteStoreType,
-            configuration: nil,
-            URL: sqliteFileURL, 
-            options: nil,
-            error: &error) == nil {
-            coordinator = nil
-             assertionFailure("Unresolved CoreData error while setting PersistentStoreCoordinator \(error), \(error!.userInfo)")
-        }
-        return coordinator!
     }
 }
 
@@ -120,7 +133,6 @@ Three layer CoreData stack comprised of:
 
 Calling save() on any NSMangedObject context, belonging to the stack, will automatically bubble the changes all the way to the NSPersistentStore
 */
-
 public class NestedMOCStack: CoreDataStack {
     /**
     Primary persisting background managed object context. This is the top level context that possess an
@@ -210,7 +222,6 @@ A CoreData stack comprised of:
 The primary queue context is updated with all changes from worker contexts saves by performing a merge via mergeChangesFromContextDidSaveNotification.
 Worker contexts can opt in to getting refreshed when the main queue saves using the same mergeChangesFromContextDidSaveNotification. See func newBackgroundContext()
 */
-
 public class SharedStoreMOCStack: CoreDataStack {
     private var backgroundContextsNeedingRefresh = NSHashTable.weakObjectsHashTable()
 
