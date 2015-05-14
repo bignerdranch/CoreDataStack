@@ -107,7 +107,7 @@ public class CoreDataStack: NSObject {
     /**
     Removes the SQLite store from disk and creates a fresh NSPersistentStore.
     */
-    public func resetPersistantStoreCoordinator(setupCallback: CoreDataSetupCallback) {
+    public func resetPersistentStoreCoordinator(setupCallback: CoreDataSetupCallback) {
         persistentStoreCoordinator = nil
         var fileRemoveError: NSError?
         if !NSFileManager.defaultManager().removeItemAtURL(storeURL, error: &fileRemoveError) {

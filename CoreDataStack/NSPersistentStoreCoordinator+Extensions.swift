@@ -23,7 +23,7 @@ public extension NSPersistentStoreCoordinator {
         let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
         dispatch_async(backgroundQueue) {
             var error: NSError?
-            if let coordinator = NSPersistentStoreCoordinator.persistantStoreCoordinator(managedObjectModel: managedObjectModel, storeURL: storeFileURL, error:&error) {
+            if let coordinator = NSPersistentStoreCoordinator.persistentStoreCoordinator(managedObjectModel: managedObjectModel, storeURL: storeFileURL, error:&error) {
                 completion(SetupResult.Success(coordinator))
             } else if let error = error {
                 completion(SetupResult.Failure(error))
@@ -33,7 +33,7 @@ public extension NSPersistentStoreCoordinator {
         }
     }
 
-    private class func persistantStoreCoordinator(#managedObjectModel: NSManagedObjectModel, storeURL: NSURL?, error: NSErrorPointer) -> NSPersistentStoreCoordinator? {
+    private class func persistentStoreCoordinator(#managedObjectModel: NSManagedObjectModel, storeURL: NSURL?, error: NSErrorPointer) -> NSPersistentStoreCoordinator? {
         let url = storeURL ?? defaultURL(modleName: nil)
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: managedObjectModel)
         let storeOptions = [NSMigratePersistentStoresAutomaticallyOption: true,

@@ -31,7 +31,7 @@ class SharedCoordinatorStackTests: XCTestCase {
         // Some testing methods assume a clean store so cleaning it out on setup is required also.
 
         let ex2 = expectationWithDescription("reset callback")
-        stack.resetPersistantStoreCoordinator() { (success, error) in
+        stack.resetPersistentStoreCoordinator() { (success, error) in
             XCTAssertTrue(success)
             if let error = error where !success {
                 println(error)
