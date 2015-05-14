@@ -22,22 +22,23 @@ class SharedCoordinatorStackTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
+        let storeURL = NSPersistentStoreCoordinator.urlForSQLiteStore(modelName: "TestModel")
+        let path = storeURL.path!
+        if NSFileManager.defaultManager().fileExistsAtPath(path) {
+            var error: NSError?
+            if !NSFileManager.defaultManager().removeItemAtURL(storeURL, error: &error) {
+                println(error)
+                XCTFail("Failed to remove store")
+            }
+        }
+        
         let ex1 = expectationWithDescription("callback")
         stack = SharedCoordinatorStack(modelName: "TestModel", inBundle: NSBundle(forClass: SharedCoordinatorStackTests.self)) { (success, error) in
             XCTAssertTrue(success)
             ex1.fulfill()
         }
 
-        // Some testing methods assume a clean store so cleaning it out on setup is required also.
 
-        let ex2 = expectationWithDescription("reset callback")
-        stack.resetPersistentStoreCoordinator() { (success, error) in
-            XCTAssertTrue(success)
-            if let error = error where !success {
-                println(error)
-            }
-            ex2.fulfill()
-        }
 
         waitForExpectationsWithTimeout(10, handler: nil)
     }
