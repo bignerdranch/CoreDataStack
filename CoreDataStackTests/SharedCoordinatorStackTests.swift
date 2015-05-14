@@ -1,6 +1,6 @@
 //
-//  ThreadConfinedStackTests.swift
-//  CoreDataStack
+//  SharedCoordinatorStackTests.swift
+//  SharedCoordinatorStackTests
 //
 //  Created by Robert Edwards on 4/27/15.
 //  Copyright (c) 2015 Big Nerd Ranch. All rights reserved.
@@ -11,25 +11,39 @@ import XCTest
 import CoreDataStack
 import CoreData
 
-class ThreadConfinedStackTests: XCTestCase {
+class SharedCoordinatorStackTests: XCTestCase {
 
     // MARK: - Properties
 
-    lazy var stack = {
-        return SharedStoreMOCStack(modelName: "TestModel", inBundle: NSBundle(forClass: CoreDataStackTests.self))
-        }()
-
+    var stack: SharedCoordinatorStack!
 
     // MARK: - Lifecycle
 
     override func setUp() {
         super.setUp()
 
-        stack.resetPersistantStoreCoordinator()
+        let storeURL = NSPersistentStoreCoordinator.urlForSQLiteStore(modelName: "TestModel")
+        let path = storeURL.path!
+        if NSFileManager.defaultManager().fileExistsAtPath(path) {
+            var error: NSError?
+            if !NSFileManager.defaultManager().removeItemAtURL(storeURL, error: &error) {
+                println(error)
+                XCTFail("Failed to remove store")
+            }
+        }
+        
+        let ex1 = expectationWithDescription("callback")
+        stack = SharedCoordinatorStack(modelName: "TestModel", inBundle: NSBundle(forClass: SharedCoordinatorStackTests.self)) { (success, error) in
+            XCTAssertTrue(success)
+            ex1.fulfill()
+        }
+
+
+
+        waitForExpectationsWithTimeout(10, handler: nil)
     }
-    
+
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
 
