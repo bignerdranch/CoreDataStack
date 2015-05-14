@@ -9,11 +9,8 @@
 import Foundation
 import CoreData
 
-public typealias CoreDataSetupCallback = (success: Bool, error: NSError?) -> Void
-
 /**
 Enum values representing the various stack types available in the CoreDataStack library.
-
 */
 public enum CoreDataStackType {
     case NestedContextStack
@@ -52,6 +49,8 @@ public class CoreDataStack: NSObject {
     private var persistentStoreCoordinator: NSPersistentStoreCoordinator!
 
     // MARK: - Lifecycle
+
+    public typealias CoreDataSetupCallback = (success: Bool, error: NSError?) -> Void
 
     /**
     Creates a SQLite backed CoreData stack for a give model in the current NSBundle.
