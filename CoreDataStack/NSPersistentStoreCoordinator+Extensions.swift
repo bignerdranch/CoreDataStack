@@ -45,7 +45,7 @@ public extension NSPersistentStoreCoordinator {
         if let store = coordinator.addPersistentStoreWithType(NSSQLiteStoreType,
             configuration: nil,
             URL: url,
-            options: nil,
+            options: storeOptions,
             error: error) {
                 return coordinator
         } else if error.memory == nil {
