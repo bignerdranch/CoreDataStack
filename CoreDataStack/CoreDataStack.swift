@@ -18,17 +18,6 @@ public enum CoreDataStackType {
 }
 
 /**
-Private subclass of NSManagedObject used to remove itself from NSNotificationCenter, 
-as an observer of peer and/or parent contexts save notifications.
-
-*/
-private class StackObservingContext: NSManagedObjectContext {
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-    }
-}
-
-/**
 Base class for creating SQLite backed CoreData stacks.
 
 More or less an abstract base class since the persistentStoreCoordinator is a private property.
@@ -275,5 +264,16 @@ public class SharedCoordinatorStack: CoreDataStack {
                 }
             }
         }
+    }
+}
+
+/**
+Private subclass of NSManagedObject used to remove itself from NSNotificationCenter,
+as an observer of peer and/or parent contexts save notifications.
+
+*/
+private class StackObservingContext: NSManagedObjectContext {
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 }
