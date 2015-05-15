@@ -45,7 +45,7 @@ public extension NSPersistentStoreCoordinator {
         /* If a migration is required use a journal_mode of DELETE 
             see: http://pablin.org/2013/05/24/problems-with-core-data-migration-manager-and-journal-mode-wal/
         */
-        if NSPersistentStoreCoordinator.storeRequiresMigration(storeURL: url, managedObjectModel: managedObjectModel) {
+        if existingStorePresent(storeURL: url) && storeRequiresMigration(storeURL: url, managedObjectModel: managedObjectModel) {
             storeOptions = [
                 NSMigratePersistentStoresAutomaticallyOption: true,
                 NSInferMappingModelAutomaticallyOption: true,
@@ -74,13 +74,17 @@ public extension NSPersistentStoreCoordinator {
     private class func storeRequiresMigration(#storeURL: NSURL, managedObjectModel: NSManagedObjectModel) -> Bool {
         var error: NSError?
         var migrationNeeded = false
-        if let storeMeta = NSPersistentStoreCoordinator.metadataForPersistentStoreOfType(NSSQLiteStoreType, URL: storeURL, error: &error) {
+        if let storeMeta = metadataForPersistentStoreOfType(NSSQLiteStoreType, URL: storeURL, error: &error) {
             migrationNeeded = managedObjectModel.isConfiguration(nil, compatibleWithStoreMetadata: storeMeta)
         } else {
             fatalError("Recovery from this point will be difficult. Failed with error: \(error)")
         }
 
         return migrationNeeded
+    }
+
+    private class func existingStorePresent(#storeURL: NSURL) -> Bool {
+        return NSFileManager.defaultManager().fileExistsAtPath(storeURL.path!)
     }
 
     private static var applicationDocumentsDirectory: NSURL {

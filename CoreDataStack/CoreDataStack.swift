@@ -112,7 +112,6 @@ public class CoreDataStack: NSObject {
     }
 }
 
-
 /**
 Three layer CoreData stack comprised of:
 
@@ -291,7 +290,6 @@ public class SharedCoordinatorStack: CoreDataStack {
 /**
 Private subclass of NSManagedObject used to remove itself from NSNotificationCenter,
 as an observer of peer and/or parent contexts save notifications.
-
 */
 private class StackObservingContext: NSManagedObjectContext {
     deinit {
