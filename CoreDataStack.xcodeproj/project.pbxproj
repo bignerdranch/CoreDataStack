@@ -11,13 +11,13 @@
 		E41764DD1AEE854D00D89DBE /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41764DC1AEE854D00D89DBE /* Book.swift */; };
 		E41764E01AEE85D500D89DBE /* SharedCoordinatorStackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41764DF1AEE85D500D89DBE /* SharedCoordinatorStackTests.swift */; };
 		E41AF9201AF82046004EB4B8 /* ObjectiveCExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E41AF91F1AF82046004EB4B8 /* ObjectiveCExampleTests.m */; };
-		E4C6F39C1AFD05E1004E3F1D /* NSPersistentStoreCoordinator+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C6F39B1AFD05E1004E3F1D /* NSPersistentStoreCoordinator+Extensions.swift */; };
+		E4C6F39C1AFD05E1004E3F1D /* NSPersistentStoreCoordinator+SQLiteHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C6F39B1AFD05E1004E3F1D /* NSPersistentStoreCoordinator+SQLiteHelpers.swift */; };
 		E4C6F3A01AFD4825004E3F1D /* TestModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4C9BC531AEA857E00A6BD1B /* TestModel.xcdatamodeld */; };
 		E4C9BC331AEA848600A6BD1B /* CoreDataStack.h in Headers */ = {isa = PBXBuildFile; fileRef = E4C9BC321AEA848600A6BD1B /* CoreDataStack.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E4C9BC391AEA848600A6BD1B /* CoreDataStack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C9BC2D1AEA848600A6BD1B /* CoreDataStack.framework */; };
 		E4C9BC401AEA848600A6BD1B /* NestedContextStackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C9BC3F1AEA848600A6BD1B /* NestedContextStackTests.swift */; };
 		E4C9BC4D1AEA850600A6BD1B /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C9BC4A1AEA850600A6BD1B /* CoreDataStack.swift */; };
-		E4C9BC4F1AEA850600A6BD1B /* NSManagedObjectContext+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C9BC4C1AEA850600A6BD1B /* NSManagedObjectContext+Extensions.swift */; };
+		E4C9BC4F1AEA850600A6BD1B /* NSManagedObjectContext+SaveHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C9BC4C1AEA850600A6BD1B /* NSManagedObjectContext+SaveHelpers.swift */; };
 		E4C9BC511AEA851A00A6BD1B /* NSError+CoreDataValidationErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C9BC501AEA851A00A6BD1B /* NSError+CoreDataValidationErrors.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,7 +37,7 @@
 		E41764DF1AEE85D500D89DBE /* SharedCoordinatorStackTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedCoordinatorStackTests.swift; sourceTree = "<group>"; };
 		E41AF91E1AF82046004EB4B8 /* CoreDataStackTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CoreDataStackTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		E41AF91F1AF82046004EB4B8 /* ObjectiveCExampleTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectiveCExampleTests.m; sourceTree = "<group>"; };
-		E4C6F39B1AFD05E1004E3F1D /* NSPersistentStoreCoordinator+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSPersistentStoreCoordinator+Extensions.swift"; sourceTree = "<group>"; };
+		E4C6F39B1AFD05E1004E3F1D /* NSPersistentStoreCoordinator+SQLiteHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSPersistentStoreCoordinator+SQLiteHelpers.swift"; sourceTree = "<group>"; };
 		E4C9BC2D1AEA848600A6BD1B /* CoreDataStack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreDataStack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4C9BC311AEA848600A6BD1B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4C9BC321AEA848600A6BD1B /* CoreDataStack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreDataStack.h; sourceTree = "<group>"; };
@@ -45,7 +45,7 @@
 		E4C9BC3E1AEA848600A6BD1B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4C9BC3F1AEA848600A6BD1B /* NestedContextStackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NestedContextStackTests.swift; sourceTree = "<group>"; };
 		E4C9BC4A1AEA850600A6BD1B /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
-		E4C9BC4C1AEA850600A6BD1B /* NSManagedObjectContext+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+Extensions.swift"; sourceTree = "<group>"; };
+		E4C9BC4C1AEA850600A6BD1B /* NSManagedObjectContext+SaveHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+SaveHelpers.swift"; sourceTree = "<group>"; };
 		E4C9BC501AEA851A00A6BD1B /* NSError+CoreDataValidationErrors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSError+CoreDataValidationErrors.swift"; sourceTree = "<group>"; };
 		E4C9BC541AEA857E00A6BD1B /* TestModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TestModel.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -143,8 +143,8 @@
 			isa = PBXGroup;
 			children = (
 				E4C9BC501AEA851A00A6BD1B /* NSError+CoreDataValidationErrors.swift */,
-				E4C9BC4C1AEA850600A6BD1B /* NSManagedObjectContext+Extensions.swift */,
-				E4C6F39B1AFD05E1004E3F1D /* NSPersistentStoreCoordinator+Extensions.swift */,
+				E4C9BC4C1AEA850600A6BD1B /* NSManagedObjectContext+SaveHelpers.swift */,
+				E4C6F39B1AFD05E1004E3F1D /* NSPersistentStoreCoordinator+SQLiteHelpers.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -257,8 +257,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4C9BC4D1AEA850600A6BD1B /* CoreDataStack.swift in Sources */,
-				E4C9BC4F1AEA850600A6BD1B /* NSManagedObjectContext+Extensions.swift in Sources */,
-				E4C6F39C1AFD05E1004E3F1D /* NSPersistentStoreCoordinator+Extensions.swift in Sources */,
+				E4C9BC4F1AEA850600A6BD1B /* NSManagedObjectContext+SaveHelpers.swift in Sources */,
+				E4C6F39C1AFD05E1004E3F1D /* NSPersistentStoreCoordinator+SQLiteHelpers.swift in Sources */,
 				E4C9BC511AEA851A00A6BD1B /* NSError+CoreDataValidationErrors.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
