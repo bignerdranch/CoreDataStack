@@ -38,7 +38,7 @@ See NestedContextStack SharedCoordinatorStack, SharedStoreStack...
 public class CoreDataStack: NSObject {
 
     private let managedObjectModelName: String
-    private var bundle: NSBundle = NSBundle.mainBundle()
+    private let bundle: NSBundle
     private lazy var managedObjectModel: NSManagedObjectModel = {
         let modelURL: NSURL! = self.bundle.URLForResource(self.managedObjectModelName, withExtension: "momd")
         return NSManagedObjectModel(contentsOfURL: modelURL)!
@@ -53,30 +53,6 @@ public class CoreDataStack: NSObject {
     public typealias CoreDataSetupCallback = (success: Bool, error: NSError?) -> Void
 
     /**
-    Creates a SQLite backed CoreData stack for a give model in the current NSBundle.
-
-    :param: modelName String Name of the xcdatamodel for the CoreData Stack.    
-    :param: callback The persistent store cooridiator will be setup asynchronously. This callback serves as notificaton that your stack is fully intialized. _Important_ access to this class is not safe until after this callback has fired.
-
-    :returns: CoreDataStack Newly created stack.
-    */
-    public required init(modelName: String, callback: CoreDataSetupCallback) {
-        managedObjectModelName = modelName
-
-        super.init()
-
-        NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(managedObjectModel, storeFileURL: nil) { (result) in
-            switch result {
-            case .Success(let coordinator):
-                self.persistentStoreCoordinator = coordinator
-                callback(success: true, error: nil)
-            case .Failure(let error):
-                callback(success: false, error: error)
-            }
-        }
-    }
-
-    /**
     Creates a SQLite backed CoreData stack for a give model in the supplyed NSBundle.
 
     :param: modelName Name of the xcdatamodel for the CoreData Stack.
@@ -85,7 +61,7 @@ public class CoreDataStack: NSObject {
 
     :returns: CoreDataStack Newly created stack.
     */
-    public required init(modelName: String, inBundle: NSBundle, callback: CoreDataSetupCallback) {
+    public required init(modelName: String, inBundle: NSBundle = NSBundle.mainBundle(), callback: CoreDataSetupCallback) {
         bundle = inBundle
         managedObjectModelName = modelName
 
