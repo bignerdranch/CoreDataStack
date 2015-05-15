@@ -22,24 +22,11 @@ class SharedCoordinatorStackTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        let storeURL = NSPersistentStoreCoordinator.urlForSQLiteStore(modelName: "TestModel")
-        let path = storeURL.path!
-        if NSFileManager.defaultManager().fileExistsAtPath(path) {
-            var error: NSError?
-            if !NSFileManager.defaultManager().removeItemAtURL(storeURL, error: &error) {
-                println(error)
-                XCTFail("Failed to remove store")
-            }
-        }
-        
         let ex1 = expectationWithDescription("callback")
         stack = SharedCoordinatorStack(modelName: "TestModel", inBundle: NSBundle(forClass: SharedCoordinatorStackTests.self)) { (success, error) in
             XCTAssertTrue(success)
             ex1.fulfill()
         }
-
-
-
         waitForExpectationsWithTimeout(10, handler: nil)
     }
 
@@ -54,10 +41,11 @@ class SharedCoordinatorStackTests: XCTestCase {
         let author = Author.newAuthorInContext(mainContext)
         author.firstName = "Bob"
         XCTAssertTrue(mainContext.saveContextAndWait(nil))
+        let authorID = author.objectID
 
         let backgroundContext = stack.newBackgroundContext(shouldReceiveUpdates: false)
         backgroundContext.performBlockAndWait() {
-            if let author = Author.allAuthorsInContext(backgroundContext).first {
+            if let author = backgroundContext.objectWithID(authorID) as? Author {
                 author.lastName = "Smith"
                 XCTAssertTrue(backgroundContext.saveContextAndWait(nil))
             } else {
@@ -80,11 +68,12 @@ class SharedCoordinatorStackTests: XCTestCase {
 
         let author = Author.newAuthorInContext(mainContext)
         XCTAssertTrue(mainContext.saveContextAndWait(nil))
+        let authorID = author.objectID
 
         //Update Test
 
         backgroundContext.performBlockAndWait {
-            if let author = Author.allAuthorsInContext(backgroundContext).first {
+            if let author = backgroundContext.objectWithID(authorID) as? Author {
                 author.firstName = "Joe"
             } else {
                 XCTFail()
@@ -95,7 +84,7 @@ class SharedCoordinatorStackTests: XCTestCase {
         XCTAssertTrue(mainContext.saveContextAndWait(nil))
 
         backgroundContext.performBlockAndWait() {
-            if let author = Author.allAuthorsInContext(backgroundContext).first, lastName = author.lastName {
+            if let author = backgroundContext.objectWithID(authorID) as? Author, lastName = author.lastName {
                 XCTAssertEqual(lastName, "Blah", "Last name should have been updated here")
             } else {
                 XCTFail()
@@ -108,8 +97,11 @@ class SharedCoordinatorStackTests: XCTestCase {
         XCTAssertTrue(mainContext.saveContextAndWait(nil))
 
         backgroundContext.performBlockAndWait() {
-            XCTAssertEqual(Author.allAuthorsInContext(backgroundContext).count, 0,
-            "Author object should have been removed here also.")
+            if let author = backgroundContext.objectWithID(authorID) as? Author {
+                if !author.deleted {
+                    XCTFail("Author object should have been removed here also.")
+                }
+            }
         }
     }
 
@@ -119,11 +111,12 @@ class SharedCoordinatorStackTests: XCTestCase {
 
         let author = Author.newAuthorInContext(mainContext)
         XCTAssertTrue(mainContext.saveContextAndWait(nil))
+        let authorID = author.objectID
 
         // Update Test
 
         backgroundContext.performBlockAndWait {
-            if let author = Author.allAuthorsInContext(backgroundContext).first {
+            if let author = backgroundContext.objectWithID(authorID) as? Author {
                 author.firstName = "Joe"
             } else {
                 XCTFail()
@@ -134,7 +127,7 @@ class SharedCoordinatorStackTests: XCTestCase {
         XCTAssertTrue(mainContext.saveContextAndWait(nil))
 
         backgroundContext.performBlockAndWait() {
-            if let author = Author.allAuthorsInContext(backgroundContext).first {
+            if let author = backgroundContext.objectWithID(authorID) as? Author {
                 XCTAssertNil(author.lastName,
                     "Last name shouldn't have been propegated from main queue")
             } else {
@@ -149,8 +142,11 @@ class SharedCoordinatorStackTests: XCTestCase {
         XCTAssertTrue(mainContext.saveContextAndWait(nil))
 
         backgroundContext.performBlockAndWait() {
-            XCTAssertEqual(Author.allAuthorsInContext(backgroundContext).count, 1,
-                "Object should be delete from main queue but still living in background.")
+            if let author = backgroundContext.objectWithID(authorID) as? Author {
+                if author.deleted {
+                    XCTFail("Object should be delete from main queue but still living in background.")
+                }
+            }
         }
     }
 }
