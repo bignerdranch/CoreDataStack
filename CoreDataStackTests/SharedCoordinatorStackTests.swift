@@ -22,12 +22,7 @@ class SharedCoordinatorStackTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        let ex1 = expectationWithDescription("callback")
-        stack = SharedCoordinatorStack(modelName: "TestModel", inBundle: NSBundle(forClass: SharedCoordinatorStackTests.self)) { (success, error) in
-            XCTAssertTrue(success)
-            ex1.fulfill()
-        }
-        waitForExpectationsWithTimeout(10, handler: nil)
+        stack = SharedCoordinatorStack(modelName: "TestModel", inBundle: NSBundle(forClass: SharedCoordinatorStackTests.self))
     }
 
     override func tearDown() {

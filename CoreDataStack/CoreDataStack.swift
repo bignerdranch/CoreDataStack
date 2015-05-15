@@ -45,7 +45,7 @@ public class CoreDataStack: NSObject {
     Creates a SQLite backed CoreData stack for a give model in the supplyed NSBundle.
 
     :param: modelName Name of the xcdatamodel for the CoreData Stack.
-    :param: inBundle NSBundle that contains the XCDataModel.
+    :param: inBundle NSBundle that contains the XCDataModel. Default value is mainBundle()
     :param: callback The persistent store cooridiator will be setup asynchronously. This callback serves as notificaton that your stack is fully intialized. _Important_ access to this class is not safe until after this callback has fired.
 
     :returns: CoreDataStack Newly created stack.
@@ -64,6 +64,27 @@ public class CoreDataStack: NSObject {
             case .Failure(let error):
                 callback(success: false, error: error)
             }
+        }
+    }
+
+    /**
+    Creates a CoreData stack with an in memory persistent store.
+    
+    :param: modelName Name of the xcdatamodel for the CoreData Stack.
+    :param: inBundle NSBundle that contains the XCDataModel. Default value is mainBundle()
+    
+    :returns: CoreDataStack Newly created stack.
+    */
+    public required init(modelName: String, inBundle: NSBundle = NSBundle.mainBundle()) {
+        bundle = inBundle
+        managedObjectModelName = modelName
+
+        super.init()
+
+        persistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
+        var storeError: NSError?
+        if persistentStoreCoordinator.addPersistentStoreWithType(NSInMemoryStoreType, configuration: nil, URL: nil, options: nil, error: &storeError) == nil {
+            fatalError("Creating the in memory store failed: \(storeError)")
         }
     }
 
