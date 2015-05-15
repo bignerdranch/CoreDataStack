@@ -36,11 +36,22 @@ public extension NSPersistentStoreCoordinator {
     private class func persistentStoreCoordinator(#managedObjectModel: NSManagedObjectModel, storeURL: NSURL?, error: NSErrorPointer) -> NSPersistentStoreCoordinator? {
         let url = storeURL ?? defaultURL(modleName: nil)
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: managedObjectModel)
-        let storeOptions = [NSMigratePersistentStoresAutomaticallyOption: true,
-            NSInferMappingModelAutomaticallyOption: true];
+        var storeOptions: [NSObject: AnyObject] = [
+            NSMigratePersistentStoresAutomaticallyOption: true,
+            NSInferMappingModelAutomaticallyOption: true,
+            NSSQLitePragmasOption: ["journal_mode": "WAL"]
+        ]
 
-        // TODO: rcedwards NSSQLitePragmasOption: @"journal_mode = WAL" provides write ahead logging but may pose some issues:
-        // http://pablin.org/2013/05/24/problems-with-core-data-migration-manager-and-journal-mode-wal/
+        /* If a migration is required use a journal_mode of DELETE 
+            see: http://pablin.org/2013/05/24/problems-with-core-data-migration-manager-and-journal-mode-wal/
+        */
+        if NSPersistentStoreCoordinator.storeRequiresMigration(storeURL: url, managedObjectModel: managedObjectModel) {
+            storeOptions = [
+                NSMigratePersistentStoresAutomaticallyOption: true,
+                NSInferMappingModelAutomaticallyOption: true,
+                NSSQLitePragmasOption: ["journal_mode": "DELETE"]
+            ]
+        }
 
         if let store = coordinator.addPersistentStoreWithType(NSSQLiteStoreType,
             configuration: nil,
@@ -58,6 +69,18 @@ public extension NSPersistentStoreCoordinator {
     private class func defaultURL(#modleName: String?) -> NSURL {
         let name = modleName ?? "coredatastore"
         return applicationDocumentsDirectory.URLByAppendingPathComponent("\(name).sqlite")
+    }
+
+    private class func storeRequiresMigration(#storeURL: NSURL, managedObjectModel: NSManagedObjectModel) -> Bool {
+        var error: NSError?
+        var migrationNeeded = false
+        if let storeMeta = NSPersistentStoreCoordinator.metadataForPersistentStoreOfType(NSSQLiteStoreType, URL: storeURL, error: &error) {
+            migrationNeeded = managedObjectModel.isConfiguration(nil, compatibleWithStoreMetadata: storeMeta)
+        } else {
+            fatalError("Recovery from this point will be difficult. Failed with error: \(error)")
+        }
+
+        return migrationNeeded
     }
 
     private static var applicationDocumentsDirectory: NSURL {
