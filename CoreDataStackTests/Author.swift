@@ -20,8 +20,8 @@ class Author: NSManagedObject {
         return NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: context) as! Author
     }
 
-    class func allAuthorsInContext(context: NSManagedObjectContext) -> [Author] {
+    class func allAuthorsInContext(context: NSManagedObjectContext) throws -> [Author] {
         let fr = NSFetchRequest(entityName: "Author")
-        return context.executeFetchRequest(fr, error: nil) as! [Author]
+        return try! context.executeFetchRequest(fr) as! [Author]
     }
 }

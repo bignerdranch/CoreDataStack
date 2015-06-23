@@ -35,14 +35,14 @@ class SharedCoordinatorStackTests: XCTestCase {
         let mainContext = stack.mainContext
         let author = Author.newAuthorInContext(mainContext)
         author.firstName = "Bob"
-        XCTAssertTrue(mainContext.saveContextAndWait(nil))
+        try! mainContext.saveContextAndWait()
         let authorID = author.objectID
 
         let backgroundContext = stack.newBackgroundContext(shouldReceiveUpdates: false)
         backgroundContext.performBlockAndWait() {
             if let author = backgroundContext.objectWithID(authorID) as? Author {
                 author.lastName = "Smith"
-                XCTAssertTrue(backgroundContext.saveContextAndWait(nil))
+                try! backgroundContext.saveContextAndWait()
             } else {
                 XCTFail()
             }
@@ -62,7 +62,7 @@ class SharedCoordinatorStackTests: XCTestCase {
         let mainContext = stack.mainContext
 
         let author = Author.newAuthorInContext(mainContext)
-        XCTAssertTrue(mainContext.saveContextAndWait(nil))
+        try! mainContext.saveContextAndWait()
         let authorID = author.objectID
 
         //Update Test
@@ -76,7 +76,7 @@ class SharedCoordinatorStackTests: XCTestCase {
         }
 
         author.lastName = "Blah"
-        XCTAssertTrue(mainContext.saveContextAndWait(nil))
+        try! mainContext.saveContextAndWait()
 
         backgroundContext.performBlockAndWait() {
             if let author = backgroundContext.objectWithID(authorID) as? Author, lastName = author.lastName {
@@ -89,7 +89,7 @@ class SharedCoordinatorStackTests: XCTestCase {
         // Delete Test
 
         mainContext.deleteObject(author)
-        XCTAssertTrue(mainContext.saveContextAndWait(nil))
+        try! mainContext.saveContextAndWait()
 
         backgroundContext.performBlockAndWait() {
             if let author = backgroundContext.objectWithID(authorID) as? Author {
@@ -105,7 +105,7 @@ class SharedCoordinatorStackTests: XCTestCase {
         let mainContext = stack.mainContext
 
         let author = Author.newAuthorInContext(mainContext)
-        XCTAssertTrue(mainContext.saveContextAndWait(nil))
+        try! mainContext.saveContextAndWait()
         let authorID = author.objectID
 
         // Update Test
@@ -119,7 +119,7 @@ class SharedCoordinatorStackTests: XCTestCase {
         }
 
         author.lastName = "Blah"
-        XCTAssertTrue(mainContext.saveContextAndWait(nil))
+        try! mainContext.saveContextAndWait()
 
         backgroundContext.performBlockAndWait() {
             if let author = backgroundContext.objectWithID(authorID) as? Author {
@@ -134,7 +134,7 @@ class SharedCoordinatorStackTests: XCTestCase {
         // Delete Test
         
         mainContext.deleteObject(author)
-        XCTAssertTrue(mainContext.saveContextAndWait(nil))
+        try! mainContext.saveContextAndWait()
 
         backgroundContext.performBlockAndWait() {
             if let author = backgroundContext.objectWithID(authorID) as? Author {

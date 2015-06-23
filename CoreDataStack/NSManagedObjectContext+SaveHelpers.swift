@@ -11,48 +11,68 @@ import CoreData
 public typealias CoreDataSaveCompletion = (Bool, NSError?) -> Void
 
 public extension NSManagedObjectContext {
-    public func saveContextAndWait(error: NSErrorPointer) -> Bool {
-        var success = true
+    public func saveContextAndWait() throws {
+        var saveError: NSError?
         switch concurrencyType {
         case .ConfinementConcurrencyType:
-            success = sharedSaveFlow(error)
-        case .MainQueueConcurrencyType:
-            fallthrough
-        case .PrivateQueueConcurrencyType:
+            do {
+                try sharedSaveFlow()
+            } catch let error as NSError {
+                throw error
+            }
+        case .MainQueueConcurrencyType,
+        .PrivateQueueConcurrencyType:
             self.performBlockAndWait { [unowned self] in
-                success = self.sharedSaveFlow(error)
+                do {
+                    try self.sharedSaveFlow()
+                } catch let error as NSError {
+                    saveError = error
+                } catch {
+                    fatalError("Need either an error or success.")
+                }
             }
         }
 
-        return success
+        if let saveError = saveError {
+            throw saveError
+        }
     }
 
     public func saveContext(completion: CoreDataSaveCompletion? = nil) {
         var error: NSError?
         var success: Bool = true
+
+        let saveFlow: (CoreDataSaveCompletion?) -> () = { [unowned self] completion in
+            do {
+                try self.sharedSaveFlow()
+                success = true
+            } catch let saveError as NSError {
+                error = saveError
+                success = false
+            } catch {
+                fatalError("Need either an error or success.")
+            }
+            completion?(success, error)
+        }
+
         switch concurrencyType {
         case .ConfinementConcurrencyType:
-            success = sharedSaveFlow(&error)
-            completion?(success, error)
-        case .MainQueueConcurrencyType:
-            fallthrough
-        case .PrivateQueueConcurrencyType:
-            self.performBlock { [unowned self] in
-                success = self.sharedSaveFlow(&error)
-                completion?(success, error)
+            saveFlow(completion)
+        case .PrivateQueueConcurrencyType,
+        .MainQueueConcurrencyType:
+            self.performBlock {
+                saveFlow(completion)
             }
         }
     }
 
-    private func sharedSaveFlow(error: NSErrorPointer) -> Bool {
-        var success = true
-        if self.hasChanges && !self.save(error) {
-            success = false
-            println("Failed to save managed object context")
-            if let error = error.memory {
-                println("Error: \(error)")
+    private func sharedSaveFlow() throws {
+        if hasChanges {
+            do {
+                try save()
+            } catch let error as NSError {
+                throw error
             }
         }
-        return success
     }
 }

@@ -11,6 +11,7 @@
 
 #import "CoreDataStackTests-Swift.h"
 #import <CoreDataStack/CoreDataStack.h>
+#import <CoreDataStack/CoreDataStack-Swift.h>
 
 @interface ObjectiveCExampleTests : XCTestCase
 

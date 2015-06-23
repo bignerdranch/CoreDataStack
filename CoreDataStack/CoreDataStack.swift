@@ -44,11 +44,11 @@ public class CoreDataStack: NSObject {
     /**
     Creates a SQLite backed CoreData stack for a give model in the supplyed NSBundle.
 
-    :param: modelName Name of the xcdatamodel for the CoreData Stack.
-    :param: inBundle NSBundle that contains the XCDataModel. Default value is mainBundle()
-    :param: callback The persistent store cooridiator will be setup asynchronously. This callback serves as notificaton that your stack is fully intialized. _Important_ access to this class is not safe until after this callback has fired.
+    - parameter modelName: Name of the xcdatamodel for the CoreData Stack.
+    - parameter inBundle: NSBundle that contains the XCDataModel. Default value is mainBundle()
+    - parameter callback: The persistent store cooridiator will be setup asynchronously. This callback serves as notificaton that your stack is fully intialized. _Important_ access to this class is not safe until after this callback has fired.
 
-    :returns: CoreDataStack Newly created stack.
+    - returns: CoreDataStack Newly created stack.
     */
     public required init(modelName: String, inBundle: NSBundle = NSBundle.mainBundle(), callback: CoreDataSetupCallback) {
         bundle = inBundle
@@ -70,10 +70,10 @@ public class CoreDataStack: NSObject {
     /**
     Creates a CoreData stack with an in memory persistent store.
     
-    :param: modelName Name of the xcdatamodel for the CoreData Stack.
-    :param: inBundle NSBundle that contains the XCDataModel. Default value is mainBundle()
+    - parameter modelName: Name of the xcdatamodel for the CoreData Stack.
+    - parameter inBundle: NSBundle that contains the XCDataModel. Default value is mainBundle()
     
-    :returns: CoreDataStack Newly created stack.
+    - returns: CoreDataStack Newly created stack.
     */
     public required init(modelName: String, inBundle: NSBundle = NSBundle.mainBundle()) {
         bundle = inBundle
@@ -82,10 +82,7 @@ public class CoreDataStack: NSObject {
         super.init()
 
         persistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
-        var storeError: NSError?
-        if persistentStoreCoordinator.addPersistentStoreWithType(NSInMemoryStoreType, configuration: nil, URL: nil, options: nil, error: &storeError) == nil {
-            fatalError("Creating the in memory store failed: \(storeError)")
-        }
+        try! persistentStoreCoordinator.addPersistentStoreWithType(NSInMemoryStoreType, configuration: nil, URL: nil, options: nil)
     }
 
     // MARK: - Public Functions
@@ -95,10 +92,8 @@ public class CoreDataStack: NSObject {
     */
     public func resetPersistentStoreCoordinator(setupCallback: CoreDataSetupCallback) {
         persistentStoreCoordinator = nil
-        var fileRemoveError: NSError?
-        if !NSFileManager.defaultManager().removeItemAtURL(storeURL, error: &fileRemoveError) {
-            setupCallback(success: false, error: fileRemoveError)
-        } else {
+        do {
+            try NSFileManager.defaultManager().removeItemAtURL(storeURL)
             NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(managedObjectModel, storeFileURL: storeURL) { (result: SetupResult) in
                 switch result {
                 case .Success (let coordinator):
@@ -108,6 +103,8 @@ public class CoreDataStack: NSObject {
                     setupCallback(success: false, error: error)
                 }
             }
+        } catch let fileRemoveError as NSError {
+            setupCallback(success: false, error: fileRemoveError)
         }
     }
 }
@@ -131,7 +128,7 @@ public class NestedContextStack: CoreDataStack {
     NSBatchUpdateRequest and NSAsynchronousFetchRequest require a context with a persistent store connected directly,
     if this was not the case this context would be marked private.
 
-    :returns: NSManagedObjectContext The primary persisting background context.
+    - returns: NSManagedObjectContext The primary persisting background context.
     */
     public lazy var privateQueueContext: NSManagedObjectContext! = {
         let coordinator = self.persistentStoreCoordinator
@@ -148,7 +145,7 @@ public class NestedContextStack: CoreDataStack {
     Its parent context is the primary private queue context that persist the data to disk.
     Making a save() call on this context will automatically trigger a save on its parent via NSNotification.
 
-    :returns: NSManagedObjectContext The main queue context.
+    - returns: NSManagedObjectContext The main queue context.
     */
     public lazy var mainQueueContext: NSManagedObjectContext! = {
         let moc = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
@@ -169,7 +166,7 @@ public class NestedContextStack: CoreDataStack {
     
     Calling save() on this managed object context will automatically trigger a save on its parent context via NSNotification observing.
 
-    :returns: NSManagedObjectContext The new worker context.
+    - returns: NSManagedObjectContext The new worker context.
     */
     public func newBackgroundWorkerMOC() -> NSManagedObjectContext {
         let moc = StackObservingContext(concurrencyType: .PrivateQueueConcurrencyType)
@@ -188,12 +185,11 @@ public class NestedContextStack: CoreDataStack {
     // MARK: - Saving
 
     @objc private func stackMemberContextDidSaveNotification(notification: NSNotification) {
-        var success = false
         if notification.object as? NSManagedObjectContext == mainQueueContext {
-            println("Saving \(privateQueueContext) as a result of \(mainQueueContext) being saved.")
+            print("Saving \(privateQueueContext) as a result of \(mainQueueContext) being saved.")
             privateQueueContext.saveContext()
         } else if let notificationMOC = notification.object as? NSManagedObjectContext {
-            println("Saving \(mainQueueContext) as a result of \(notificationMOC) being saved.")
+            print("Saving \(mainQueueContext) as a result of \(notificationMOC) being saved.")
             mainQueueContext.saveContext()
         } else {
             fatalError("Notification posted from an object other than an NSManagedObjectContext")
@@ -235,16 +231,16 @@ public class SharedCoordinatorStack: CoreDataStack {
     /**
     Creates a new background managed object context for performing work on a background queue.
 
-    :param: shouldReceiveUpdates A boolean value specifying if this background context
+    - parameter shouldReceiveUpdates: A boolean value specifying if this background context
                                     should be refreshed with save changes 
                                     from the main queue managed object context. 
                                     The main queue context will be updated with changes from this context
                                     irrespective to this property value.
                                     Default value is false.
 
-    :returns: NSManagedObjectContext The new background context.
+    - returns: NSManagedObjectContext The new background context.
     */
-    public func newBackgroundContext(shouldReceiveUpdates: Bool = false) -> NSManagedObjectContext {
+    public func newBackgroundContext(shouldReceiveUpdates shouldReceiveUpdates: Bool = false) -> NSManagedObjectContext {
         var context: NSManagedObjectContext!
 
         context = StackObservingContext(concurrencyType: .PrivateQueueConcurrencyType)
