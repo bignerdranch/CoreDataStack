@@ -169,7 +169,7 @@ public class NestedContextStack: CoreDataStack {
     - returns: NSManagedObjectContext The new worker context.
     */
     public func newBackgroundWorkerMOC() -> NSManagedObjectContext {
-        let moc = StackObservingContext(concurrencyType: .PrivateQueueConcurrencyType)
+        let moc = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
         moc.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
         moc.parentContext = self.mainQueueContext
         moc.name = "Background Worker Context"
@@ -243,7 +243,7 @@ public class SharedCoordinatorStack: CoreDataStack {
     public func newBackgroundContext(shouldReceiveUpdates shouldReceiveUpdates: Bool = false) -> NSManagedObjectContext {
         var context: NSManagedObjectContext!
 
-        context = StackObservingContext(concurrencyType: .PrivateQueueConcurrencyType)
+        context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
         context.persistentStoreCoordinator = persistentStoreCoordinator
         context.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
         context.name = "Background Context (Shared Coordinator Pattern)"
@@ -280,15 +280,5 @@ public class SharedCoordinatorStack: CoreDataStack {
                 }
             }
         }
-    }
-}
-
-/**
-Private subclass of NSManagedObject used to remove itself from NSNotificationCenter,
-as an observer of peer and/or parent contexts save notifications.
-*/
-private class StackObservingContext: NSManagedObjectContext {
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 }
