@@ -1,13 +1,40 @@
 # BNR CoreData Stack - README is a Work in Progress
 
+The BNR CoreData Stack is a small framework, written in Swift, that makes it easy to quickly set up a multi-threading ready CoreData stack.
 ## Base CoreDataStack
 
-![Legent](./Resources/Legend.png)
+various stack types
 
-## Nested Managed Object Context Stack
+## Stack Types
+
+![Legend](./Resources/Legend.png)
+
+### Nested Managed Object Context Stack Type
 
 ![Nested Managed Object Context Stack](./Resources/NestedMOC.png)
 
-## Thread Confined Managed Object Context Stack
+### Shared Persistent Store Coordinator Stack Type
 
-![Thread Confined Managed Object Context Stack](./Resources/ThreadConfined.png)
+![Thread Confined Managed Object Context Stack](./Resources/SharedPersistentStore.png)
+
+### Shared Store Stack Type
+
+![Shared Store Stack Type](./Resources/SharedStore.png)
+
+### BNR Stack
+
+![Thread Confined Managed Object Context Stack](./Resources/BNR_Stack.png)
+
+## Helpful Extensions
+
+### NSPersistentStoreCoordinator SQLite Helpers
+
+NSPersistentStoreCoordinator+SQLiteHelpers.swift
+
+### NSManagedObjectContext Save Convenience Methods
+
+NSManagedObjectContext+SaveHelpers.swift
+
+### Validation Error Coalescing
+
+NSError+CoreDataValidationErrors.swift
