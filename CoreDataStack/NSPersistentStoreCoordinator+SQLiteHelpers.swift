@@ -19,7 +19,7 @@ public extension NSPersistentStoreCoordinator {
         return defaultURL(modleName: modelName)
     }
 
-    public class func setupSQLiteBackedCoordinator(managedObjectModel: NSManagedObjectModel, storeFileURL: NSURL?, completion: (SetupResult) -> Void) {
+    public class func setupSQLiteBackedCoordinator(managedObjectModel: NSManagedObjectModel, storeFileURL: NSURL, completion: (SetupResult) -> Void) {
         let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
         dispatch_async(backgroundQueue) {
             do {

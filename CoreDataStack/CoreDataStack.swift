@@ -113,7 +113,7 @@ public class CoreDataStack: NSObject {
 
         super.init()
 
-        NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(managedObjectModel, storeFileURL: nil) { (result) in
+        NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(managedObjectModel, storeFileURL: NSPersistentStoreCoordinator.urlForSQLiteStore(modelName: managedObjectModelName)) { (result) in
             switch result {
             case .Success(let coordinator):
                 self.persistentStoreCoordinator = coordinator
@@ -148,9 +148,14 @@ public class CoreDataStack: NSObject {
     Removes the SQLite store from disk and creates a fresh NSPersistentStore.
     */
     public func resetPersistentStoreCoordinator(setupCallback: CoreDataSetupCallback) {
-        persistentStoreCoordinator = nil
         do {
-            try NSFileManager.defaultManager().removeItemAtURL(storeURL)
+            if #available(iOS 9, *), let store = persistentStoreCoordinator.persistentStoreForURL(storeURL) {
+                try persistentStoreCoordinator.removePersistentStore(store)
+            } else {
+                persistentStoreCoordinator = nil
+                try NSFileManager.defaultManager().removeItemAtURL(storeURL)
+            }
+
             NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(managedObjectModel, storeFileURL: storeURL) { (result: SetupResult) in
                 switch result {
                 case .Success (let coordinator):
