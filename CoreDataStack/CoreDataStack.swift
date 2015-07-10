@@ -31,10 +31,6 @@ public class CoreDataStack: NSObject {
     }()
     private var persistentStoreCoordinator: NSPersistentStoreCoordinator!
 
-    // MARK: - Lifecycle
-
-    public typealias CoreDataSetupCallback = (success: Bool, error: NSError?) -> Void
-
     /**
     Primary persisting background managed object context. This is the top level context that possess an
     NSPersistentStoreCoordinator and saves changes to disk on a background queue.
@@ -97,6 +93,10 @@ public class CoreDataStack: NSObject {
         
         return moc
     }
+
+    // MARK: - Lifecycle
+
+    public typealias CoreDataSetupCallback = (success: Bool, error: NSError?) -> Void
 
     /**
     Creates a SQLite backed CoreData stack for a give model in the supplyed NSBundle.
