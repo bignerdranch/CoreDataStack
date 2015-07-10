@@ -12,13 +12,13 @@ import CoreDataStack
 
 class CoreDataStackTests: XCTestCase {
 
-    var stack: NestedContextStack!
+    var stack: CoreDataStack!
 
     override func setUp() {
         super.setUp()
 
         let expectation = expectationWithDescription("callback")
-        stack = NestedContextStack(modelName: "TestModel", inBundle: NSBundle(forClass: CoreDataStackTests.self)) { (success, error) in
+        stack = CoreDataStack(modelName: "TestModel", inBundle: NSBundle(forClass: CoreDataStackTests.self)) { (success, error) in
             XCTAssertTrue(success)
             expectation.fulfill()
         }
