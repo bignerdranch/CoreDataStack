@@ -28,7 +28,7 @@ public extension NSManagedObjectContext {
                 } catch let error as NSError {
                     saveError = error
                 } catch {
-                    fatalError("Need either an error or success.")
+                    assertionFailure("Need either an error or success.")
                 }
             }
         }
@@ -50,7 +50,7 @@ public extension NSManagedObjectContext {
                 error = saveError
                 success = false
             } catch {
-                fatalError("Need either an error or success.")
+                assertionFailure("Need either an error or success.")
             }
             completion?(success, error)
         }

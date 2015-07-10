@@ -175,7 +175,7 @@ public class CoreDataStack: NSObject {
             print("Saving \(mainQueueContext) as a result of \(notificationMOC) being saved.")
             mainQueueContext.saveContext()
         } else {
-            fatalError("Notification posted from an object other than an NSManagedObjectContext")
+            assertionFailure("Notification posted from an object other than an NSManagedObjectContext")
         }
     }
 }

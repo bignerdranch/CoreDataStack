@@ -28,7 +28,7 @@ public extension NSPersistentStoreCoordinator {
             } catch let error as NSError {
                 completion(SetupResult.Failure(error))
             } catch {
-                fatalError("Success or error neccessary")
+                assertionFailure("Success or error neccessary")
             }
         }
     }
