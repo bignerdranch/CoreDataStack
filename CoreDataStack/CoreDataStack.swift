@@ -132,7 +132,7 @@ public class CoreDataStack: NSObject {
     
     - returns: CoreDataStack Newly created stack.
     */
-    public required init(modelName: String, inBundle: NSBundle = NSBundle.mainBundle()) {
+    public required init(inMemoryStoreWithModelName modelName: String, inBundle: NSBundle = NSBundle.mainBundle()) {
         bundle = inBundle
         managedObjectModelName = modelName
 
