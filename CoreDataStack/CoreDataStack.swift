@@ -9,6 +9,13 @@
 import Foundation
 import CoreData
 
+// TODO: rcedwards These will be replaced with Box/Either or something native to Swift (fingers crossed) https://github.com/bignerdranch/CoreDataStack/issues/10
+public enum SetupResult {
+    case Success(NSPersistentStoreCoordinator)
+    case Failure(NSError)
+}
+public typealias CoreDataSetupCallback = (success: Bool, error: NSError?) -> Void
+
 /**
 Three layer CoreData stack comprised of:
 
@@ -73,30 +80,7 @@ public class CoreDataStack: NSObject {
         return moc
         }()
 
-    /**
-    Returns a new background worker managed object context as a child of the main queue context.
-
-    Calling save() on this managed object context will automatically trigger a save on its parent context via NSNotification observing.
-
-    - returns: NSManagedObjectContext The new worker context.
-    */
-    public func newBackgroundWorkerMOC() -> NSManagedObjectContext {
-        let moc = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-        moc.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
-        moc.parentContext = self.mainQueueContext
-        moc.name = "Background Worker Context"
-
-        NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: "stackMemberContextDidSaveNotification:",
-            name: NSManagedObjectContextDidSaveNotification,
-            object: moc)
-        
-        return moc
-    }
-
     // MARK: - Lifecycle
-
-    public typealias CoreDataSetupCallback = (success: Bool, error: NSError?) -> Void
 
     /**
     Creates a SQLite backed CoreData stack for a give model in the supplyed NSBundle.

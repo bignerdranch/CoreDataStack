@@ -8,11 +8,6 @@
 
 import CoreData
 
-public enum SetupResult {
-    case Success(NSPersistentStoreCoordinator)
-    case Failure(NSError)
-}
-
 public extension NSPersistentStoreCoordinator {
 
     public class func urlForSQLiteStore(modelName modelName: String?) -> NSURL {
