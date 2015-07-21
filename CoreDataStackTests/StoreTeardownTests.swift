@@ -23,12 +23,7 @@ class StoreTeardownTests: XCTestCase {
         waitForExpectationsWithTimeout(10, handler: nil)
     }
 
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-
-    func testExample() {
+    func testPersistentStoreReset() {
         let expectation = expectationWithDescription("callback")
         stack.resetPersistentStoreCoordinator() { (success, error) in
             XCTAssertTrue(success)
