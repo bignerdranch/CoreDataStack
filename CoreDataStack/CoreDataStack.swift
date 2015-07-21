@@ -14,6 +14,10 @@ public enum SetupResult {
     case Success(NSPersistentStoreCoordinator)
     case Failure(NSError)
 }
+public enum BatchContextResult {
+    case Success(NSManagedObjectContext)
+    case Failure(NSError)
+}
 public typealias CoreDataSetupCallback = (success: Bool, error: NSError?) -> Void
 
 /**
@@ -127,6 +131,51 @@ public class CoreDataStack: NSObject {
     }
 
     // MARK: - Public Functions
+
+    /**
+    Returns a new background worker managed object context as a child of the main queue context.
+
+    Calling save() on this managed object context will automatically trigger a save on its parent context via NSNotification observing.
+
+    - returns: NSManagedObjectContext The new worker context.
+    */
+    public func newBackgroundWorkerMOC() -> NSManagedObjectContext {
+        let moc = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+        moc.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
+        moc.parentContext = self.mainQueueContext
+        moc.name = "Background Worker Context"
+
+        NSNotificationCenter.defaultCenter().addObserver(self,
+            selector: "stackMemberContextDidSaveNotification:",
+            name: NSManagedObjectContextDidSaveNotification,
+            object: moc)
+
+        return moc
+    }
+
+    /**
+    Returns a new background managed object context connected to 
+        a discrete persistent store coordinator created with the same store URL provided during stack initialization.
+    
+    - returns: NSManagedObjectContext The new background context.
+    */
+    public func newBatchOperationContext(setupCallback: (BatchContextResult) -> Void) {
+        let moc = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+        moc.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyObjectTrumpMergePolicyType)
+        moc.name = "Batch Operation Context"
+
+        NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(managedObjectModel, storeFileURL: storeURL) { (result: SetupResult) in
+            switch result {
+            case .Success(let coordinator):
+                moc.persistentStoreCoordinator = coordinator
+                setupCallback(BatchContextResult.Success(moc))
+                break
+            case .Failure(let error):
+                setupCallback(BatchContextResult.Failure(error))
+                break
+            }
+        }
+    }
 
     /**
     Removes the SQLite store from disk and creates a fresh NSPersistentStore.
