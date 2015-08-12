@@ -152,6 +152,10 @@ Calling save() on any NSMangedObject context, belonging to the stack, will autom
             name: NSManagedObjectContextDidSaveNotification,
             object: mainQueueContext)
     }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
 }
 
 public extension CoreDataStack {
