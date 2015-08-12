@@ -27,19 +27,27 @@ class BatchOperationContextTests: XCTestCase {
         let ex1 = expectationWithDescription("StackSetup")
         let ex2 = expectationWithDescription("MocSetup")
 
-        stack = CoreDataStack(modelName: "TestModel", inBundle: NSBundle(forClass: CoreDataStackTests.self)) { (success, error) in
-            XCTAssertTrue(success)
-            ex1.fulfill()
-        }
+        let bundle = NSBundle(forClass: CoreDataStackTests.self)
 
-        stack.newBatchOperationContext() { (result) in
+        CoreDataStack.constructStack(withModelName: "TestModel", inBundle: bundle) { result in
             switch result {
-            case .Success(let context):
-                self.operationContext = context
+            case .Success(let stack):
+                self.stack = stack
+                stack.newBatchOperationContext() { (result) in
+                    switch result {
+                    case .Success(let context):
+                        self.operationContext = context
+                    case .Failure(let error):
+                        print(error)
+                        XCTFail()
+                    }
+                    ex2.fulfill()
+                }
             case .Failure(let error):
-                XCTFail(error.description)
+                print(error)
+                XCTFail()
             }
-            ex2.fulfill()
+            ex1.fulfill()
         }
 
         waitForExpectationsWithTimeout(10, handler: nil)

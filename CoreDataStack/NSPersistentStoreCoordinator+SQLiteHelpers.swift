@@ -14,16 +14,14 @@ public extension NSPersistentStoreCoordinator {
         return defaultURL(modleName: modelName)
     }
 
-    public class func setupSQLiteBackedCoordinator(managedObjectModel: NSManagedObjectModel, storeFileURL: NSURL, completion: (SetupResult) -> Void) {
+    public class func setupSQLiteBackedCoordinator(managedObjectModel: NSManagedObjectModel, storeFileURL: NSURL, completion: (CoordinatorResult) -> Void) {
         let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
         dispatch_async(backgroundQueue) {
             do {
                 let coordinator = try NSPersistentStoreCoordinator.persistentStoreCoordinator(managedObjectModel: managedObjectModel, storeURL: storeFileURL)
-                completion(SetupResult.Success(coordinator))
-            } catch let error as NSError {
-                completion(SetupResult.Failure(error))
-            } catch {
-                assertionFailure("Success or error neccessary")
+                completion(.Success(coordinator))
+            } catch let error {
+                completion(.Failure(error))
             }
         }
     }

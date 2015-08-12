@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
-#import "CoreDataStackTests-Swift.h"
 #import <CoreDataStack/CoreDataStack.h>
 #import <CoreDataStack/CoreDataStack-Swift.h>
 
@@ -27,8 +26,10 @@
     XCTestExpectation *ex = [self expectationWithDescription:@"Callback"];
 
     NSBundle *bundle = [NSBundle bundleForClass:self.class];
-    self.stack = [[CoreDataStack alloc] initWithModelName:@"TestModel" inBundle:bundle callback:^(BOOL success, NSError *error) {
-        XCTAssertTrue(success);
+    [CoreDataStack objc_constructStackWithModelName:@"TestModel" inBundle:bundle ofStoreType:StoreTypeSQLite callback:^(CoreDataStack * _Nullable stack, NSError * _Nullable error) {
+        XCTAssertNotNil(stack);
+        XCTAssertNil(error);
+        self.stack = stack;
         [ex fulfill];
     }];
 

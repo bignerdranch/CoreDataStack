@@ -18,14 +18,31 @@ class CoreDataStackTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        let expectation = expectationWithDescription("callback")
-        stack = CoreDataStack(modelName: "TestModel", inBundle: NSBundle(forClass: CoreDataStackTests.self)) { (success, error) in
-            XCTAssertTrue(success)
-            expectation.fulfill()
+        let bundle = NSBundle(forClass: CoreDataStackTests.self)
+        let ex1 = expectationWithDescription("SQLite Callback")
+        CoreDataStack.constructStack(withModelName: "TestModel", inBundle: bundle) { result in
+            switch result {
+            case .Success(let stack):
+                self.stack = stack
+            case .Failure(let error):
+                print(error)
+                XCTFail()
+            }
+            ex1.fulfill()
+        }
+
+        let ex2 = expectationWithDescription("In Memory Callback")
+        CoreDataStack.constructStack(withModelName: "TestModel", inBundle: bundle, ofStoreType: .InMemory) { result in
+            switch result {
+            case .Success(let stack):
+                self.memoryStore = stack
+            case .Failure(let error):
+                print(error)
+                XCTFail()
+            }
+            ex2.fulfill()
         }
         waitForExpectationsWithTimeout(10, handler: nil)
-
-        memoryStore = CoreDataStack(inMemoryStoreWithModelName: "TestModel", inBundle: NSBundle(forClass: CoreDataStackTests.self))
     }
 
     func testInitialization() {

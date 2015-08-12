@@ -8,16 +8,16 @@
 
 import CoreData
 
-public typealias CoreDataSaveCompletion = (Bool, NSError?) -> Void
+public typealias CoreDataStackSaveCompletion = SaveResult -> Void
 
 public extension NSManagedObjectContext {
     public func saveContextAndWait() throws {
-        var saveError: NSError?
+        var saveError: ErrorType?
         switch concurrencyType {
         case .ConfinementConcurrencyType:
             do {
                 try sharedSaveFlow()
-            } catch let error as NSError {
+            } catch let error {
                 throw error
             }
         case .MainQueueConcurrencyType,
@@ -25,10 +25,8 @@ public extension NSManagedObjectContext {
             self.performBlockAndWait { [unowned self] in
                 do {
                     try self.sharedSaveFlow()
-                } catch let error as NSError {
+                } catch let error {
                     saveError = error
-                } catch {
-                    assertionFailure("Need either an error or success.")
                 }
             }
         }
@@ -38,21 +36,14 @@ public extension NSManagedObjectContext {
         }
     }
 
-    public func saveContext(completion: CoreDataSaveCompletion? = nil) {
-        var error: NSError?
-        var success: Bool = true
-
-        let saveFlow: (CoreDataSaveCompletion?) -> () = { [unowned self] completion in
+    public func saveContext(completion: CoreDataStackSaveCompletion? = nil) {
+        let saveFlow: (CoreDataStackSaveCompletion?) -> () = { [unowned self] completion in
             do {
                 try self.sharedSaveFlow()
-                success = true
-            } catch let saveError as NSError {
-                error = saveError
-                success = false
-            } catch {
-                assertionFailure("Need either an error or success.")
+                completion?(.Success)
+            } catch let saveError {
+                completion?(.Failure(saveError))
             }
-            completion?(success, error)
         }
 
         switch concurrencyType {
@@ -70,7 +61,7 @@ public extension NSManagedObjectContext {
         if hasChanges {
             do {
                 try save()
-            } catch let error as NSError {
+            } catch let error {
                 throw error
             }
         }

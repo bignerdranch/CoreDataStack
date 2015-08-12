@@ -15,9 +15,16 @@ class StoreTeardownTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
+        let bundle = NSBundle(forClass: CoreDataStackTests.self)
         let expectation = expectationWithDescription("callback")
-        stack = CoreDataStack(modelName: "TestModel", inBundle: NSBundle(forClass: CoreDataStackTests.self)) { (success, error) in
-            XCTAssertTrue(success)
+        CoreDataStack.constructStack(withModelName: "TestModel", inBundle: bundle) { result in
+            switch result {
+            case .Success(let stack):
+                self.stack = stack
+            case .Failure(let error):
+                print(error)
+                XCTFail()
+            }
             expectation.fulfill()
         }
         waitForExpectationsWithTimeout(10, handler: nil)
@@ -25,8 +32,14 @@ class StoreTeardownTests: XCTestCase {
 
     func testPersistentStoreReset() {
         let expectation = expectationWithDescription("callback")
-        stack.resetPersistentStoreCoordinator() { (success, error) in
-            XCTAssertTrue(success)
+        stack.resetPersistentStoreCoordinator() { result in
+            switch result {
+            case .Success:
+                break
+            case .Failure(let error):
+                print(error)
+                XCTFail()
+            }
             expectation.fulfill()
         }
         waitForExpectationsWithTimeout(10, handler: nil)
