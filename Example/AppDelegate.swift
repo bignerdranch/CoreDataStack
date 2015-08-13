@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
-        CoreDataStack.constructStack(withModelName: "Example") { result in
+        CoreDataStack.constructStack(withModelName: "TestModel") { result in
             switch result {
             case .Success(let stack):
                 self.coreDataStack = stack
