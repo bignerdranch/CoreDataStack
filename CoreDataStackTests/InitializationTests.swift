@@ -8,6 +8,7 @@
 
 import XCTest
 
+import CoreData
 import CoreDataStack
 
 class CoreDataStackTests: XCTestCase {
@@ -43,6 +44,16 @@ class CoreDataStackTests: XCTestCase {
             ex2.fulfill()
         }
         waitForExpectationsWithTimeout(10, handler: nil)
+    }
+
+    override func tearDown() {
+        let destinationURL = NSPersistentStoreCoordinator.urlForSQLiteStore(modelName: "TestModel")
+        let fileManager = NSFileManager.defaultManager()
+        if fileManager.fileExistsAtPath(destinationURL.path!) {
+            try! fileManager.removeItemAtURL(destinationURL)
+        }
+
+        super.tearDown()
     }
 
     func testInitialization() {

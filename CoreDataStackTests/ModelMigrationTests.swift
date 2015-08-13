@@ -25,6 +25,16 @@ class ModelMigrationTests: XCTestCase {
         }
         try! NSFileManager.defaultManager().copyItemAtURL(existingModelURL, toURL: destinationURL)
     }
+
+    override func tearDown() {
+        let destinationURL = NSPersistentStoreCoordinator.urlForSQLiteStore(modelName: "TestModel")
+        let fileManager = NSFileManager.defaultManager()
+        if fileManager.fileExistsAtPath(destinationURL.path!) {
+            try! fileManager.removeItemAtURL(destinationURL)
+        }
+
+        super.tearDown()
+    }
     
     func testVersionMigration() {
         let ex1 = expectationWithDescription("Setup Expectation")

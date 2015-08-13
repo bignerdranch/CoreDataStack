@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
+#import <CoreData/CoreData.h>
+
 #import <CoreDataStack/CoreDataStack.h>
 #import <CoreDataStack/CoreDataStack-Swift.h>
 
@@ -34,6 +36,16 @@
     }];
 
     [self waitForExpectationsWithTimeout:10 handler:nil];
+}
+
+- (void)tearDown {
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSURL *destURL = [NSPersistentStoreCoordinator urlForSQLiteStoreWithModelName:@"TestModel"];
+    if ([fm fileExistsAtPath:destURL.path]) {
+        [fm removeItemAtURL:destURL error:nil];
+    }
+
+    [super tearDown];
 }
 
 - (void)testInitializaton {

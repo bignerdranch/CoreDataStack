@@ -8,6 +8,8 @@
 
 import XCTest
 
+import CoreData
+
 class StoreTeardownTests: XCTestCase {
 
     var stack: CoreDataStack!
@@ -28,6 +30,16 @@ class StoreTeardownTests: XCTestCase {
             expectation.fulfill()
         }
         waitForExpectationsWithTimeout(10, handler: nil)
+    }
+
+    override func tearDown() {
+        let destinationURL = NSPersistentStoreCoordinator.urlForSQLiteStore(modelName: "TestModel")
+        let fileManager = NSFileManager.defaultManager()
+        if fileManager.fileExistsAtPath(destinationURL.path!) {
+            try! fileManager.removeItemAtURL(destinationURL)
+        }
+
+        super.tearDown()
     }
 
     func testPersistentStoreReset() {
