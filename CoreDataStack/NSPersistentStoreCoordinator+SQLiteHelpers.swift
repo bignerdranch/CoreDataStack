@@ -66,7 +66,7 @@ public extension NSPersistentStoreCoordinator {
         var migrationNeeded = false
         do {
             let storeMeta = try metadataForPersistentStoreOfType(NSSQLiteStoreType, URL: storeURL)
-            migrationNeeded = managedObjectModel.isConfiguration(nil, compatibleWithStoreMetadata: storeMeta)
+            migrationNeeded = !managedObjectModel.isConfiguration(nil, compatibleWithStoreMetadata: storeMeta)
         } catch let error as NSError {
             fatalError("Recovery from this point will be difficult. Failed with error: \(error)")
         }
