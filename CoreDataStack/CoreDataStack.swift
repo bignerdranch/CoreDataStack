@@ -83,12 +83,9 @@ Calling save() on any NSMangedObject context, belonging to the stack, will autom
     - returns: NSManagedObjectContext The main queue context.
     */
     public let mainQueueContext: NSManagedObjectContext = {
-        var managedObjectContext: NSManagedObjectContext!
-        dispatch_sync(dispatch_get_main_queue()) {
-            managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
-            managedObjectContext.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
-            managedObjectContext.name = "Main Queue Context (UI Context)"
-        }
+        let managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
+        managedObjectContext.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
+        managedObjectContext.name = "Main Queue Context (UI Context)"
         return managedObjectContext
         }()
 
