@@ -54,16 +54,10 @@ class BatchOperationContextTests: XCTestCase {
     }
 
     override func tearDown() {
-        // Delete all the inserted books
-        if #available(iOS 9.0, *) {
-            let resetReq = NSBatchDeleteRequest(fetchRequest: bookFetchRequest)
-            try! stack.mainQueueContext.executeRequest(resetReq)
-        } else {
-            let books = try! stack.mainQueueContext.executeFetchRequest(bookFetchRequest) as! [Book]
-            for book in books {
-                stack.mainQueueContext.deleteObject(book)
-            }
-            stack.mainQueueContext.saveContext()
+        let destinationURL = NSPersistentStoreCoordinator.urlForSQLiteStore(modelName: "TestModel")
+        let fileManager = NSFileManager.defaultManager()
+        if fileManager.fileExistsAtPath(destinationURL.path!) {
+            try! fileManager.removeItemAtURL(destinationURL)
         }
 
         super.tearDown()
