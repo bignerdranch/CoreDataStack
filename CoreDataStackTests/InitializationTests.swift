@@ -11,17 +11,15 @@ import XCTest
 import CoreData
 import CoreDataStack
 
-class CoreDataStackTests: XCTestCase {
+class CoreDataStackTests: TempDirectoryTestCase {
 
     var stack: CoreDataStack!
     var memoryStore: CoreDataStack!
 
-    override func setUp() {
-        super.setUp()
-
+    func testInitialization() throws {
         let bundle = NSBundle(forClass: CoreDataStackTests.self)
         let ex1 = expectationWithDescription("SQLite Callback")
-        CoreDataStack.constructStack(withModelName: "TestModel", inBundle: bundle) { result in
+        try CoreDataStack.constructStack(withModelName: "TestModel", inBundle: bundle, inDirectoryAtURL: tempDirectory) { result in
             switch result {
             case .Success(let stack):
                 self.stack = stack
@@ -31,9 +29,9 @@ class CoreDataStackTests: XCTestCase {
             }
             ex1.fulfill()
         }
-
+        
         let ex2 = expectationWithDescription("In Memory Callback")
-        CoreDataStack.constructStack(withModelName: "TestModel", inBundle: bundle, ofStoreType: .InMemory) { result in
+        try CoreDataStack.constructStack(withModelName: "TestModel", inBundle: bundle, ofStoreType: .InMemory) { result in
             switch result {
             case .Success(let stack):
                 self.memoryStore = stack
@@ -44,19 +42,7 @@ class CoreDataStackTests: XCTestCase {
             ex2.fulfill()
         }
         waitForExpectationsWithTimeout(10, handler: nil)
-    }
 
-    override func tearDown() {
-        let destinationURL = NSPersistentStoreCoordinator.urlForSQLiteStore(modelName: "TestModel")
-        let fileManager = NSFileManager.defaultManager()
-        if fileManager.fileExistsAtPath(destinationURL.path!) {
-            try! fileManager.removeItemAtURL(destinationURL)
-        }
-
-        super.tearDown()
-    }
-
-    func testInitialization() {
         XCTAssertNotNil(stack.mainQueueContext)
         XCTAssertNotNil(stack.privateQueueContext)
 

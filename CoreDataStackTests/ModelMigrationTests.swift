@@ -10,40 +10,18 @@ import XCTest
 
 import CoreData
 
-class ModelMigrationTests: XCTestCase {
+class ModelMigrationTests: TempDirectoryTestCase {
 
     let bundle = NSBundle(forClass: ModelMigrationTests.self)
-    override func setUp() {
-        super.setUp()
-
-        let existingModelURL = bundle.URLForResource("TestModel", withExtension: "sqlite")!
-
-        let destinationURL = NSPersistentStoreCoordinator.urlForSQLiteStore(modelName: "TestModel")
-        let fileManager = NSFileManager.defaultManager()
-        if fileManager.fileExistsAtPath(destinationURL.path!) {
-            try! fileManager.removeItemAtURL(destinationURL)
-        }
-        try! NSFileManager.defaultManager().copyItemAtURL(existingModelURL, toURL: destinationURL)
-    }
-
-    override func tearDown() {
-        let destinationURL = NSPersistentStoreCoordinator.urlForSQLiteStore(modelName: "TestModel")
-        let fileManager = NSFileManager.defaultManager()
-        if fileManager.fileExistsAtPath(destinationURL.path!) {
-            try! fileManager.removeItemAtURL(destinationURL)
-        }
-
-        super.tearDown()
-    }
     
-    func testVersionMigration() {
+    func testVersionMigration() throws {
         let ex1 = expectationWithDescription("Setup Expectation")
-        CoreDataStack.constructStack(withModelName: "TestModel", inBundle: bundle, ofStoreType: .SQLite) { result in
+        try CoreDataStack.constructStack(withModelName: "TestModel", inBundle: bundle, ofStoreType: .SQLite, inDirectoryAtURL: tempDirectory) { result in
             switch result {
             case .Success(let stack):
                 XCTAssertNotNil(stack.mainQueueContext)
             case .Failure(let error):
-                XCTFail("\(error)")
+                XCTFail("Error constructing stack: \(error)")
             }
             ex1.fulfill()
         }

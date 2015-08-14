@@ -10,7 +10,7 @@ import XCTest
 
 import CoreData
 
-class BatchOperationContextTests: XCTestCase {
+class BatchOperationContextTests: TempDirectoryTestCase {
 
     var stack: CoreDataStack!
     var operationContext: NSManagedObjectContext!
@@ -29,38 +29,34 @@ class BatchOperationContextTests: XCTestCase {
 
         let bundle = NSBundle(forClass: CoreDataStackTests.self)
 
-        CoreDataStack.constructStack(withModelName: "TestModel", inBundle: bundle) { result in
-            switch result {
-            case .Success(let stack):
-                self.stack = stack
-                stack.newBatchOperationContext() { (result) in
-                    switch result {
-                    case .Success(let context):
-                        self.operationContext = context
-                    case .Failure(let error):
-                        print(error)
-                        XCTFail()
+        do {
+            try CoreDataStack.constructStack(withModelName: "TestModel", inBundle: bundle, inDirectoryAtURL: tempDirectory) { result in
+                switch result {
+                case .Success(let stack):
+                    self.stack = stack
+                    do {
+                        try stack.newBatchOperationContext() { (result) in
+                            switch result {
+                            case .Success(let context):
+                                self.operationContext = context
+                            case .Failure(let error):
+                                XCTFail("Error creating batch operation context: \(error)")
+                            }
+                            ex2.fulfill()
+                        }
+                    } catch let error {
+                        XCTFail("Error creating batch operation context: \(error)")
                     }
-                    ex2.fulfill()
+                case .Failure(let error):
+                    XCTFail("Error constructing stack: \(error)")
                 }
-            case .Failure(let error):
-                print(error)
-                XCTFail()
+                ex1.fulfill()
             }
-            ex1.fulfill()
+        } catch let error {
+            XCTFail("Error constructing stack: \(error)")
         }
 
         waitForExpectationsWithTimeout(10, handler: nil)
-    }
-
-    override func tearDown() {
-        let destinationURL = NSPersistentStoreCoordinator.urlForSQLiteStore(modelName: "TestModel")
-        let fileManager = NSFileManager.defaultManager()
-        if fileManager.fileExistsAtPath(destinationURL.path!) {
-            try! fileManager.removeItemAtURL(destinationURL)
-        }
-
-        super.tearDown()
     }
 
     func testBatchOperation() {

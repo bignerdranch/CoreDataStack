@@ -14,7 +14,9 @@
 #import <CoreDataStack/CoreDataStack.h>
 #import <CoreDataStack/CoreDataStack-Swift.h>
 
-@interface ObjectiveCExampleTests : XCTestCase
+#import "CoreDataStackTests-Swift.h"
+
+@interface ObjectiveCExampleTests : TempDirectoryTestCase
 
 @property (nonatomic, strong) CoreDataStack *stack;
 
@@ -38,19 +40,7 @@
     [self waitForExpectationsWithTimeout:10 handler:nil];
 }
 
-- (void)tearDown {
-    NSFileManager *fm = [NSFileManager defaultManager];
-    NSURL *destURL = [NSPersistentStoreCoordinator urlForSQLiteStoreWithModelName:@"TestModel"];
-    if ([fm fileExistsAtPath:destURL.path]) {
-        [fm removeItemAtURL:destURL error:nil];
-    }
-
-    [super tearDown];
-}
-
 - (void)testInitializaton {
-    XCTAssert(YES, @"Pass");
-
     XCTAssertNotNil(self.stack);
     XCTAssertNotNil(self.stack.mainQueueContext);
 

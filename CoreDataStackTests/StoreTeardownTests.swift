@@ -10,7 +10,7 @@ import XCTest
 
 import CoreData
 
-class StoreTeardownTests: XCTestCase {
+class StoreTeardownTests: TempDirectoryTestCase {
 
     var stack: CoreDataStack!
 
@@ -19,28 +19,22 @@ class StoreTeardownTests: XCTestCase {
 
         let bundle = NSBundle(forClass: CoreDataStackTests.self)
         let expectation = expectationWithDescription("callback")
-        CoreDataStack.constructStack(withModelName: "TestModel", inBundle: bundle) { result in
-            switch result {
-            case .Success(let stack):
-                self.stack = stack
-            case .Failure(let error):
-                print(error)
-                XCTFail()
+        do {
+            try CoreDataStack.constructStack(withModelName: "TestModel", inBundle: bundle, inDirectoryAtURL: tempDirectory) { result in
+                switch result {
+                case .Success(let stack):
+                    self.stack = stack
+                case .Failure(let error):
+                    XCTFail("Error constructing stack: \(error)")
+                }
+                expectation.fulfill()
             }
-            expectation.fulfill()
+        } catch let error {
+            XCTFail("Error constructing stack: \(error)")
         }
         waitForExpectationsWithTimeout(10, handler: nil)
     }
 
-    override func tearDown() {
-        let destinationURL = NSPersistentStoreCoordinator.urlForSQLiteStore(modelName: "TestModel")
-        let fileManager = NSFileManager.defaultManager()
-        if fileManager.fileExistsAtPath(destinationURL.path!) {
-            try! fileManager.removeItemAtURL(destinationURL)
-        }
-
-        super.tearDown()
-    }
 
     func testPersistentStoreReset() {
         let expectation = expectationWithDescription("callback")
