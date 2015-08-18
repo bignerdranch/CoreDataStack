@@ -53,7 +53,7 @@ Three layer CoreData stack comprised of:
 * A main queue context that is a child of the primary queue
 * A method for spawning many background worker contexts that are children of the main queue context
 
-Calling save() on any NSMangedObject context, belonging to the stack, will automatically bubble the changes all the way to the NSPersistentStore
+Calling save() on any NSMangedObjectContext belonging to the stack will automatically bubble the changes all the way to the NSPersistentStore
 */
 @objc public final class CoreDataStack: NSObject {
 
