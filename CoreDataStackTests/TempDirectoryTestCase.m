@@ -8,6 +8,12 @@
 
 #import "TempDirectoryTestCase.h"
 
+@interface TempDirectoryTestCase()
+
+@property (nonatomic, strong) NSURL *tempDirectory;
+
+@end
+
 @implementation TempDirectoryTestCase
 
 - (NSURL *)makeTempDirectory {
@@ -35,6 +41,7 @@
     [super setUp];
     
     self.tempDirectory = [self makeTempDirectory];
+    self.tempStoreURL = [self.tempDirectory URLByAppendingPathComponent:@"testmodel.sqlite"];
 }
 
 - (void)tearDown {

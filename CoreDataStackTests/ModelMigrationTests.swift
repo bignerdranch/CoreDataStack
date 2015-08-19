@@ -16,7 +16,7 @@ class ModelMigrationTests: TempDirectoryTestCase {
     
     func testVersionMigration() throws {
         let ex1 = expectationWithDescription("Setup Expectation")
-        try CoreDataStack.constructStack(withModelName: "TestModel", inBundle: bundle, ofStoreType: .SQLite, inDirectoryAtURL: tempDirectory) { result in
+        CoreDataStack.constructStack(withModelName: "TestModel", inBundle: bundle, ofStoreType: .SQLite(desiredStoreURL: tempStoreURL)) { result in
             switch result {
             case .Success(let stack):
                 XCTAssertNotNil(stack.mainQueueContext)
