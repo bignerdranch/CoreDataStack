@@ -51,12 +51,6 @@ Three layer CoreData stack comprised of:
 Calling save() on any NSMangedObjectContext belonging to the stack will automatically bubble the changes all the way to the NSPersistentStore
 */
 public final class CoreDataStack {
-
-    public enum StoreType {
-        case InMemory
-        case SQLite(desiredStoreURL: NSURL!)
-    }
-
     /**
     Primary persisting background managed object context. This is the top level context that possess an
     NSPersistentStoreCoordinator and saves changes to disk on a background queue.
@@ -109,39 +103,42 @@ public final class CoreDataStack {
     - parameter callback: The SQLite persistent store coordinator will be setup asynchronously. This callback will be passed either an initialized CoreDataStack object or an ErrorType value. In-memory stores have this callback executed inline.
     - throws CoreDataStackError.InvalidSQLiteStoreURL if a URL cannot be created to persist to disk.
     */
-    public static func constructStack(withModelName modelName: String,
+    public static func constructSQLiteStack(withModelName modelName: String,
         inBundle bundle: NSBundle = NSBundle.mainBundle(),
-        ofStoreType storeType: StoreType = .SQLite(desiredStoreURL: nil),
+        withPreferredStoreURL desiredStoreURL: NSURL? = nil,
         callback: CoreDataStackSetupCallback) {
-            
-        let model = bundle.managedObjectModel(modelName: modelName)
-
-        switch storeType {
-        case .InMemory:
-            let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
-            do {
-                try coordinator.addPersistentStoreWithType(NSInMemoryStoreType, configuration: nil, URL: nil, options: nil)
-                let stack = CoreDataStack(modelName: modelName, bundle: bundle, persistentStoreCoordinator: coordinator, storeType: .InMemory)
-                callback(.Success(stack))
-            } catch let coordinatorError {
-                callback(.Failure(coordinatorError))
-            }
-            
-        case .SQLite(let desiredURL):
-            let storeFileURL = desiredURL ?? NSURL(string: "\(modelName).sqlite", relativeToURL: documentsDirectory)!
+            let model = bundle.managedObjectModel(modelName: modelName)
+            let storeFileURL = desiredStoreURL ?? NSURL(string: "\(modelName).sqlite", relativeToURL: documentsDirectory)!
             NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(model, storeFileURL: storeFileURL) { coordinatorResult in
                 switch coordinatorResult {
                 case .Success(let coordinator):
-                    let stack = CoreDataStack(modelName: modelName, bundle: bundle, persistentStoreCoordinator: coordinator, storeType: .SQLite(desiredStoreURL: storeFileURL))
+                    let stack = CoreDataStack(modelName : modelName, bundle: bundle, persistentStoreCoordinator: coordinator, storeType: .SQLite(storeURL: storeFileURL))
                     callback(.Success(stack))
                 case .Failure(let error):
                     callback(.Failure(error))
                 }
             }
-        }
+    }
+
+    public static func constructInMemoryStack(withModelName modelName: String,
+        inBundle bundle: NSBundle = NSBundle.mainBundle()) throws -> CoreDataStack {
+            let model = bundle.managedObjectModel(modelName: modelName)
+            let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
+            do {
+                try coordinator.addPersistentStoreWithType(NSInMemoryStoreType, configuration: nil, URL: nil, options: nil)
+                let stack = CoreDataStack(modelName: modelName, bundle: bundle, persistentStoreCoordinator: coordinator, storeType: .InMemory)
+                return stack
+            } catch {
+                throw error
+            }
     }
 
     // MARK: - Private Implementation
+
+    private enum StoreType {
+        case InMemory
+        case SQLite(storeURL: NSURL)
+    }
 
     private let managedObjectModelName: String
     private let storeType: StoreType
