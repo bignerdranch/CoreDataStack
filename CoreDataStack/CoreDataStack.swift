@@ -229,31 +229,33 @@ public extension CoreDataStack {
 
     /**
     Creates a new background managed object context connected to
-    a discrete persistent store coordinator created with the same store URL provided during stack initialization.
+    a discrete persistent store coordinator created with the same store used by the stack in construction.
 
     - parameter setupCallback: A callback with either the new managed object context or an ErrorType value with the error
-    - throws CoreDataStackError.NoSQLiteStoreURL if there is no store on disk to support this
     */
     public func newBatchOperationContext(setupCallback: CoreDataStackBatchMOCCallback) {
-
         let moc = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
         moc.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyObjectTrumpMergePolicyType)
         moc.name = "Batch Operation Context"
 
         switch storeType {
         case .InMemory:
-            // TODO: rcedwards Implement this
-            break
+            let coordinator = NSPersistentStoreCoordinator(managedObjectModel: managedObjectModel)
+            do {
+                try coordinator.addPersistentStoreWithType(NSInMemoryStoreType, configuration: nil, URL: nil, options: nil)
+                moc.persistentStoreCoordinator = coordinator
+                setupCallback(.Success(moc))
+            } catch {
+                setupCallback(.Failure(error))
+            }
         case .SQLite(let storeURL):
             NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(managedObjectModel, storeFileURL: storeURL) { result in
                 switch result {
                 case .Success(let coordinator):
                     moc.persistentStoreCoordinator = coordinator
                     setupCallback(.Success(moc))
-                    break
                 case .Failure(let error):
                     setupCallback(.Failure(error))
-                    break
                 }
             }
         }
