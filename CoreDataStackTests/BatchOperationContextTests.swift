@@ -29,31 +29,23 @@ class BatchOperationContextTests: TempDirectoryTestCase {
 
         let bundle = NSBundle(forClass: CoreDataStackTests.self)
 
-        do {
-            try CoreDataStack.constructStack(withModelName: "TestModel", inBundle: bundle, inDirectoryAtURL: tempDirectory) { result in
-                switch result {
-                case .Success(let stack):
-                    self.stack = stack
-                    do {
-                        try stack.newBatchOperationContext() { (result) in
-                            switch result {
-                            case .Success(let context):
-                                self.operationContext = context
-                            case .Failure(let error):
-                                XCTFail("Error creating batch operation context: \(error)")
-                            }
-                            ex2.fulfill()
-                        }
-                    } catch let error {
+        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: bundle, withStoreURL: tempStoreURL) { result in
+            switch result {
+            case .Success(let stack):
+                self.stack = stack
+                stack.newBatchOperationContext() { (result) in
+                    switch result {
+                    case .Success(let context):
+                        self.operationContext = context
+                    case .Failure(let error):
                         XCTFail("Error creating batch operation context: \(error)")
                     }
-                case .Failure(let error):
-                    XCTFail("Error constructing stack: \(error)")
+                    ex2.fulfill()
                 }
-                ex1.fulfill()
+            case .Failure(let error):
+                XCTFail("Error constructing stack: \(error)")
             }
-        } catch let error {
-            XCTFail("Error constructing stack: \(error)")
+            ex1.fulfill()
         }
 
         waitForExpectationsWithTimeout(10, handler: nil)

@@ -19,19 +19,16 @@ class StoreTeardownTests: TempDirectoryTestCase {
 
         let bundle = NSBundle(forClass: CoreDataStackTests.self)
         let expectation = expectationWithDescription("callback")
-        do {
-            try CoreDataStack.constructStack(withModelName: "TestModel", inBundle: bundle, inDirectoryAtURL: tempDirectory) { result in
-                switch result {
-                case .Success(let stack):
-                    self.stack = stack
-                case .Failure(let error):
-                    XCTFail("Error constructing stack: \(error)")
-                }
-                expectation.fulfill()
+        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: bundle, withStoreURL: tempStoreURL) { result in
+            switch result {
+            case .Success(let stack):
+                self.stack = stack
+            case .Failure(let error):
+                XCTFail("Error constructing stack: \(error)")
             }
-        } catch let error {
-            XCTFail("Error constructing stack: \(error)")
+            expectation.fulfill()
         }
+
         waitForExpectationsWithTimeout(10, handler: nil)
     }
 

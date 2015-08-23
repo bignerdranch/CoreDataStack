@@ -10,6 +10,6 @@
 
 @interface TempDirectoryTestCase : XCTestCase
 
-@property (nonatomic, strong) NSURL *tempDirectory;
+@property (nonatomic, strong) NSURL *tempStoreURL;
 
 @end
