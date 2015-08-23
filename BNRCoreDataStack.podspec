@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "BNRCoreDataStack"
-  s.version      = "0.3.0b1"
+  s.version      = "0.3.0b2"
   s.summary      = "The Big Nerd Ranch Core Data stack."
 
   s.description  = <<-DESC
@@ -33,15 +33,12 @@ DESC
 
 
   s.authors              = ["Robert Edwards", "Brian Hardy"]
-  # Or just: s.author    = "Brian Hardy"
-  # s.authors            = { "Brian Hardy" => "brian@bignerdranch.com" }
-  # s.social_media_url   = "http://twitter.com/Brian Hardy"
 
   s.ios.deployment_target = "8.0"
   s.osx.deployment_target = "10.10"
 
 
-  s.source       = { :git => "git@github.com:bignerdranch/CoreDataStack.git", :tag => "v0.3.0b1" }
+  s.source       = { :git => "git@github.com:bignerdranch/CoreDataStack.git", :tag => "v0.3.0b2" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
