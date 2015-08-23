@@ -20,7 +20,7 @@ class CoreDataStackTests: TempDirectoryTestCase {
         let bundle = NSBundle(forClass: CoreDataStackTests.self)
         let ex1 = expectationWithDescription("SQLite Callback")
 
-        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: bundle, withPreferredStoreURL: tempStoreURL) { result in
+        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: bundle, withStoreURL: tempStoreURL) { result in
             switch result {
             case .Success(let stack):
                 self.stack = stack

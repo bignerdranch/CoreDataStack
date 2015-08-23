@@ -93,19 +93,16 @@ public final class CoreDataStack {
         It is also possible that you might want to create an in-memory-store-backed MOC for a CoreDataStack that uses SQLite otherwise.
     */
     /**
-    Creates a SQLite backed CoreData stack for a give model in the supplyed NSBundle.
+    Creates a SQLite backed CoreData stack for a given model in the supplied NSBundle.
 
     - parameter modelName: Name of the xcdatamodel for the CoreData Stack.
     - parameter inBundle: NSBundle that contains the XCDataModel. Default value is mainBundle()
-    - parameter ofStoreType: CoreDataStack.StoreType type for the stack. Default value is SQLite
-    - parameter persistingToFilename: Optional name of a file to use on disk. If SQLite store type is used and this is nil, defaults to "\(modelName).sqlite"
-    - parameter inDirectoryAtURL: NSURL specifying the directory where the store file will go. If SQLite store type is used and this is nil, defaults to the user's documents directory.
-    - parameter callback: The SQLite persistent store coordinator will be setup asynchronously. This callback will be passed either an initialized CoreDataStack object or an ErrorType value. In-memory stores have this callback executed inline.
-    - throws CoreDataStackError.InvalidSQLiteStoreURL if a URL cannot be created to persist to disk.
+    - parameter withStoreURL: Optional URL to use for storing the SQLite file. Defaults to "\(modelName).sqlite" in the Documents directory.
+    - parameter callback: The SQLite persistent store coordinator will be setup asynchronously. This callback will be passed either an initialized CoreDataStack object or an ErrorType value.
     */
     public static func constructSQLiteStack(withModelName modelName: String,
         inBundle bundle: NSBundle = NSBundle.mainBundle(),
-        withPreferredStoreURL desiredStoreURL: NSURL? = nil,
+        withStoreURL desiredStoreURL: NSURL? = nil,
         callback: CoreDataStackSetupCallback) {
             let model = bundle.managedObjectModel(modelName: modelName)
             let storeFileURL = desiredStoreURL ?? NSURL(string: "\(modelName).sqlite", relativeToURL: documentsDirectory)!
@@ -124,13 +121,9 @@ public final class CoreDataStack {
         inBundle bundle: NSBundle = NSBundle.mainBundle()) throws -> CoreDataStack {
             let model = bundle.managedObjectModel(modelName: modelName)
             let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
-            do {
-                try coordinator.addPersistentStoreWithType(NSInMemoryStoreType, configuration: nil, URL: nil, options: nil)
-                let stack = CoreDataStack(modelName: modelName, bundle: bundle, persistentStoreCoordinator: coordinator, storeType: .InMemory)
-                return stack
-            } catch {
-                throw error
-            }
+            try coordinator.addPersistentStoreWithType(NSInMemoryStoreType, configuration: nil, URL: nil, options: nil)
+            let stack = CoreDataStack(modelName: modelName, bundle: bundle, persistentStoreCoordinator: coordinator, storeType: .InMemory)
+            return stack
     }
 
     // MARK: - Private Implementation
