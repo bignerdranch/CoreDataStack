@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
-        try! CoreDataStack.constructStack(withModelName: "TestModel") { result in
+        CoreDataStack.constructSQLiteStack(withModelName: "TestModel") { result in
             switch result {
             case .Success(let stack):
                 self.coreDataStack = stack
