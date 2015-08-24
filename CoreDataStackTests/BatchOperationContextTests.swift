@@ -10,7 +10,7 @@ import XCTest
 
 import CoreData
 
-class BatchOperationContextTests: XCTestCase {
+class BatchOperationContextTests: TempDirectoryTestCase {
 
     var stack: CoreDataStack!
     var operationContext: NSManagedObjectContext!
@@ -29,7 +29,7 @@ class BatchOperationContextTests: XCTestCase {
 
         let bundle = NSBundle(forClass: CoreDataStackTests.self)
 
-        CoreDataStack.constructStack(withModelName: "TestModel", inBundle: bundle) { result in
+        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: bundle, withStoreURL: tempStoreURL) { result in
             switch result {
             case .Success(let stack):
                 self.stack = stack
@@ -38,35 +38,17 @@ class BatchOperationContextTests: XCTestCase {
                     case .Success(let context):
                         self.operationContext = context
                     case .Failure(let error):
-                        print(error)
-                        XCTFail()
+                        XCTFail("Error creating batch operation context: \(error)")
                     }
                     ex2.fulfill()
                 }
             case .Failure(let error):
-                print(error)
-                XCTFail()
+                XCTFail("Error constructing stack: \(error)")
             }
             ex1.fulfill()
         }
 
         waitForExpectationsWithTimeout(10, handler: nil)
-    }
-
-    override func tearDown() {
-        // Delete all the inserted books
-        if #available(iOS 9.0, *) {
-            let resetReq = NSBatchDeleteRequest(fetchRequest: bookFetchRequest)
-            try! stack.mainQueueContext.executeRequest(resetReq)
-        } else {
-            let books = try! stack.mainQueueContext.executeFetchRequest(bookFetchRequest) as! [Book]
-            for book in books {
-                stack.mainQueueContext.deleteObject(book)
-            }
-            stack.mainQueueContext.saveContext()
-        }
-
-        super.tearDown()
     }
 
     func testBatchOperation() {

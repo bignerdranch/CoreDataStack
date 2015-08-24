@@ -8,19 +8,19 @@
 
 import XCTest
 
+import CoreData
 import CoreDataStack
 
-class CoreDataStackTests: XCTestCase {
+class CoreDataStackTests: TempDirectoryTestCase {
 
     var stack: CoreDataStack!
     var memoryStore: CoreDataStack!
 
-    override func setUp() {
-        super.setUp()
-
+    func testInitialization() throws {
         let bundle = NSBundle(forClass: CoreDataStackTests.self)
         let ex1 = expectationWithDescription("SQLite Callback")
-        CoreDataStack.constructStack(withModelName: "TestModel", inBundle: bundle) { result in
+
+        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: bundle, withStoreURL: tempStoreURL) { result in
             switch result {
             case .Success(let stack):
                 self.stack = stack
@@ -31,21 +31,14 @@ class CoreDataStackTests: XCTestCase {
             ex1.fulfill()
         }
 
-        let ex2 = expectationWithDescription("In Memory Callback")
-        CoreDataStack.constructStack(withModelName: "TestModel", inBundle: bundle, ofStoreType: .InMemory) { result in
-            switch result {
-            case .Success(let stack):
-                self.memoryStore = stack
-            case .Failure(let error):
-                print(error)
-                XCTFail()
-            }
-            ex2.fulfill()
+        do {
+            try stack = CoreDataStack.constructInMemoryStack(withModelName: "TestModel", inBundle: bundle)
+        } catch {
+            XCTFail("\(error)")
         }
-        waitForExpectationsWithTimeout(10, handler: nil)
-    }
 
-    func testInitialization() {
+        waitForExpectationsWithTimeout(10, handler: nil)
+
         XCTAssertNotNil(stack.mainQueueContext)
         XCTAssertNotNil(stack.privateQueueContext)
 

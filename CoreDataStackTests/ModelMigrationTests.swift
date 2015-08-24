@@ -10,30 +10,18 @@ import XCTest
 
 import CoreData
 
-class ModelMigrationTests: XCTestCase {
+class ModelMigrationTests: TempDirectoryTestCase {
 
     let bundle = NSBundle(forClass: ModelMigrationTests.self)
-    override func setUp() {
-        super.setUp()
-
-        let existingModelURL = bundle.URLForResource("TestModel", withExtension: "sqlite")!
-
-        let destinationURL = NSPersistentStoreCoordinator.urlForSQLiteStore(modelName: "TestModel")
-        let fileManager = NSFileManager.defaultManager()
-        if fileManager.fileExistsAtPath(destinationURL.path!) {
-            try! fileManager.removeItemAtURL(destinationURL)
-        }
-        try! NSFileManager.defaultManager().copyItemAtURL(existingModelURL, toURL: destinationURL)
-    }
     
-    func testVersionMigration() {
+    func testVersionMigration() throws {
         let ex1 = expectationWithDescription("Setup Expectation")
-        CoreDataStack.constructStack(withModelName: "TestModel", inBundle: bundle, ofStoreType: .SQLite) { result in
+        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: bundle, withStoreURL: tempStoreURL) { result in
             switch result {
             case .Success(let stack):
                 XCTAssertNotNil(stack.mainQueueContext)
             case .Failure(let error):
-                XCTFail("\(error)")
+                XCTFail("Error constructing stack: \(error)")
             }
             ex1.fulfill()
         }

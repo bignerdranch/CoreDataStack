@@ -8,7 +8,9 @@
 
 import XCTest
 
-class StoreTeardownTests: XCTestCase {
+import CoreData
+
+class StoreTeardownTests: TempDirectoryTestCase {
 
     var stack: CoreDataStack!
 
@@ -17,18 +19,19 @@ class StoreTeardownTests: XCTestCase {
 
         let bundle = NSBundle(forClass: CoreDataStackTests.self)
         let expectation = expectationWithDescription("callback")
-        CoreDataStack.constructStack(withModelName: "TestModel", inBundle: bundle) { result in
+        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: bundle, withStoreURL: tempStoreURL) { result in
             switch result {
             case .Success(let stack):
                 self.stack = stack
             case .Failure(let error):
-                print(error)
-                XCTFail()
+                XCTFail("Error constructing stack: \(error)")
             }
             expectation.fulfill()
         }
+
         waitForExpectationsWithTimeout(10, handler: nil)
     }
+
 
     func testPersistentStoreReset() {
         let expectation = expectationWithDescription("callback")

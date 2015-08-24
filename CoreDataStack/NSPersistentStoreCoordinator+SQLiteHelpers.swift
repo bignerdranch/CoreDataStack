@@ -10,10 +10,6 @@ import CoreData
 
 public extension NSPersistentStoreCoordinator {
 
-    public class func urlForSQLiteStore(modelName modelName: String?) -> NSURL {
-        return defaultURL(modleName: modelName)
-    }
-
     public class func setupSQLiteBackedCoordinator(managedObjectModel: NSManagedObjectModel, storeFileURL: NSURL, completion: (CoordinatorResult) -> Void) {
         let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
         dispatch_async(backgroundQueue) {
@@ -26,8 +22,7 @@ public extension NSPersistentStoreCoordinator {
         }
     }
 
-    private class func persistentStoreCoordinator(managedObjectModel managedObjectModel: NSManagedObjectModel, storeURL: NSURL?) throws -> NSPersistentStoreCoordinator {
-        let url = storeURL ?? defaultURL(modleName: nil)
+    private class func persistentStoreCoordinator(managedObjectModel managedObjectModel: NSManagedObjectModel, storeURL: NSURL) throws -> NSPersistentStoreCoordinator {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: managedObjectModel)
         var storeOptions: [NSObject: AnyObject] = [
             NSMigratePersistentStoresAutomaticallyOption: true,
@@ -38,7 +33,7 @@ public extension NSPersistentStoreCoordinator {
         /* If a migration is required use a journal_mode of DELETE 
             see: http://pablin.org/2013/05/24/problems-with-core-data-migration-manager-and-journal-mode-wal/
         */
-        if existingStorePresent(storeURL: url) && storeRequiresMigration(storeURL: url, managedObjectModel: managedObjectModel) {
+        if existingStorePresent(storeURL: storeURL) && storeRequiresMigration(storeURL: storeURL, managedObjectModel: managedObjectModel) {
             storeOptions = [
                 NSMigratePersistentStoresAutomaticallyOption: true,
                 NSInferMappingModelAutomaticallyOption: true,
@@ -49,17 +44,12 @@ public extension NSPersistentStoreCoordinator {
         do {
             try coordinator.addPersistentStoreWithType(NSSQLiteStoreType,
                 configuration: nil,
-                URL: url,
+                URL: storeURL,
                 options: storeOptions)
             return coordinator
         } catch let error as NSError {
             throw error
         }
-    }
-
-    private class func defaultURL(modleName modleName: String?) -> NSURL {
-        let name = modleName ?? "coredatastore"
-        return applicationDocumentsDirectory.URLByAppendingPathComponent("\(name).sqlite")
     }
 
     private class func storeRequiresMigration(storeURL storeURL: NSURL, managedObjectModel: NSManagedObjectModel) -> Bool {
@@ -78,11 +68,5 @@ public extension NSPersistentStoreCoordinator {
         return NSFileManager.defaultManager().fileExistsAtPath(storeURL.path!)
     }
 
-    private static var applicationDocumentsDirectory: NSURL {
-        get {
-            let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
-            return urls[urls.count-1] as NSURL
-        }
-    }
 }
 

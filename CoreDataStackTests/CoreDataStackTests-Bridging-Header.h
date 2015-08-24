@@ -4,3 +4,4 @@
 
 #import <CoreDataStack/CoreDataStack.h>
 #import "CoreDataStack.h"
+#import "TempDirectoryTestCase.h"

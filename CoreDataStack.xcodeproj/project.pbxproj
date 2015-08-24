@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		69FC00381B7DBFB80002C1AC /* TempDirectoryTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 69FC00371B7DBFB80002C1AC /* TempDirectoryTestCase.m */; };
 		E41764DB1AEE854C00D89DBE /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41764DA1AEE854C00D89DBE /* Author.swift */; };
 		E41764DD1AEE854D00D89DBE /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41764DC1AEE854D00D89DBE /* Book.swift */; };
-		E41AF9201AF82046004EB4B8 /* ObjectiveCExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E41AF91F1AF82046004EB4B8 /* ObjectiveCExampleTests.m */; };
 		E4598B3A1B7CF80200F7DAD9 /* TestModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4C9BC531AEA857E00A6BD1B /* TestModel.xcdatamodeld */; };
 		E4598B3B1B7CF80800F7DAD9 /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41764DA1AEE854C00D89DBE /* Author.swift */; };
 		E4598B3C1B7CF80800F7DAD9 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41764DC1AEE854D00D89DBE /* Book.swift */; };
@@ -51,10 +51,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		69FC00361B7DBFB80002C1AC /* TempDirectoryTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TempDirectoryTestCase.h; sourceTree = "<group>"; };
+		69FC00371B7DBFB80002C1AC /* TempDirectoryTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TempDirectoryTestCase.m; sourceTree = "<group>"; };
 		E41764DA1AEE854C00D89DBE /* Author.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Author.swift; sourceTree = "<group>"; };
 		E41764DC1AEE854D00D89DBE /* Book.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		E41AF91E1AF82046004EB4B8 /* CoreDataStackTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CoreDataStackTests-Bridging-Header.h"; sourceTree = "<group>"; };
-		E41AF91F1AF82046004EB4B8 /* ObjectiveCExampleTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectiveCExampleTests.m; sourceTree = "<group>"; };
 		E4598B391B7CF43600F7DAD9 /* TestModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "TestModel 2.xcdatamodel"; sourceTree = "<group>"; };
 		E4598B3D1B7CF86800F7DAD9 /* TestModel.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = TestModel.sqlite; sourceTree = "<group>"; };
 		E4598B401B7CF8BF00F7DAD9 /* ModelMigrationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelMigrationTests.swift; sourceTree = "<group>"; };
@@ -188,7 +189,8 @@
 				E4F59A451B505AE700C61516 /* StoreTeardownTests.swift */,
 				E4B23F001B5EAE6C00A4F218 /* BatchOperationContextTests.swift */,
 				E4598B401B7CF8BF00F7DAD9 /* ModelMigrationTests.swift */,
-				E41AF91F1AF82046004EB4B8 /* ObjectiveCExampleTests.m */,
+				69FC00361B7DBFB80002C1AC /* TempDirectoryTestCase.h */,
+				69FC00371B7DBFB80002C1AC /* TempDirectoryTestCase.m */,
 				E4C9BC3D1AEA848600A6BD1B /* Supporting Files */,
 			);
 			name = Tests;
@@ -381,9 +383,9 @@
 			files = (
 				E4C6F3A01AFD4825004E3F1D /* TestModel.xcdatamodeld in Sources */,
 				E4B23F011B5EAE6C00A4F218 /* BatchOperationContextTests.swift in Sources */,
+				69FC00381B7DBFB80002C1AC /* TempDirectoryTestCase.m in Sources */,
 				E4598B411B7CF8BF00F7DAD9 /* ModelMigrationTests.swift in Sources */,
 				E4F59A461B505AE700C61516 /* StoreTeardownTests.swift in Sources */,
-				E41AF9201AF82046004EB4B8 /* ObjectiveCExampleTests.m in Sources */,
 				E41764DD1AEE854D00D89DBE /* Book.swift in Sources */,
 				E41764DB1AEE854C00D89DBE /* Author.swift in Sources */,
 				E4C9BC401AEA848600A6BD1B /* InitializationTests.swift in Sources */,
@@ -552,6 +554,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = CoreDataStack/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.bignerdranch.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -570,6 +573,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = CoreDataStack/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.bignerdranch.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
