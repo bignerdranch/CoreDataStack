@@ -20,9 +20,9 @@
     NSString *tempDir = NSTemporaryDirectory();
     NSString *nameTemplate = [NSString stringWithFormat:@"%@.XXXXX", self.class];
     NSString *combinedTempDirName = [tempDir stringByAppendingPathComponent:nameTemplate];
-    // FIXME: how to get rid of this warning? copy the string?
-    char *fsRep = combinedTempDirName.fileSystemRepresentation;
-    char *uniqueName = mkdtemp(fsRep);
+
+    const char *fsRep = combinedTempDirName.fileSystemRepresentation;
+    char *uniqueName = mkdtemp((char *)fsRep);
     if (uniqueName == NULL) {
         return nil;
     }
