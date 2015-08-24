@@ -35,7 +35,7 @@ class StoreTeardownTests: TempDirectoryTestCase {
 
     func testPersistentStoreReset() {
         let expectation = expectationWithDescription("callback")
-        stack.resetPersistentStoreCoordinator() { result in
+        stack.resetSQLiteStore() { result in
             switch result {
             case .Success:
                 break

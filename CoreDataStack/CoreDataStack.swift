@@ -33,7 +33,7 @@ public typealias ResetResult = SuccessResult
 
 // MARK: - Action callbacks
 public typealias CoreDataStackSetupCallback = SetupResult -> Void
-public typealias CoreDataStackResetCallback = ResetResult -> Void
+public typealias CoreDataStackSQLiteResetCallback = ResetResult -> Void
 public typealias CoreDataStackBatchMOCCallback = BatchContextResult -> Void
 
 /**
@@ -164,14 +164,14 @@ public final class CoreDataStack {
 
 public extension CoreDataStack {
     /**
-    Removes the SQLite store from disk and creates a fresh NSPersistentStore.
+    For SQLite based stacks, this function will remove the SQLite store from disk and creates a fresh NSPersistentStore.
     
      - parameter resetCallback: A callback with a Success or an ErrorType value with the error
     */
-    public func resetPersistentStoreCoordinator(resetCallback: CoreDataStackResetCallback) {
+    public func resetSQLiteStore(resetCallback: CoreDataStackSQLiteResetCallback) {
         switch storeType {
         case .InMemory:
-            // TODO: rcedwards implement this
+            assertionFailure("Function is only available for SQLite backed stacks.")
             break
         case .SQLite(let storeURL):
             do {
