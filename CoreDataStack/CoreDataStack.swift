@@ -36,11 +36,6 @@ public typealias CoreDataStackSetupCallback = SetupResult -> Void
 public typealias CoreDataStackResetCallback = ResetResult -> Void
 public typealias CoreDataStackBatchMOCCallback = BatchContextResult -> Void
 
-// MARK: - Errors
-public enum CoreDataStackError : ErrorType {
-    case InvalidSQLiteStoreURL
-}
-
 /**
 Three layer CoreData stack comprised of:
 
@@ -96,13 +91,6 @@ public final class CoreDataStack {
 
     // MARK: - Lifecycle
 
-    /* TODO: the distinct StoreType values are really crying out for separate `construct` functions at a minimum.
-        For in-memory store types:
-            - no details about the storage location are needed
-            - no asynchronous behavior is performed for the callback
-            - batch operations are not supported (assumes the store is on disk)
-        It is also possible that you might want to create an in-memory-store-backed MOC for a CoreDataStack that uses SQLite otherwise.
-    */
     /**
     Creates a SQLite backed CoreData stack for a given model in the supplied NSBundle.
 
