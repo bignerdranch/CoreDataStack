@@ -14,23 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E4C9BC2C1AEA848600A6BD1B"
-               BuildableName = "CoreDataStack.framework"
-               BlueprintName = "CoreDataStack"
-               ReferencedContainer = "container:CoreDataStack.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E4C9BC371AEA848600A6BD1B"
-               BuildableName = "CoreDataStackTests.xctest"
-               BlueprintName = "CoreDataStackTests"
+               BlueprintIdentifier = "E4B99C651B740321005B7E1A"
+               BuildableName = "Example.app"
+               BlueprintName = "Example"
                ReferencedContainer = "container:CoreDataStack.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -42,23 +28,13 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E4C9BC371AEA848600A6BD1B"
-               BuildableName = "CoreDataStackTests.xctest"
-               BlueprintName = "CoreDataStackTests"
-               ReferencedContainer = "container:CoreDataStack.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E4C9BC2C1AEA848600A6BD1B"
-            BuildableName = "CoreDataStack.framework"
-            BlueprintName = "CoreDataStack"
+            BlueprintIdentifier = "E4B99C651B740321005B7E1A"
+            BuildableName = "Example.app"
+            BlueprintName = "Example"
             ReferencedContainer = "container:CoreDataStack.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -75,15 +51,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E4C9BC2C1AEA848600A6BD1B"
-            BuildableName = "CoreDataStack.framework"
-            BlueprintName = "CoreDataStack"
+            BlueprintIdentifier = "E4B99C651B740321005B7E1A"
+            BuildableName = "Example.app"
+            BlueprintName = "Example"
             ReferencedContainer = "container:CoreDataStack.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
             argument = "-com.apple.CoreData.ConcurrencyDebug 1"
@@ -99,15 +76,16 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E4C9BC2C1AEA848600A6BD1B"
-            BuildableName = "CoreDataStack.framework"
-            BlueprintName = "CoreDataStack"
+            BlueprintIdentifier = "E4B99C651B740321005B7E1A"
+            BuildableName = "Example.app"
+            BlueprintName = "Example"
             ReferencedContainer = "container:CoreDataStack.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
