@@ -94,9 +94,9 @@ public final class CoreDataStack {
     /**
     Creates a SQLite backed CoreData stack for a given model in the supplied NSBundle.
 
-    - parameter modelName: Name of the xcdatamodel for the CoreData Stack.
+    - parameter modelName: Base name of the xcdatamodel file.
     - parameter inBundle: NSBundle that contains the XCDataModel. Default value is mainBundle()
-    - parameter withStoreURL: Optional URL to use for storing the SQLite file. Defaults to "\(modelName).sqlite" in the Documents directory.
+    - parameter withStoreURL: Optional URL to use for storing the SQLite file. Defaults to "\\(modelName).sqlite" in the Documents directory.
     - parameter callback: The SQLite persistent store coordinator will be setup asynchronously. This callback will be passed either an initialized CoreDataStack object or an ErrorType value.
     */
     public static func constructSQLiteStack(withModelName modelName: String,
@@ -116,6 +116,14 @@ public final class CoreDataStack {
             }
     }
 
+    /**
+    Creates an in-memory Core Data stack for a given model in the supplied NSBundle.
+    
+    This stack is configured with the same concurrency and persistence model as the SQLite stack, but everything is in-memory.
+
+    - parameter modelName: Base name of the xcdatamodel file.
+    - parameter inBundle: NSBundle that contains the XCDataModel. Default value is mainBundle()
+    */
     public static func constructInMemoryStack(withModelName modelName: String,
         inBundle bundle: NSBundle = NSBundle.mainBundle()) throws -> CoreDataStack {
             let model = bundle.managedObjectModel(modelName: modelName)
@@ -256,15 +264,14 @@ public extension CoreDataStack {
 
 private extension CoreDataStack {
     @objc private func stackMemberContextDidSaveNotification(notification: NSNotification) {
-        if notification.object as? NSManagedObjectContext == mainQueueContext {
-            print("Saving \(privateQueueContext) as a result of \(mainQueueContext) being saved.")
-            privateQueueContext.saveContext()
-        } else if let notificationMOC = notification.object as? NSManagedObjectContext {
-            print("Saving \(mainQueueContext) as a result of \(notificationMOC) being saved.")
-            mainQueueContext.saveContext()
-        } else {
+        guard let notificationMOC = notification.object as? NSManagedObjectContext else {
             assertionFailure("Notification posted from an object other than an NSManagedObjectContext")
+            return
         }
+        guard let parentContext = notificationMOC.parentContext else {
+            return
+        }
+        parentContext.saveContext()
     }
 }
 
