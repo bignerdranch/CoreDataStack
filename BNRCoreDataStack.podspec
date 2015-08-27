@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "BNRCoreDataStack"
-  s.version      = "0.3.0b2"
+  s.version      = "0.3.0"
   s.summary      = "The Big Nerd Ranch Core Data stack."
 
   s.description  = <<-DESC
@@ -38,7 +38,7 @@ DESC
   s.osx.deployment_target = "10.10"
 
 
-  s.source       = { :git => "git@github.com:bignerdranch/CoreDataStack.git", :tag => "v0.3.0b2" }
+  s.source       = { :git => "https://github.com/bignerdranch/CoreDataStack.git", :tag => "v0.3.0" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -53,18 +53,6 @@ DESC
 
   s.public_header_files = "CoreDataStack/*.h"
 
-
   s.frameworks = "CoreData"
-
-  # ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  #
-  #  If your library depends on compiler flags you can set them in the xcconfig hash
-  #  where they will only apply to your library. If you depend on other Podspecs
-  #  you can include multiple dependencies to ensure it works.
-
-  # s.requires_arc = true
-
-  # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
-  # s.dependency "JSONKit", "~> 1.4"
 
 end
