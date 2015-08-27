@@ -1,0 +1,96 @@
+//
+//  SaveTests.swift
+//  CoreDataStack
+//
+//  Created by Brian Hardy on 8/27/15.
+//  Copyright © 2015 Big Nerd Ranch. All rights reserved.
+//
+
+import Foundation
+import CoreData
+@testable import CoreDataStack
+
+class SaveTests : TempDirectoryTestCase {
+    
+    var coreDataStack: CoreDataStack!
+    
+    override func setUp() {
+        super.setUp()
+        createStack()
+    }
+    
+    override func tearDown() {
+        coreDataStack = nil
+        super.tearDown()
+    }
+    
+    func testBackgroundInsertAndSavePropagatesChanges() {
+        // create a NSFRC looking for Authors
+        let frc = authorsFetchedResultsController()
+        let frcDelegate = EmptyFRCDelegate()
+        frc.delegate = frcDelegate
+        // fetch authors to ensure we got zero (and setup change notification)
+        try! frc.performFetch()
+        XCTAssertEqual(frc.fetchedObjects?.count, 0)
+        // now insert some authors on a background MOC and save it
+        let bgMoc = coreDataStack.newBackgroundWorkerMOC()
+        expectationForNotification(NSManagedObjectContextDidSaveNotification, object: coreDataStack.privateQueueContext, handler: nil)
+        bgMoc.performBlockAndWait { () -> Void in
+            for i in 1...5 {
+                let author = Author.newAuthorInContext(bgMoc)
+                author.firstName = "Jim \(i)"
+                author.lastName = "Jones \(i)"
+            }
+            do {
+                try bgMoc.saveContextAndWait()
+            } catch let error {
+                XCTFail("Could not save background context: \(error)")
+            }
+        }
+        // assert we now have that many authors in the FRC
+        XCTAssertEqual(frc.fetchedObjects?.count, 5)
+        // wait for the persisting context to save async
+        waitForExpectationsWithTimeout(5, handler: nil)
+        // destroy and recreate the stack
+        coreDataStack = nil
+        createStack()
+        // try the fetch again
+        let newFRC = authorsFetchedResultsController()
+        try! newFRC.performFetch()
+        // assert that we still have the same number of authors
+        XCTAssertEqual(newFRC.fetchedObjects?.count, 5)
+    }
+    
+    func authorsFetchedResultsController() -> NSFetchedResultsController {
+        let fetchRequest = NSFetchRequest(entityName: "Author")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "lastName", ascending: true)]
+        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: coreDataStack.mainQueueContext, sectionNameKeyPath: nil, cacheName: nil)
+    }
+    
+    func createStack() {
+        let setupExpectation = expectationWithDescription("stack setup")
+        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: NSBundle(forClass: SaveTests.self), withStoreURL: self.tempStoreURL) { (setupResult) -> Void in
+            switch setupResult {
+            case .Success(let stack):
+                self.coreDataStack = stack
+            default: break
+            }
+            setupExpectation.fulfill()
+        }
+        waitForExpectationsWithTimeout(2, handler: nil)
+    }
+}
+
+class EmptyFRCDelegate : NSObject, NSFetchedResultsControllerDelegate {
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        // nothing
+    }
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        // nothing
+    }
+    
+    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        // nothing
+    }
+}
