@@ -94,9 +94,9 @@ public final class CoreDataStack {
     /**
     Creates a SQLite backed CoreData stack for a given model in the supplied NSBundle.
 
-    - parameter modelName: Name of the xcdatamodel for the CoreData Stack.
+    - parameter modelName: Base name of the xcdatamodel file.
     - parameter inBundle: NSBundle that contains the XCDataModel. Default value is mainBundle()
-    - parameter withStoreURL: Optional URL to use for storing the SQLite file. Defaults to "\(modelName).sqlite" in the Documents directory.
+    - parameter withStoreURL: Optional URL to use for storing the SQLite file. Defaults to "\\(modelName).sqlite" in the Documents directory.
     - parameter callback: The SQLite persistent store coordinator will be setup asynchronously. This callback will be passed either an initialized CoreDataStack object or an ErrorType value.
     */
     public static func constructSQLiteStack(withModelName modelName: String,
