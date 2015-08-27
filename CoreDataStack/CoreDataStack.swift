@@ -256,15 +256,14 @@ public extension CoreDataStack {
 
 private extension CoreDataStack {
     @objc private func stackMemberContextDidSaveNotification(notification: NSNotification) {
-        if notification.object as? NSManagedObjectContext == mainQueueContext {
-            print("Saving \(privateQueueContext) as a result of \(mainQueueContext) being saved.")
-            privateQueueContext.saveContext()
-        } else if let notificationMOC = notification.object as? NSManagedObjectContext {
-            print("Saving \(mainQueueContext) as a result of \(notificationMOC) being saved.")
-            mainQueueContext.saveContext()
-        } else {
+        guard let notificationMOC = notification.object as? NSManagedObjectContext else {
             assertionFailure("Notification posted from an object other than an NSManagedObjectContext")
+            return
         }
+        guard let parentContext = notificationMOC.parentContext else {
+            return
+        }
+        parentContext.saveContext()
     }
 }
 
