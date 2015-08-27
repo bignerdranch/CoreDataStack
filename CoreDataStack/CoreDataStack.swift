@@ -116,6 +116,14 @@ public final class CoreDataStack {
             }
     }
 
+    /**
+    Creates an in-memory Core Data stack for a given model in the supplied NSBundle.
+    
+    This stack is configured with the same concurrency and persistence model as the SQLite stack, but everything is in-memory.
+
+    - parameter modelName: Base name of the xcdatamodel file.
+    - parameter inBundle: NSBundle that contains the XCDataModel. Default value is mainBundle()
+    */
     public static func constructInMemoryStack(withModelName modelName: String,
         inBundle bundle: NSBundle = NSBundle.mainBundle()) throws -> CoreDataStack {
             let model = bundle.managedObjectModel(modelName: modelName)
