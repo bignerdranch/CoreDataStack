@@ -25,16 +25,8 @@ various stack types
 
 ![Thread Confined Managed Object Context Stack](./Resources/BNR_Stack.png)
 
-## Helpful Extensions
 
-### NSPersistentStoreCoordinator SQLite Helpers
 
-NSPersistentStoreCoordinator+SQLiteHelpers.swift
 
-### NSManagedObjectContext Save Convenience Methods
 
-NSManagedObjectContext+SaveHelpers.swift
 
-### Validation Error Coalescing
-
-NSError+CoreDataValidationErrors.swift
