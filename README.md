@@ -68,6 +68,14 @@ Then run `pod install`.
 
 
 
+## About
 
+[![Big Nerd Ranch](./resources/logo.png =400x)](http://bignerdranch.com)
 
+- We [Develop][develop] custom apps for clients around the world.
+- We [Teach][teach] immersive development bootcamps.
+- We [Write][write] best-selling Big Nerd Ranch Guides.
 
+[develop]: https://www.bignerdranch.com/we-develop/
+[teach]: https://www.bignerdranch.com/we-teach/
+[write]: https://www.bignerdranch.com/we-write/
