@@ -1,9 +1,9 @@
-# BNR CoreData Stack
+# BNR Core Data Stack
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Cocoapods Compatible](https://img.shields.io/cocoapods/v/BNRCoreDataStack.svg)](https://img.shields.io/cocoapods/v/BNRCoreDataStack.svg)
 [![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](./LICENSE)
 
-The BNR CoreData Stack is a small framework, written in Swift, that makes it easy to quickly set up a multi-threading ready CoreData stack.
+The BNR Core Data Stack is a small framework, written in Swift, that makes it easy to quickly set up a multi-threading ready Core Data stack.
 
 ## Minimum Requirements
 
@@ -50,9 +50,9 @@ Then run `pod install`.
 
 ## Stack Design Patterns
 
-The BNR CoreData stack provides a quick setup and a superior substitute to Xcode's _Use CoreData_ checkbox template for creating the necessary boilerplate code.
+The BNR Core Data stack provides a quick setup and a superior substitute to Xcode's _Use Core Data_ checkbox template for creating the necessary boilerplate code.
 
-Ultimately though the real value comes with having a solid foundation for interfacing with CoreData in a multi-threaded environment. To best describe the design choices made in the BNR CoreData stack, we'll first walk through the various patterns of multi-threaded CoreData stacks. 
+Ultimately though the real value comes with having a solid foundation for interfacing with Core Data in a multi-threaded environment. To best describe the design choices made in the BNR Core Data stack, we'll first walk through the various patterns of multi-threaded Core Data stacks. 
 
 [Skip to usage info](#usage):
 
@@ -100,7 +100,7 @@ In iOS 5.0 / OS X 10.7 Apple introduced the concept of nested managed object con
 
 ### <a id="shared_store"></a> Shared Store Stack Pattern
 
-One criticism of the nested managed object context pattern, is that inserting a large number of objects (on the order of thousands) is significantly slower than doing the same operation with a shared persistent store coordinator stack. See [Concurrent CoreData Stack Performance Shootout](http://floriankugler.com/2013/04/29/concurrent-core-data-stack-performance-shootout/) For this reason some have outright avoided using a [nested managed object context pattern](#nested) all together in favor of the [shared persistent store coordinator pattern](#shared_coordinator).
+One criticism of the nested managed object context pattern, is that inserting a large number of objects (on the order of thousands) is significantly slower than doing the same operation with a shared persistent store coordinator stack. See [Concurrent Core Data Stack Performance Shootout](http://floriankugler.com/2013/04/29/concurrent-core-data-stack-performance-shootout/) For this reason some have outright avoided using a [nested managed object context pattern](#nested) all together in favor of the [shared persistent store coordinator pattern](#shared_coordinator).
 
 Apple however recommends an alternate approach for solving this type of performance issue.
 
@@ -124,9 +124,9 @@ The changes could be propagated across context using the same pattern described 
 - More complex setup compared to [nested managed object context pattern](#nested)
 - Syncing changes between stacks is manual
 
-### The BNR CoreData Stack
+### The BNR Core Data Stack
 
-This brings us to the BNR CoreData Stack. For us the simplicity of the [nested managed object context pattern](#nested) greatly outweighs any performance deficiencies.
+This brings us to the BNR Core Data Stack. For us the simplicity of the [nested managed object context pattern](#nested) greatly outweighs any performance deficiencies.
 
 At the root of our stack is a `PrivateQueueConcurrencyType` managed object context that handles writing to our store. Since this context is on a private queue we benefit from moving disk writing off the main queue. There should be no need to perform fetch request or call `save()` on this context directly.
 
@@ -134,7 +134,7 @@ The root context has one child context which is a `MainQueueConcurrencyType` con
 
 For any longer running task, such as inserting or updating data from a web service, you should use a new background worker context. The stack will vend you one via the `newBackgroundWorkerMOC()` function.
 
-Since saving an `NSManagedObjectContext` will only propagate changes up a single level to the `parentContext`, the BNR CoreData Stack listens for save notifications and ensures that the changes get persisted all the way up the chain to your store.
+Since saving an `NSManagedObjectContext` will only propagate changes up a single level to the `parentContext`, the BNR Core Data Stack listens for save notifications and ensures that the changes get persisted all the way up the chain to your store.
 
 Recognizing that at times you may need to perform a large import operation where the nested context performance would be the bottleneck, we've included a function to vend you a managed object context with its own stack `newBatchOperationContext(setupCallback: CoreDataStackBatchMOCCallback)`. This follows the pattern outlined in [Shared Store Stack Pattern](#shared_store).
 
@@ -142,7 +142,7 @@ Recognizing that at times you may need to perform a large import operation where
 
 #### Asynchronous Setup
 
-The BNR CoreData stack can be constructed with either an `NSSQLiteStoreType` store or an `NSInMemoryStoreType` store. Since a SQLite backed store could potentially need to perform model migrations and take an indefinite amount of time, the stack construction is asynchronous. Similarly, creating a new batch operation context will also be asynchronous since it relies on constructing a discrete stack of its own. For usage details see [Usage - Standard SQLite Backed](#sqlite_construct)
+The BNR Core Data stack can be constructed with either an `NSSQLiteStoreType` store or an `NSInMemoryStoreType` store. Since a SQLite backed store could potentially need to perform model migrations and take an indefinite amount of time, the stack construction is asynchronous. Similarly, creating a new batch operation context will also be asynchronous since it relies on constructing a discrete stack of its own. For usage details see [Usage - Standard SQLite Backed](#sqlite_construct)
 
 ## <a id="usage"></a> Usage
 
@@ -238,14 +238,14 @@ myCoreDataStack.newBatchOperationContext() { result in
 
 ### Resetting The Stack
 
-At times it can be necessary to completely reset your CoreData store and remove the file from disk for example when a user logs out of your application. An `NSSQLiteStoreType` stack can be reset using the function `resetSQLiteStore(resetCallback: CoreDataStackSQLiteResetCallback)`.
+At times it can be necessary to completely reset your Core Data store and remove the file from disk for example when a user logs out of your application. An `NSSQLiteStoreType` stack can be reset using the function `resetSQLiteStore(resetCallback: CoreDataStackSQLiteResetCallback)`.
 
 
 ```
 myCoreDataStack.resetSQLiteStore() { result in
     switch result {
     case .Success:
-        // proceed with fresh CoreData Stack
+        // proceed with fresh Core Data Stack
     case .Failure(let error):
         print(error)
     }
