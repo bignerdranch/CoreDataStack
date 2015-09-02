@@ -62,7 +62,7 @@ Ultimately though the real value comes with having a solid foundation for interf
 
 The first pattern is constructed with a single persistent store coordinator, connected to a main queue managed object context. Background worker managed object contexts are created as needed and share the same single instance of the persistent store coordinator. 
 
-Saving any one of these managed object contexts will push changes through the shared coordinator and on to the backing store file. While the changes from each context are available in the store after a save, no other context is aware of the changes made in any other context.
+Saving any one of these managed object contexts will push changes through the shared coordinator and on to the backing store file. While the changes from each context are available in the store after a save, no context is aware of the changes made in any other context.
 
 In order to keep all contexts in sync, the stack must subscribe to `NSManagedObjectContextDidSaveNotification` notifications and then call `mergeChangesFromContextDidSaveNotification()` on the remaining contexts.
 
