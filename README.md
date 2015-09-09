@@ -152,6 +152,16 @@ myCoreDataStack.resetSQLiteStore() { result in
 }
 ```
 
+## Debugging Tips
+
+To validate that you are honoring all of the threading rules it's common to add the following to a project scheme under `Run > Arguments > Arguments Passed On Launch`.
+
+```
+-com.apple.CoreData.ConcurrencyDebug 1
+```
+
+This will throw an exception if you happen to break a threading rule. For more on setting up Launch Arguments check out this [article by NSHipster](http://nshipster.com/launch-arguments-and-environment-variables/).
+
 ## About
 
 [![Big Nerd Ranch](./Resources/logo.png)](http://bignerdranch.com)
