@@ -168,6 +168,8 @@ public final class CoreDataStack {
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
+
+    private let saveBubbleDispatchGroup = dispatch_group_create()
 }
 
 public extension CoreDataStack {
@@ -182,24 +184,28 @@ public extension CoreDataStack {
             assertionFailure("Function is only available for SQLite backed stacks.")
             break
         case .SQLite(let storeURL):
-            do {
-                if #available(iOS 9, *), let store = persistentStoreCoordinator.persistentStoreForURL(storeURL) {
-                    try persistentStoreCoordinator.removePersistentStore(store)
-                } else {
-                    try NSFileManager.defaultManager().removeItemAtURL(storeURL)
-                }
-
-                NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(managedObjectModel, storeFileURL: storeURL) { result in
-                    switch result {
-                    case .Success (let coordinator):
-                        self.persistentStoreCoordinator = coordinator
-                        resetCallback(.Success)
-                    case .Failure (let error):
-                        resetCallback(.Failure(error))
+            let coordinator = persistentStoreCoordinator
+            let mom = managedObjectModel
+            dispatch_group_notify(saveBubbleDispatchGroup, dispatch_get_main_queue()) {
+                do {
+                    if #available(iOS 9, *), let store = coordinator.persistentStoreForURL(storeURL) {
+                        try coordinator.removePersistentStore(store)
+                    } else {
+                        try NSFileManager.defaultManager().removeItemAtURL(storeURL)
                     }
+
+                    NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(mom, storeFileURL: storeURL) { result in
+                        switch result {
+                        case .Success (let coordinator):
+                            self.persistentStoreCoordinator = coordinator
+                            resetCallback(.Success)
+                        case .Failure (let error):
+                            resetCallback(.Failure(error))
+                        }
+                    }
+                } catch let fileRemoveError {
+                    resetCallback(.Failure(fileRemoveError))
                 }
-            } catch let fileRemoveError {
-                resetCallback(.Failure(fileRemoveError))
             }
         }
     }
@@ -271,7 +277,11 @@ private extension CoreDataStack {
         guard let parentContext = notificationMOC.parentContext else {
             return
         }
-        parentContext.saveContext()
+
+        dispatch_group_enter(saveBubbleDispatchGroup)
+        parentContext.saveContext() { _ in
+            dispatch_group_leave(self.saveBubbleDispatchGroup)
+        }
     }
 }
 
