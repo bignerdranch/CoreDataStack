@@ -196,32 +196,33 @@ public extension CoreDataStack {
             }
 
             let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
-            dispatch_async(backgroundQueue) {
-                dispatch_group_notify(self.saveBubbleDispatchGroup, dispatch_get_main_queue()) {
-                    do {
+            dispatch_group_notify(self.saveBubbleDispatchGroup, backgroundQueue) {
+                do {
+                    try coordinator.performAndWait() {
                         if #available(iOS 9, *) {
                             try coordinator.destroyPersistentStoreAtURL(storeURL, withType: NSSQLiteStoreType, options: nil)
                         } else {
                             try coordinator.removePersistentStore(store)
                             try NSFileManager.defaultManager().removeItemAtURL(storeURL)
-                            
+
                             // Remove journal files if present
                             let _ = try? NSFileManager.defaultManager().removeItemAtURL(storeURL.URLByAppendingPathComponent("-shm"))
                             let _ = try? NSFileManager.defaultManager().removeItemAtURL(storeURL.URLByAppendingPathComponent("-wal"))
                         }
+                    }
+                } catch let resetError {
+                    resetCallback(.Failure(resetError))
+                    return
+                }
 
-                        // Setup a new stack
-                        NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(mom, storeFileURL: storeURL) { result in
-                            switch result {
-                            case .Success (let coordinator):
-                                self.persistentStoreCoordinator = coordinator
-                                resetCallback(.Success)
-                            case .Failure (let error):
-                                resetCallback(.Failure(error))
-                            }
-                        }
-                    } catch let fileRemoveError {
-                        resetCallback(.Failure(fileRemoveError))
+                // Setup a new stack
+                NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(mom, storeFileURL: storeURL) { result in
+                    switch result {
+                    case .Success (let coordinator):
+                        self.persistentStoreCoordinator = coordinator
+                        resetCallback(.Success)
+                    case .Failure (let error):
+                        resetCallback(.Failure(error))
                     }
                 }
             }
@@ -317,5 +318,26 @@ private extension NSBundle {
     func managedObjectModel(modelName modelName: String) -> NSManagedObjectModel {
         let URL = URLForResource(modelName, withExtension: NSBundle.modelExtension)!
         return NSManagedObjectModel(contentsOfURL: URL)!
+    }
+}
+
+private extension NSPersistentStoreCoordinator {
+    private func performAndWait<Return>(body: () throws -> Return) throws -> Return {
+        var value: Return!
+        var error: ErrorType?
+
+        performBlockAndWait {
+            do {
+                value = try body()
+            } catch let theError {
+                error = theError
+            }
+        }
+
+        if let error = error {
+            throw error
+        } else {
+            return value
+        }
     }
 }
