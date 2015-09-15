@@ -199,12 +199,16 @@ public extension CoreDataStack {
             dispatch_async(backgroundQueue) {
                 dispatch_group_notify(self.saveBubbleDispatchGroup, dispatch_get_main_queue()) {
                     do {
-                        try coordinator.removePersistentStore(store)
-                        try NSFileManager.defaultManager().removeItemAtURL(storeURL)
-
-                        // Remove journal files if present
-                        let _ = try? NSFileManager.defaultManager().removeItemAtURL(storeURL.URLByAppendingPathComponent("-shm"))
-                        let _ = try? NSFileManager.defaultManager().removeItemAtURL(storeURL.URLByAppendingPathComponent("-wal"))
+                        if #available(iOS 9, *) {
+                            try coordinator.destroyPersistentStoreAtURL(storeURL, withType: NSSQLiteStoreType, options: nil)
+                        } else {
+                            try coordinator.removePersistentStore(store)
+                            try NSFileManager.defaultManager().removeItemAtURL(storeURL)
+                            
+                            // Remove journal files if present
+                            let _ = try? NSFileManager.defaultManager().removeItemAtURL(storeURL.URLByAppendingPathComponent("-shm"))
+                            let _ = try? NSFileManager.defaultManager().removeItemAtURL(storeURL.URLByAppendingPathComponent("-wal"))
+                        }
 
                         // Setup a new stack
                         NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(mom, storeFileURL: storeURL) { result in
