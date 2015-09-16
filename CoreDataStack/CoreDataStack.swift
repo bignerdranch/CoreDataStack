@@ -198,10 +198,10 @@ public extension CoreDataStack {
             let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
             dispatch_group_notify(self.saveBubbleDispatchGroup, backgroundQueue) {
                 do {
-                    try coordinator.performAndWait() {
-                        if #available(iOS 9, *) {
-                            try coordinator.destroyPersistentStoreAtURL(storeURL, withType: NSSQLiteStoreType, options: nil)
-                        } else {
+                    if #available(iOS 9, *) {
+                        try coordinator.destroyPersistentStoreAtURL(storeURL, withType: NSSQLiteStoreType, options: nil)
+                    } else {
+                        try coordinator.performAndWait() {
                             try coordinator.removePersistentStore(store)
                             try NSFileManager.defaultManager().removeItemAtURL(storeURL)
 
