@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "BNRCoreDataStack"
-  s.version      = "0.3.0"
+  s.version      = "0.3.1"
   s.summary      = "The Big Nerd Ranch Core Data stack."
 
   s.description  = <<-DESC
@@ -38,7 +38,7 @@ DESC
   s.osx.deployment_target = "10.10"
 
 
-  s.source       = { :git => "https://github.com/bignerdranch/CoreDataStack.git", :tag => "v0.3.0" }
+  s.source       = { :git => "https://github.com/bignerdranch/CoreDataStack.git", :tag => "v0.3.1" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
