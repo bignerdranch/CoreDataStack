@@ -36,6 +36,11 @@ public typealias CoreDataStackSetupCallback = SetupResult -> Void
 public typealias CoreDataStackSQLiteResetCallback = ResetResult -> Void
 public typealias CoreDataStackBatchMOCCallback = BatchContextResult -> Void
 
+// MARK: - Error Handling
+public enum CoreDataStackError: ErrorType {
+    case StoreNotFoundAtURL(url: NSURL)
+}
+
 /**
 Three layer CoreData stack comprised of:
 
@@ -46,6 +51,7 @@ Three layer CoreData stack comprised of:
 Calling save() on any NSMangedObjectContext belonging to the stack will automatically bubble the changes all the way to the NSPersistentStore
 */
 public final class CoreDataStack {
+    
     /**
     Primary persisting background managed object context. This is the top level context that possess an
     NSPersistentStoreCoordinator and saves changes to disk on a background queue.
@@ -54,8 +60,6 @@ public final class CoreDataStack {
 
     NSBatchUpdateRequest and NSAsynchronousFetchRequest require a context with a persistent store connected directly,
     if this was not the case this context would be marked private.
-
-    - returns: NSManagedObjectContext The primary persisting background context.
     */
     public let privateQueueContext: NSManagedObjectContext = {
         let managedObjectContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
@@ -68,8 +72,6 @@ public final class CoreDataStack {
     The main queue context for any work that will be performed on the main queue.
     Its parent context is the primary private queue context that persist the data to disk.
     Making a save() call on this context will automatically trigger a save on its parent via NSNotification.
-
-    - returns: NSManagedObjectContext The main queue context.
     */
     public let mainQueueContext: NSManagedObjectContext = {
         var managedObjectContext: NSManagedObjectContext!
@@ -168,13 +170,15 @@ public final class CoreDataStack {
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
+
+    private let saveBubbleDispatchGroup = dispatch_group_create()
 }
 
 public extension CoreDataStack {
     /**
     For SQLite based stacks, this function will remove the SQLite store from disk and creates a fresh NSPersistentStore.
-    
-     - parameter resetCallback: A callback with a Success or an ErrorType value with the error
+
+    - parameter resetCallback: A callback with a Success or an ErrorType value with the error
     */
     public func resetSQLiteStore(resetCallback: CoreDataStackSQLiteResetCallback) {
         switch storeType {
@@ -182,14 +186,37 @@ public extension CoreDataStack {
             assertionFailure("Function is only available for SQLite backed stacks.")
             break
         case .SQLite(let storeURL):
-            do {
-                if #available(iOS 9, *), let store = persistentStoreCoordinator.persistentStoreForURL(storeURL) {
-                    try persistentStoreCoordinator.removePersistentStore(store)
-                } else {
-                    try NSFileManager.defaultManager().removeItemAtURL(storeURL)
+            let coordinator = persistentStoreCoordinator
+            let mom = managedObjectModel
+
+            guard let store = coordinator.persistentStoreForURL(storeURL) else {
+                let error = CoreDataStackError.StoreNotFoundAtURL(url: storeURL)
+                resetCallback(.Failure(error))
+                break
+            }
+
+            let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
+            dispatch_group_notify(self.saveBubbleDispatchGroup, backgroundQueue) {
+                do {
+                    if #available(iOS 9, *) {
+                        try coordinator.destroyPersistentStoreAtURL(storeURL, withType: NSSQLiteStoreType, options: nil)
+                    } else {
+                        try coordinator.performAndWait() {
+                            try coordinator.removePersistentStore(store)
+                            try NSFileManager.defaultManager().removeItemAtURL(storeURL)
+
+                            // Remove journal files if present
+                            let _ = try? NSFileManager.defaultManager().removeItemAtURL(storeURL.URLByAppendingPathComponent("-shm"))
+                            let _ = try? NSFileManager.defaultManager().removeItemAtURL(storeURL.URLByAppendingPathComponent("-wal"))
+                        }
+                    }
+                } catch let resetError {
+                    resetCallback(.Failure(resetError))
+                    return
                 }
 
-                NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(managedObjectModel, storeFileURL: storeURL) { result in
+                // Setup a new stack
+                NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(mom, storeFileURL: storeURL) { result in
                     switch result {
                     case .Success (let coordinator):
                         self.persistentStoreCoordinator = coordinator
@@ -198,8 +225,6 @@ public extension CoreDataStack {
                         resetCallback(.Failure(error))
                     }
                 }
-            } catch let fileRemoveError {
-                resetCallback(.Failure(fileRemoveError))
             }
         }
     }
@@ -271,7 +296,11 @@ private extension CoreDataStack {
         guard let parentContext = notificationMOC.parentContext else {
             return
         }
-        parentContext.saveContext()
+
+        dispatch_group_enter(saveBubbleDispatchGroup)
+        parentContext.saveContext() { _ in
+            dispatch_group_leave(self.saveBubbleDispatchGroup)
+        }
     }
 }
 
@@ -289,5 +318,26 @@ private extension NSBundle {
     func managedObjectModel(modelName modelName: String) -> NSManagedObjectModel {
         let URL = URLForResource(modelName, withExtension: NSBundle.modelExtension)!
         return NSManagedObjectModel(contentsOfURL: URL)!
+    }
+}
+
+private extension NSPersistentStoreCoordinator {
+    private func performAndWait<Return>(body: () throws -> Return) throws -> Return {
+        var value: Return!
+        var error: ErrorType?
+
+        performBlockAndWait {
+            do {
+                value = try body()
+            } catch let theError {
+                error = theError
+            }
+        }
+
+        if let error = error {
+            throw error
+        } else {
+            return value
+        }
     }
 }

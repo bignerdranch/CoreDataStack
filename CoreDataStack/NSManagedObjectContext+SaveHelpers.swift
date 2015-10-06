@@ -11,6 +11,11 @@ import CoreData
 public typealias CoreDataStackSaveCompletion = SaveResult -> Void
 
 public extension NSManagedObjectContext {
+
+    /**
+    Convenience method to synchronously save the managed object context if changes are present. 
+    Method also ensures that the save is executed on the correct queue when using Main/Private queue concurrency types.
+    */
     public func saveContextAndWait() throws {
         var saveError: ErrorType?
         switch concurrencyType {
@@ -36,6 +41,12 @@ public extension NSManagedObjectContext {
         }
     }
 
+    /**
+    Convenience method to asynchronously save the managed object context if changes are present.
+    Method also ensures that the save is executed on the correct queue when using Main/Private queue concurrency types.
+
+    :param: completion Completion closure with a SaveResult to be executed upon the completion of the save operation.
+    */
     public func saveContext(completion: CoreDataStackSaveCompletion? = nil) {
         let saveFlow: (CoreDataStackSaveCompletion?) -> () = { [unowned self] completion in
             do {

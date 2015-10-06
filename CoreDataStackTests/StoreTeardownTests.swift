@@ -34,6 +34,18 @@ class StoreTeardownTests: TempDirectoryTestCase {
 
 
     func testPersistentStoreReset() {
+        // Insert some fresh objects
+        let worker = stack.newBackgroundWorkerMOC()
+        worker.performBlockAndWait() {
+            for _ in 0..<100 {
+                NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: worker)
+            }
+        }
+
+        // Save just the worker context synchronously
+        try! worker.saveContextAndWait()
+
+        // The reset function will wait for all changes to bubble up before removing the store file.
         let expectation = expectationWithDescription("callback")
         stack.resetSQLiteStore() { result in
             switch result {
