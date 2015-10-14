@@ -9,7 +9,8 @@
 import XCTest
 
 import CoreData
-import CoreDataStack
+
+@testable import CoreDataStack
 
 class CoreDataStackTests: TempDirectoryTestCase {
 

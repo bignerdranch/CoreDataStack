@@ -10,6 +10,8 @@ import XCTest
 
 import CoreData
 
+@testable import CoreDataStack
+
 class BatchOperationContextTests: TempDirectoryTestCase {
 
     var stack: CoreDataStack!
