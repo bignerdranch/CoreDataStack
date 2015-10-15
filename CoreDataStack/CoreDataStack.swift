@@ -62,24 +62,30 @@ public final class CoreDataStack {
     NSBatchUpdateRequest and NSAsynchronousFetchRequest require a context with a persistent store connected directly,
     if this was not the case this context would be marked private.
     */
-    public let privateQueueContext: NSManagedObjectContext = {
+    public lazy var privateQueueContext: NSManagedObjectContext = {
+        return self.constructPersistingContext()
+        }()
+    private func constructPersistingContext() -> NSManagedObjectContext {
         let managedObjectContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
         managedObjectContext.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
         managedObjectContext.name = "Primary Private Queue Context (Persisting Context)"
         return managedObjectContext
-        }()
+    }
 
     /**
     The main queue context for any work that will be performed on the main queue.
     Its parent context is the primary private queue context that persist the data to disk.
     Making a save() call on this context will automatically trigger a save on its parent via NSNotification.
     */
-    public let mainQueueContext: NSManagedObjectContext = {
+    public lazy var mainQueueContext: NSManagedObjectContext = {
+        return self.constructMainQueueContext()
+        }()
+    private func constructMainQueueContext() -> NSManagedObjectContext {
         var managedObjectContext: NSManagedObjectContext!
         let setup: () -> Void = {
             managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
             managedObjectContext.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
-            managedObjectContext.name = "Main Queue Context (UI Context)"
+            managedObjectContext.parentContext = self.privateQueueContext
         }
         // Always create the main-queue ManagedObjectContext on the main queue.
         if !NSThread.isMainThread() {
@@ -90,7 +96,7 @@ public final class CoreDataStack {
             setup()
         }
         return managedObjectContext
-        }()
+    }
 
     // MARK: - Lifecycle
 
@@ -146,7 +152,13 @@ public final class CoreDataStack {
     private let managedObjectModelName: String
     private let storeType: StoreType
     private let bundle: NSBundle
-    private var persistentStoreCoordinator: NSPersistentStoreCoordinator
+    private var persistentStoreCoordinator: NSPersistentStoreCoordinator {
+        didSet {
+            privateQueueContext = constructPersistingContext()
+            privateQueueContext.persistentStoreCoordinator = persistentStoreCoordinator
+            mainQueueContext = constructMainQueueContext()
+        }
+    }
     private var managedObjectModel: NSManagedObjectModel {
         get {
             return bundle.managedObjectModel(modelName: managedObjectModelName)
@@ -160,7 +172,6 @@ public final class CoreDataStack {
 
         self.persistentStoreCoordinator = persistentStoreCoordinator
         privateQueueContext.persistentStoreCoordinator = persistentStoreCoordinator
-        mainQueueContext.parentContext = privateQueueContext
 
         NSNotificationCenter.defaultCenter().addObserver(self,
             selector: "stackMemberContextDidSaveNotification:",
