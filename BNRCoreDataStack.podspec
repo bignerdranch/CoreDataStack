@@ -38,7 +38,7 @@ DESC
   s.osx.deployment_target = "10.10"
 
 
-  s.source       = { :git => "https://github.com/bignerdranch/CoreDataStack.git", :tag => "v1.0.0" }
+  s.source       = { :git => "https://github.com/bignerdranch/CoreDataStack.git", :tag => "v#{s.version}" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
