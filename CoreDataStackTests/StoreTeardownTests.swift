@@ -55,7 +55,16 @@ class StoreTeardownTests: TempDirectoryTestCase {
         stack.resetStore() { result in
             switch result {
             case .Success:
+                // Insert some objects after a reset
+                let worker = self.stack.newBackgroundWorkerMOC()
+                worker.performBlockAndWait() {
+                    for _ in 0..<100 {
+                        NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: worker)
+                    }
+                }
+                try! worker.saveContextAndWait()
                 break
+
             case .Failure(let error):
                 print(error)
                 XCTFail()
@@ -82,6 +91,14 @@ class StoreTeardownTests: TempDirectoryTestCase {
         memoryStack.resetStore() { result in
             switch result {
             case .Success:
+                // Insert some objects after a reset
+                let worker = self.stack.newBackgroundWorkerMOC()
+                worker.performBlockAndWait() {
+                    for _ in 0..<100 {
+                        NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: worker)
+                    }
+                }
+                try! worker.saveContextAndWait()
                 break
             case .Failure(let error):
                 print(error)
