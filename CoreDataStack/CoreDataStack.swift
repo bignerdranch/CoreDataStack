@@ -224,7 +224,7 @@ public extension CoreDataStack {
                 }
 
                 do {
-                    if #available(iOS 9, *) {
+                    if #available(iOS 9, OSX 10.11, *) {
                         try coordinator.destroyPersistentStoreAtURL(storeURL, withType: NSSQLiteStoreType, options: nil)
                     } else {
                         try coordinator.performAndWait() {
