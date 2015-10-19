@@ -33,12 +33,13 @@ public typealias ResetResult = SuccessResult
 
 // MARK: - Action callbacks
 public typealias CoreDataStackSetupCallback = SetupResult -> Void
-public typealias CoreDataStackSQLiteResetCallback = ResetResult -> Void
+public typealias CoreDataStackStoreResetCallback = ResetResult -> Void
 public typealias CoreDataStackBatchMOCCallback = BatchContextResult -> Void
 
 // MARK: - Error Handling
 public enum CoreDataStackError: ErrorType {
     case StoreNotFoundAtURL(url: NSURL)
+    case InMemoryStoreMissing
 }
 
 /**
@@ -176,27 +177,41 @@ public final class CoreDataStack {
 
 public extension CoreDataStack {
     /**
-    For SQLite based stacks, this function will remove the SQLite store from disk and creates a fresh NSPersistentStore.
+    This function resets the persistent store connected to the coordinator.
+    For SQLite based stacks, this function will also remove the SQLite store from disk.
 
     - parameter resetCallback: A callback with a Success or an ErrorType value with the error
     */
-    public func resetSQLiteStore(resetCallback: CoreDataStackSQLiteResetCallback) {
-        switch storeType {
-        case .InMemory:
-            assertionFailure("Function is only available for SQLite backed stacks.")
-            break
-        case .SQLite(let storeURL):
-            let coordinator = persistentStoreCoordinator
-            let mom = managedObjectModel
-
-            guard let store = coordinator.persistentStoreForURL(storeURL) else {
-                let error = CoreDataStackError.StoreNotFoundAtURL(url: storeURL)
-                resetCallback(.Failure(error))
+    public func resetStore(resetCallback: CoreDataStackStoreResetCallback) {
+        let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
+        dispatch_group_notify(self.saveBubbleDispatchGroup, backgroundQueue) {
+            switch self.storeType {
+            case .InMemory:
+                do {
+                    guard let store = self.persistentStoreCoordinator.persistentStores.first else {
+                        resetCallback(.Failure(CoreDataStackError.InMemoryStoreMissing))
+                        break
+                    }
+                    try self.persistentStoreCoordinator.performAndWait() {
+                        try self.persistentStoreCoordinator.removePersistentStore(store)
+                        try self.persistentStoreCoordinator.addPersistentStoreWithType(NSInMemoryStoreType, configuration: nil, URL: nil, options: nil)
+                    }
+                    resetCallback(.Success)
+                } catch {
+                    resetCallback(.Failure(error))
+                }
                 break
-            }
 
-            let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
-            dispatch_group_notify(self.saveBubbleDispatchGroup, backgroundQueue) {
+            case .SQLite(let storeURL):
+                let coordinator = self.persistentStoreCoordinator
+                let mom = self.managedObjectModel
+
+                guard let store = coordinator.persistentStoreForURL(storeURL) else {
+                    let error = CoreDataStackError.StoreNotFoundAtURL(url: storeURL)
+                    resetCallback(.Failure(error))
+                    break
+                }
+
                 do {
                     if #available(iOS 9, *) {
                         try coordinator.destroyPersistentStoreAtURL(storeURL, withType: NSSQLiteStoreType, options: nil)

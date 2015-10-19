@@ -10,6 +10,8 @@ import XCTest
 
 import CoreData
 
+@testable import CoreDataStack
+
 class ModelMigrationTests: TempDirectoryTestCase {
 
     let bundle = NSBundle(forClass: ModelMigrationTests.self)

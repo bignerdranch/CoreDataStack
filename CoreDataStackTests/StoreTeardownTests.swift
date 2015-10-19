@@ -10,9 +10,12 @@ import XCTest
 
 import CoreData
 
+@testable import CoreDataStack
+
 class StoreTeardownTests: TempDirectoryTestCase {
 
     var stack: CoreDataStack!
+    var memoryStack: CoreDataStack!
 
     override func setUp() {
         super.setUp()
@@ -28,6 +31,8 @@ class StoreTeardownTests: TempDirectoryTestCase {
             }
             expectation.fulfill()
         }
+
+        memoryStack = try! CoreDataStack.constructInMemoryStack(withModelName: "TestModel", inBundle: bundle)
 
         waitForExpectationsWithTimeout(10, handler: nil)
     }
@@ -47,7 +52,34 @@ class StoreTeardownTests: TempDirectoryTestCase {
 
         // The reset function will wait for all changes to bubble up before removing the store file.
         let expectation = expectationWithDescription("callback")
-        stack.resetSQLiteStore() { result in
+        stack.resetStore() { result in
+            switch result {
+            case .Success:
+                break
+            case .Failure(let error):
+                print(error)
+                XCTFail()
+            }
+            expectation.fulfill()
+        }
+        waitForExpectationsWithTimeout(10, handler: nil)
+    }
+
+    func testInMemoryReset() {
+        // Insert some fresh objects
+        let worker = memoryStack.newBackgroundWorkerMOC()
+        worker.performBlockAndWait() {
+            for _ in 0..<100 {
+                NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: worker)
+            }
+        }
+
+        // Save just the worker context synchronously
+        try! worker.saveContextAndWait()
+
+        // The reset function will wait for all changes to bubble up before removing the store file.
+        let expectation = expectationWithDescription("callback")
+        memoryStack.resetStore() { result in
             switch result {
             case .Success:
                 break
