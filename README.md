@@ -142,11 +142,11 @@ myCoreDataStack.newBatchOperationContext() { result in
 
 ### Resetting The Stack
 
-At times it can be necessary to completely reset your Core Data store and remove the file from disk, for example when a user logs out of your application. An `NSSQLiteStoreType` stack can be reset using the function `resetSQLiteStore(resetCallback: CoreDataStackSQLiteResetCallback)`.
+At times it can be necessary to completely reset your Core Data store and remove the file from disk, for example when a user logs out of your application. An instance of `CoreDataStack` can be reset by using the function `resetStore(resetCallback: CoreDataStackStoreResetCallback)`.
 
 
 ```
-myCoreDataStack.resetSQLiteStore() { result in
+myCoreDataStack.resetStore() { result in
     switch result {
     case .Success:
         // proceed with fresh Core Data Stack
