@@ -20,13 +20,9 @@ public extension NSManagedObjectContext {
         var saveError: ErrorType?
         switch concurrencyType {
         case .ConfinementConcurrencyType:
-            do {
-                try sharedSaveFlow()
-            } catch let error {
-                throw error
-            }
+            try sharedSaveFlow()
         case .MainQueueConcurrencyType,
-        .PrivateQueueConcurrencyType:
+             .PrivateQueueConcurrencyType:
             self.performBlockAndWait { [unowned self] in
                 do {
                     try self.sharedSaveFlow()
