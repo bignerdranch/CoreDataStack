@@ -22,7 +22,7 @@ public extension NSManagedObjectContext {
         case .ConfinementConcurrencyType:
             try sharedSaveFlow()
         case .MainQueueConcurrencyType,
-        .PrivateQueueConcurrencyType:
+             .PrivateQueueConcurrencyType:
             self.performBlockAndWait { [unowned self] in
                 do {
                     try self.sharedSaveFlow()
