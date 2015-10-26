@@ -62,7 +62,7 @@ public final class CoreDataStack {
     NSBatchUpdateRequest and NSAsynchronousFetchRequest require a context with a persistent store connected directly,
     if this was not the case this context would be marked private.
     */
-    public lazy var privateQueueContext: NSManagedObjectContext = {
+    public private(set) lazy var privateQueueContext: NSManagedObjectContext = {
         return self.constructPersistingContext()
         }()
     private func constructPersistingContext() -> NSManagedObjectContext {
@@ -77,7 +77,7 @@ public final class CoreDataStack {
     Its parent context is the primary private queue context that persist the data to disk.
     Making a save() call on this context will automatically trigger a save on its parent via NSNotification.
     */
-    public lazy var mainQueueContext: NSManagedObjectContext = {
+    public private(set) lazy var mainQueueContext: NSManagedObjectContext = {
         return self.constructMainQueueContext()
         }()
     private func constructMainQueueContext() -> NSManagedObjectContext {
