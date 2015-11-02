@@ -1,3 +1,5 @@
 **/xcuserdata
 *.xccheckout
 Carthage
+build
+docs
