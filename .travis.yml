@@ -1,6 +1,9 @@
-language: objective-c
+language: objective-c # lies!
 xcode_project: CoreDataStack.xcodeproj
 xcode_scheme: CoreDataStack
 xcode_sdk: iphonesimulator
-osx_image: xcode7
+osx_image: xcode7.1
 before_install: brew uninstall xctool && brew install --HEAD xctool
+notifications:
+    slack:
+        secure: CTGqQ7QtRDRvrDYlurFYT17ASP/o4h86Pp95UlXbwhVs3534IsaHc5n1kvQcQAvoxcqSabj5MghKNPq7upsOm6LFYhuRPbXGgC2lvCUSvVS2hysXA9To7RdqJirDGSziw2GLMXy2F6/C2/lo3uT2KUeGbHx6DJFp2y26RLC8bppCGmK0JY3yUa9n12d1+PMVsAbop3uVc5kLSxppjWhnSL5tFS1jlQkFp8a6kuB2UYGXiEMn4YQe0mjq4We/IkGjUXKq/AmPf6TEZ46OO0voLoMEmE6w+NY6PyHZJBUJ/6+3gA+nekweZmzczna/IyGds2fSAxmAgz3gdbbksvOVnS4VWHwDuJ+izCyIqq2pCmnVsZYSQNPnr9+rqWYOEI7449WG2pw/Zt4XN/IfcnwiyjvZpfdkYBUTTS8FZCoshrvDV1AO7TZ6J1M2kAtJxLo/ODoLOOJKPNLY8ty6A+J5mXBZXj9dqd4cg2MHMlF8PheDg88t/6EhjA2wfUmwIWKH/iUPvVVO6Jg/obQACrl25a7/PfiFYPbualVAIYZ4NatPN0MupRuFXCBnsUCTHq+gqF8Q0470zOxJ4PzIF4EtRZxlwJo/d2nsZ5DuCsv1O+n1xWd67Y/cK2DxMxkjd/US281esShMYNA/Sr4gtKfYd9z4SdIQD+kbfeM5GhyrzFY=
