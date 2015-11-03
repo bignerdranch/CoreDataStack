@@ -24,9 +24,9 @@ public extension NSPersistentStoreCoordinator {
     /**
     Asynchronously creates an NSPersistentStoreCoordinator and adds a SQLite based store.
 
-    :param: managedObjectModel The NSManagedObjectModel describing the data model.
-    :param: storeFileURL The URL where the SQLite store file will reside.
-    :param: completion A completion closure with a CoordinatorResult that will be executed following the persistent store being added to the coordinator.
+    - parameter managedObjectModel: The NSManagedObjectModel describing the data model.
+    - parameter storeFileURL: The URL where the SQLite store file will reside.
+    - parameter completion: A completion closure with a CoordinatorResult that will be executed following the persistent store being added to the coordinator.
     */
     public class func setupSQLiteBackedCoordinator(managedObjectModel: NSManagedObjectModel, storeFileURL: NSURL, completion: (CoordinatorResult) -> Void) {
         let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)

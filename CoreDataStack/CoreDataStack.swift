@@ -12,20 +12,33 @@ import CoreData
 // TODO: rcedwards These will be replaced with Box/Either or something native to Swift (fingers crossed) https://github.com/bignerdranch/CoreDataStack/issues/10
 
 // MARK: - Operation Result Types
+
+/// Result containing either an instance of NSPersistentStoreCoordinator or ErrorType
 public enum CoordinatorResult {
+    /// A success case with associated NSPersistentStoreCoordinator instance
     case Success(NSPersistentStoreCoordinator)
+    /// A failure case with associated ErrorType instance
     case Failure(ErrorType)
 }
+/// Result containing either an instance of NSManagedObjectContext or ErrorType
 public enum BatchContextResult {
+    /// A success case with associated NSManagedObjectContext instance
     case Success(NSManagedObjectContext)
+    /// A failure case with associated ErrorType instance
     case Failure(ErrorType)
 }
+/// Result containing either an instance of CoreDataStack or ErrorType
 public enum SetupResult {
+    /// A success case with associated CoreDataStack instance
     case Success(CoreDataStack)
+    /// A failure case with associated ErrorType instance
     case Failure(ErrorType)
 }
+/// Result of void representing success or an instance of ErrorType
 public enum SuccessResult {
+    /// A success case
     case Success
+    /// A failure case with associated ErrorType instance
     case Failure(ErrorType)
 }
 public typealias SaveResult = SuccessResult
@@ -37,8 +50,12 @@ public typealias CoreDataStackStoreResetCallback = ResetResult -> Void
 public typealias CoreDataStackBatchMOCCallback = BatchContextResult -> Void
 
 // MARK: - Error Handling
+
+/// CoreDataStack specific ErrorTypes
 public enum CoreDataStackError: ErrorType {
+    /// Case when an NSPersistentStore is not found for the supplied store URL
     case StoreNotFoundAtURL(url: NSURL)
+    /// Case when an In-Memory store is not found
     case InMemoryStoreMissing
 }
 
