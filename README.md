@@ -9,6 +9,8 @@ The BNR Core Data Stack is a small framework, written in Swift, that makes it ea
 
 For more details on the design methodology see: [Introducing the Big Nerd Ranch Core Data Stack](https://www.bignerdranch.com/blog/introducing-the-big-nerd-ranch-core-data-stack/)
 
+For complete source documentation see: [Documentation](http://bignerdranch.github.io/CoreDataStack/index.html)
+
 ## Minimum Requirements
 
 - iOS 8.0
