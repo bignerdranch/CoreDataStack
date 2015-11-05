@@ -16,7 +16,7 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; th
     echo -e "Generating Jazzy output \n"
     jazzy --swift-version 2.1 --source-directory ./ --output ./gh-pages --podspec ./BNRCoreDataStack.podspec
 
-    echo -e "Moving into gh-pages clone"
+    echo -e "Moving into gh-pages clone \n"
     pushd gh-pages
 
     echo -e "Adding new docs \n"
@@ -24,7 +24,7 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; th
     git add -A
     git status
     git commit -m "Refresh docs from successful travis build $TRAVIS_BUILD_NUMBER"
-    git push -fq origin gh-pages > /dev/null
+    git push -fq origin gh-pages
 
     echo -e "Moving out of gh-pages clone and cleaning up"
     popd
