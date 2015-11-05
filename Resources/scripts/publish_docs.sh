@@ -22,9 +22,8 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; th
     git commit -m "Refresh docs from successful travis build $TRAVIS_BUILD_NUMBER"
     git push -fq origin gh-pages > /dev/null
 
-    echo -e "Moving out of gh-pages clone and cleaing up"
+    echo -e "Moving out of gh-pages clone and cleaning up"
     popd
-    rm -rf gh-pages
 
     echo -e "Published latest docs.\n"
 fi
