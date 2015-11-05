@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -x
-
 if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
     echo -e "Generating docs \n"
 
@@ -25,7 +23,7 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; th
     echo -e "Adding new docs \n"
     git add -A
     git commit -m "Refresh docs from successful travis build $TRAVIS_BUILD_NUMBER"
-    git push --force --quiet https://${GH_TOKEN}@github.com/bignerdranch/CoreDataStack master:gh-pages > /dev/null 2>$1
+    git push --force --quiet "https://${GH_TOKEN}@github.com/bignerdranch/CoreDataStack" master:gh-pages > /dev/null 2>&1
     echo -e "Published latest docs.\n"
 
     echo -e "Moving out of gh-pages clone and cleaning up"
