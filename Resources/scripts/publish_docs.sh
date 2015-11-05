@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -x
-
 if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
     echo -e "Generating docs \n"
 
