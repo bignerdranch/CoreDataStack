@@ -9,45 +9,10 @@
 import Foundation
 import CoreData
 
-// TODO: rcedwards These will be replaced with Box/Either or something native to Swift (fingers crossed) https://github.com/bignerdranch/CoreDataStack/issues/10
-
-// MARK: - Operation Result Types
-
-/// Result containing either an instance of NSPersistentStoreCoordinator or ErrorType
-public enum CoordinatorResult {
-    /// A success case with associated NSPersistentStoreCoordinator instance
-    case Success(NSPersistentStoreCoordinator)
-    /// A failure case with associated ErrorType instance
-    case Failure(ErrorType)
-}
-/// Result containing either an instance of NSManagedObjectContext or ErrorType
-public enum BatchContextResult {
-    /// A success case with associated NSManagedObjectContext instance
-    case Success(NSManagedObjectContext)
-    /// A failure case with associated ErrorType instance
-    case Failure(ErrorType)
-}
-/// Result containing either an instance of CoreDataStack or ErrorType
-public enum SetupResult {
-    /// A success case with associated CoreDataStack instance
-    case Success(CoreDataStack)
-    /// A failure case with associated ErrorType instance
-    case Failure(ErrorType)
-}
-/// Result of void representing success or an instance of ErrorType
-public enum SuccessResult {
-    /// A success case
-    case Success
-    /// A failure case with associated ErrorType instance
-    case Failure(ErrorType)
-}
-public typealias SaveResult = SuccessResult
-public typealias ResetResult = SuccessResult
-
 // MARK: - Action callbacks
-public typealias CoreDataStackSetupCallback = SetupResult -> Void
-public typealias CoreDataStackStoreResetCallback = ResetResult -> Void
-public typealias CoreDataStackBatchMOCCallback = BatchContextResult -> Void
+public typealias CoreDataStackSetupCallback = CoreDataStack.SetupResult -> Void
+public typealias CoreDataStackStoreResetCallback = CoreDataStack.ResetResult -> Void
+public typealias CoreDataStackBatchMOCCallback = CoreDataStack.BatchContextResult -> Void
 
 // MARK: - Error Handling
 
@@ -201,6 +166,43 @@ public final class CoreDataStack {
     }
 
     private let saveBubbleDispatchGroup = dispatch_group_create()
+}
+
+public extension CoreDataStack {
+    // TODO: rcedwards These will be replaced with Box/Either or something native to Swift (fingers crossed) https://github.com/bignerdranch/CoreDataStack/issues/10
+
+    // MARK: - Operation Result Types
+
+    /// Result containing either an instance of NSPersistentStoreCoordinator or ErrorType
+    public enum CoordinatorResult {
+        /// A success case with associated NSPersistentStoreCoordinator instance
+        case Success(NSPersistentStoreCoordinator)
+        /// A failure case with associated ErrorType instance
+        case Failure(ErrorType)
+    }
+    /// Result containing either an instance of NSManagedObjectContext or ErrorType
+    public enum BatchContextResult {
+        /// A success case with associated NSManagedObjectContext instance
+        case Success(NSManagedObjectContext)
+        /// A failure case with associated ErrorType instance
+        case Failure(ErrorType)
+    }
+    /// Result containing either an instance of CoreDataStack or ErrorType
+    public enum SetupResult {
+        /// A success case with associated CoreDataStack instance
+        case Success(CoreDataStack)
+        /// A failure case with associated ErrorType instance
+        case Failure(ErrorType)
+    }
+    /// Result of void representing success or an instance of ErrorType
+    public enum SuccessResult {
+        /// A success case
+        case Success
+        /// A failure case with associated ErrorType instance
+        case Failure(ErrorType)
+    }
+    public typealias SaveResult = SuccessResult
+    public typealias ResetResult = SuccessResult
 }
 
 public extension CoreDataStack {

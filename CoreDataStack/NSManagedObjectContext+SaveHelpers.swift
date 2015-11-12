@@ -8,7 +8,7 @@
 
 import CoreData
 
-public typealias CoreDataStackSaveCompletion = SaveResult -> Void
+public typealias CoreDataStackSaveCompletion = CoreDataStack.SaveResult -> Void
 
 /**
  Convenience extension to NSManagedObjectContext that ensures that saves to contexts of type 
