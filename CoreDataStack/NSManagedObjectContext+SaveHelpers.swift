@@ -8,7 +8,7 @@
 
 import CoreData
 
-public typealias CoreDataStackSaveCompletion = SaveResult -> Void
+public typealias CoreDataStackSaveCompletion = CoreDataStack.SaveResult -> Void
 
 /**
  Convenience extension to NSManagedObjectContext that ensures that saves to contexts of type 
@@ -27,7 +27,7 @@ public extension NSManagedObjectContext {
             try sharedSaveFlow()
         case .MainQueueConcurrencyType,
              .PrivateQueueConcurrencyType:
-            self.performBlockAndWait { [unowned self] in
+            self.performBlockAndWait {
                 do {
                     try self.sharedSaveFlow()
                 } catch let error {
@@ -48,7 +48,7 @@ public extension NSManagedObjectContext {
     - parameter completion: Completion closure with a SaveResult to be executed upon the completion of the save operation.
     */
     public func saveContext(completion: CoreDataStackSaveCompletion? = nil) {
-        let saveFlow: (CoreDataStackSaveCompletion?) -> () = { [unowned self] completion in
+        let saveFlow: (CoreDataStackSaveCompletion?) -> () = { completion in
             do {
                 try self.sharedSaveFlow()
                 completion?(.Success)
