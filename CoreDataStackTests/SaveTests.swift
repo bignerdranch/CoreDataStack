@@ -61,13 +61,29 @@ class SaveTests : TempDirectoryTestCase {
         XCTAssertEqual(newFRC.fetchedObjects?.count, 5)
     }
     
-    func authorsFetchedResultsController() -> NSFetchedResultsController {
+    private func authorsFetchedResultsController() -> NSFetchedResultsController {
         let fetchRequest = NSFetchRequest(entityName: "Author")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "lastName", ascending: true)]
         return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: coreDataStack.mainQueueContext, sectionNameKeyPath: nil, cacheName: nil)
     }
     
-    func createStack() {
+    func testBackgroundSaveAsync() {
+        expectationForNotification(NSManagedObjectContextDidSaveNotification, object: coreDataStack.mainQueueContext, handler: nil)
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0)) { () -> Void in
+            let bgMoc = self.coreDataStack.newBackgroundWorkerMOC()
+            bgMoc.performBlockAndWait { () -> Void in
+                for i in 1...5 {
+                    let author = Author.newAuthorInContext(bgMoc)
+                    author.firstName = "Jim \(i)"
+                    author.lastName = "Jones \(i)"
+                }
+            }
+            bgMoc.saveContext()
+        }
+        waitForExpectationsWithTimeout(2, handler: nil)
+    }
+    
+    private func createStack() {
         let setupExpectation = expectationWithDescription("stack setup")
         CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: NSBundle(forClass: SaveTests.self), withStoreURL: self.tempStoreURL) { (setupResult) -> Void in
             switch setupResult {
