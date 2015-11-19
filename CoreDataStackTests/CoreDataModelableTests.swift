@@ -33,12 +33,12 @@ class CoreDataModelableTests: TempDirectoryTestCase {
     }
 
     func testNewObject() {
-        let book = Book.newInContext(stack.mainQueueContext)
+        let book = Book(managedObjectContext: stack.mainQueueContext)
         XCTAssertNotNil(book)
     }
 
     func testFindFirst() {
-        let _ = Book.newInContext(stack.mainQueueContext)
+        let _ = Book(managedObjectContext: stack.mainQueueContext)
         try! stack.mainQueueContext.saveContextAndWait()
 
         let firstBook = Book.findFirst(nil, context: stack.mainQueueContext)
@@ -59,7 +59,7 @@ class CoreDataModelableTests: TempDirectoryTestCase {
     func testAllInContext() {
         let totalBooks = 5
         for _ in 0..<totalBooks {
-            let _ = Book.newInContext(stack.mainQueueContext)
+            let _ = Book(managedObjectContext: stack.mainQueueContext)
             try! stack.mainQueueContext.saveContextAndWait()
         }
 
@@ -71,7 +71,7 @@ class CoreDataModelableTests: TempDirectoryTestCase {
         let totalBooks = 5
         var exceptionBooks = [Book]()
         for counter in 0..<totalBooks {
-            let newBook = Book.newInContext(stack.mainQueueContext)
+            let newBook = Book(managedObjectContext: stack.mainQueueContext)
             try! stack.mainQueueContext.saveContextAndWait()
 
             if (counter % 2 == 0) {
@@ -94,7 +94,7 @@ class CoreDataModelableTests: TempDirectoryTestCase {
     func testRemoveAll() {
         let totalBooks = 5
         for _ in 0..<totalBooks {
-            let _ = Book.newInContext(stack.mainQueueContext)
+            let _ = Book(managedObjectContext: stack.mainQueueContext)
             try! stack.mainQueueContext.saveContextAndWait()
         }
 

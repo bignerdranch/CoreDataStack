@@ -44,7 +44,7 @@ class EntityMonitorTests: TempDirectoryTestCase, EntityMonitorDelegate {
         let fr = NSFetchRequest(entityName: Author.entityName)
         let results = try! moc.executeFetchRequest(fr)
         if results.count < 1 {
-            let _ = Author.newInContext(stack.mainQueueContext)
+            let _ = Author(managedObjectContext: stack.mainQueueContext)
             try! moc.saveContextAndWait()
         }
     }
@@ -62,11 +62,11 @@ class EntityMonitorTests: TempDirectoryTestCase, EntityMonitorDelegate {
         deleteExpectation = expectationWithDescription("EntityMonitor Delete Callback")
 
         // Insert an Item
-        let entity = Author.newInContext(moc)
+        let entity = Author(managedObjectContext: moc)
         try! moc.saveContextAndWait()
 
         // New book (since we aren't observing this shouldn't show up in our delegate callback)
-        let _ = Book.newInContext(moc)
+        let _ = Book(managedObjectContext: moc)
         try! moc.saveContextAndWait()
 
         // Modify an existing
@@ -89,11 +89,11 @@ class EntityMonitorTests: TempDirectoryTestCase, EntityMonitorDelegate {
 
         // Test Insert
         insertExpectation = expectationWithDescription("EntityMonitor Insert Callback")
-        let _ = Author.newInContext(moc)
+        let _ = Author(managedObjectContext: moc)
         waitForExpectationsWithTimeout(10, handler: nil)
 
         // New Book (since we aren't observing this shouldn't show up in our delegate callback)
-        let _ = Book.newInContext(moc)
+        let _ = Book(managedObjectContext: moc)
 
         // Test Update
         updateExpectation = expectationWithDescription("EntityMonitor Update Callback")
@@ -104,7 +104,7 @@ class EntityMonitorTests: TempDirectoryTestCase, EntityMonitorDelegate {
 
         // Test Delete
         deleteExpectation = expectationWithDescription("EntityMonitor Delete Callback")
-        let deleteMe = Author.newInContext(moc)
+        let deleteMe = Author(managedObjectContext: moc)
         stack.mainQueueContext.deleteObject(deleteMe)
         waitForExpectationsWithTimeout(10, handler: nil)
     }
@@ -120,7 +120,7 @@ class EntityMonitorTests: TempDirectoryTestCase, EntityMonitorDelegate {
         filteredMonitor.setDelegate(self)
 
         // Create an initial book
-        let newAuthor = Author.newInContext(moc)
+        let newAuthor = Author(managedObjectContext: moc)
         try! moc.saveContextAndWait()
 
         // Look for an update

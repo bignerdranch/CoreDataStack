@@ -36,8 +36,16 @@ public extension CoreDataModelable where Self: NSManagedObject {
 
     - returns: Self: The newly created entity.
     */
-    static public func newInContext(context: NSManagedObjectContext) -> Self {
-        return NSEntityDescription.insertNewObjectForEntityForName(entityName, inManagedObjectContext: context) as! Self
+    init(managedObjectContext context: NSManagedObjectContext) {
+        self.init(entity: Self.entityInContext(context), insertIntoManagedObjectContext: context)
+    }
+
+    private static func entityInContext(context: NSManagedObjectContext) -> NSEntityDescription! {
+        guard let entity = NSEntityDescription.entityForName(entityName, inManagedObjectContext: context) else {
+            assertionFailure("Entity named \(entityName) doesn't exist. Fix the entity description or naming of \(Self.self).")
+            return nil
+        }
+        return entity
     }
 
     // MARK: - Finding Objects

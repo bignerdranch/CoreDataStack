@@ -37,7 +37,7 @@ class SaveTests : TempDirectoryTestCase {
         expectationForNotification(NSManagedObjectContextDidSaveNotification, object: coreDataStack.privateQueueContext, handler: nil)
         bgMoc.performBlockAndWait { () -> Void in
             for i in 1...5 {
-                let author = Author.newInContext(bgMoc)
+                let author = Author(managedObjectContext: bgMoc)
                 author.firstName = "Jim \(i)"
                 author.lastName = "Jones \(i)"
             }
@@ -73,7 +73,7 @@ class SaveTests : TempDirectoryTestCase {
             let bgMoc = self.coreDataStack.newBackgroundWorkerMOC()
             bgMoc.performBlockAndWait { () -> Void in
                 for i in 1...5 {
-                    let author = Author.newInContext(bgMoc)
+                    let author = Author(managedObjectContext: bgMoc)
                     author.firstName = "Jim \(i)"
                     author.lastName = "Jones \(i)"
                 }
