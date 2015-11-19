@@ -8,20 +8,16 @@
 
 import Foundation
 import CoreData
+import CoreDataStack
 
 @objc(Author)
-class Author: NSManagedObject {
+class Author: NSManagedObject, CoreDataModelable {
 
     @NSManaged var firstName: String?
     @NSManaged var lastName: String?
     @NSManaged var books: Set<Book>
 
-    class func newAuthorInContext(context: NSManagedObjectContext) -> Author {
-        return NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: context) as! Author
-    }
+    // MARK: - CoreDataModelable
 
-    class func allAuthorsInContext(context: NSManagedObjectContext) throws -> [Author] {
-        let fr = NSFetchRequest(entityName: "Author")
-        return try! context.executeFetchRequest(fr) as! [Author]
-    }
+    static var entityName = "Author"
 }
