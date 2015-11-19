@@ -18,5 +18,5 @@ class Book: NSManagedObject, CoreDataModelable {
 
     // MARK: - CoreDataModelable
 
-    static var entityName = "Book"
+    static let entityName = "Book"
 }

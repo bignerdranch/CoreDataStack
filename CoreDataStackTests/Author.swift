@@ -19,5 +19,5 @@ class Author: NSManagedObject, CoreDataModelable {
 
     // MARK: - CoreDataModelable
 
-    static var entityName = "Author"
+    static let entityName = "Author"
 }
