@@ -87,6 +87,10 @@ public class EntityMonitor<T: NSManagedObject where T: CoreDataModelable> {
         setupObservers()
     }
 
+    deinit {
+        removeObservers()
+    }
+
     // MARK: - Private
 
     private func setupObservers() {
@@ -102,6 +106,10 @@ public class EntityMonitor<T: NSManagedObject where T: CoreDataModelable> {
             selector: ChangeObserverSelectorName,
             name: notificationName,
             object: context)
+    }
+
+    private func removeObservers() {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
     // MARK: - Notifications
