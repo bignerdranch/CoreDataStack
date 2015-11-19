@@ -7,15 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6979C2F11B8F58FA006E521B /* SaveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6979C2EF1B8F58BB006E521B /* SaveTests.swift */; settings = {ASSET_TAGS = (); }; };
+		6979C2F11B8F58FA006E521B /* SaveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6979C2EF1B8F58BB006E521B /* SaveTests.swift */; };
 		69FC00381B7DBFB80002C1AC /* TempDirectoryTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 69FC00371B7DBFB80002C1AC /* TempDirectoryTestCase.m */; };
 		E41764DB1AEE854C00D89DBE /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41764DA1AEE854C00D89DBE /* Author.swift */; };
 		E41764DD1AEE854D00D89DBE /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41764DC1AEE854D00D89DBE /* Book.swift */; };
+		E43A3C671BFCD81A0019D6B4 /* CoreDataModelable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43A3C661BFCD81A0019D6B4 /* CoreDataModelable.swift */; };
 		E4598B3A1B7CF80200F7DAD9 /* TestModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4C9BC531AEA857E00A6BD1B /* TestModel.xcdatamodeld */; };
 		E4598B3B1B7CF80800F7DAD9 /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41764DA1AEE854C00D89DBE /* Author.swift */; };
 		E4598B3C1B7CF80800F7DAD9 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41764DC1AEE854D00D89DBE /* Book.swift */; };
 		E4598B3E1B7CF86800F7DAD9 /* TestModel.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = E4598B3D1B7CF86800F7DAD9 /* TestModel.sqlite */; };
 		E4598B411B7CF8BF00F7DAD9 /* ModelMigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4598B401B7CF8BF00F7DAD9 /* ModelMigrationTests.swift */; };
+		E45DE9DE1BFD33B8000A2F01 /* CoreDataModelableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45DE9DD1BFD33B8000A2F01 /* CoreDataModelableTests.swift */; };
 		E4B23F011B5EAE6C00A4F218 /* BatchOperationContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B23F001B5EAE6C00A4F218 /* BatchOperationContextTests.swift */; };
 		E4B99C691B740321005B7E1A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B99C681B740321005B7E1A /* AppDelegate.swift */; };
 		E4B99C6B1B740321005B7E1A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B99C6A1B740321005B7E1A /* ViewController.swift */; };
@@ -57,9 +59,11 @@
 		E41764DA1AEE854C00D89DBE /* Author.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Author.swift; sourceTree = "<group>"; };
 		E41764DC1AEE854D00D89DBE /* Book.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		E41AF91E1AF82046004EB4B8 /* CoreDataStackTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CoreDataStackTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		E43A3C661BFCD81A0019D6B4 /* CoreDataModelable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataModelable.swift; sourceTree = "<group>"; };
 		E4598B391B7CF43600F7DAD9 /* TestModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "TestModel 2.xcdatamodel"; sourceTree = "<group>"; };
 		E4598B3D1B7CF86800F7DAD9 /* TestModel.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = TestModel.sqlite; sourceTree = "<group>"; };
 		E4598B401B7CF8BF00F7DAD9 /* ModelMigrationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelMigrationTests.swift; sourceTree = "<group>"; };
+		E45DE9DD1BFD33B8000A2F01 /* CoreDataModelableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataModelableTests.swift; sourceTree = "<group>"; };
 		E4B23F001B5EAE6C00A4F218 /* BatchOperationContextTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatchOperationContextTests.swift; sourceTree = "<group>"; };
 		E4B99C661B740321005B7E1A /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B99C681B740321005B7E1A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -120,6 +124,28 @@
 			path = CoreDataStackTests;
 			sourceTree = "<group>";
 		};
+		E43A3C611BFCD0530019D6B4 /* Stack Tests */ = {
+			isa = PBXGroup;
+			children = (
+				E4C9BC3F1AEA848600A6BD1B /* InitializationTests.swift */,
+				E4F59A451B505AE700C61516 /* StoreTeardownTests.swift */,
+				E4B23F001B5EAE6C00A4F218 /* BatchOperationContextTests.swift */,
+				E4598B401B7CF8BF00F7DAD9 /* ModelMigrationTests.swift */,
+				6979C2EF1B8F58BB006E521B /* SaveTests.swift */,
+				E45DE9DD1BFD33B8000A2F01 /* CoreDataModelableTests.swift */,
+			);
+			name = "Stack Tests";
+			sourceTree = "<group>";
+		};
+		E43A3C621BFCD0860019D6B4 /* Shared Test Utils */ = {
+			isa = PBXGroup;
+			children = (
+				69FC00361B7DBFB80002C1AC /* TempDirectoryTestCase.h */,
+				69FC00371B7DBFB80002C1AC /* TempDirectoryTestCase.m */,
+			);
+			name = "Shared Test Utils";
+			sourceTree = "<group>";
+		};
 		E4598B3F1B7CF86F00F7DAD9 /* Migration Samples */ = {
 			isa = PBXGroup;
 			children = (
@@ -166,6 +192,7 @@
 			isa = PBXGroup;
 			children = (
 				E4C9BC4A1AEA850600A6BD1B /* CoreDataStack.swift */,
+				E43A3C661BFCD81A0019D6B4 /* CoreDataModelable.swift */,
 				E4C9BC521AEA851F00A6BD1B /* Extensions */,
 				E4C9BC301AEA848600A6BD1B /* Supporting Files */,
 			);
@@ -185,13 +212,8 @@
 		E4C9BC3C1AEA848600A6BD1B /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				E4C9BC3F1AEA848600A6BD1B /* InitializationTests.swift */,
-				E4F59A451B505AE700C61516 /* StoreTeardownTests.swift */,
-				E4B23F001B5EAE6C00A4F218 /* BatchOperationContextTests.swift */,
-				E4598B401B7CF8BF00F7DAD9 /* ModelMigrationTests.swift */,
-				6979C2EF1B8F58BB006E521B /* SaveTests.swift */,
-				69FC00361B7DBFB80002C1AC /* TempDirectoryTestCase.h */,
-				69FC00371B7DBFB80002C1AC /* TempDirectoryTestCase.m */,
+				E43A3C611BFCD0530019D6B4 /* Stack Tests */,
+				E43A3C621BFCD0860019D6B4 /* Shared Test Utils */,
 				E4C9BC3D1AEA848600A6BD1B /* Supporting Files */,
 			);
 			name = Tests;
@@ -371,6 +393,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4C9BC4D1AEA850600A6BD1B /* CoreDataStack.swift in Sources */,
+				E43A3C671BFCD81A0019D6B4 /* CoreDataModelable.swift in Sources */,
 				E4C9BC4F1AEA850600A6BD1B /* NSManagedObjectContext+SaveHelpers.swift in Sources */,
 				E4C6F39C1AFD05E1004E3F1D /* NSPersistentStoreCoordinator+SQLiteHelpers.swift in Sources */,
 			);
@@ -386,6 +409,7 @@
 				69FC00381B7DBFB80002C1AC /* TempDirectoryTestCase.m in Sources */,
 				E4598B411B7CF8BF00F7DAD9 /* ModelMigrationTests.swift in Sources */,
 				E4F59A461B505AE700C61516 /* StoreTeardownTests.swift in Sources */,
+				E45DE9DE1BFD33B8000A2F01 /* CoreDataModelableTests.swift in Sources */,
 				E41764DD1AEE854D00D89DBE /* Book.swift in Sources */,
 				E41764DB1AEE854C00D89DBE /* Author.swift in Sources */,
 				E4C9BC401AEA848600A6BD1B /* InitializationTests.swift in Sources */,
