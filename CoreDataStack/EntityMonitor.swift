@@ -54,14 +54,14 @@ public class EntityMonitor<T: NSManagedObject where T: CoreDataModelable> {
     private let frequency: FireFrequency
     private let entityPredicate: NSPredicate
     private let filterPredicate: NSPredicate?
-    private var combinedPredicate: NSPredicate {
-        if let filterPredicate = filterPredicate {
+    private lazy var combinedPredicate: NSPredicate = {
+        if let filterPredicate = self.filterPredicate {
             return NSCompoundPredicate(andPredicateWithSubpredicates:
-                [entityPredicate, filterPredicate])
+                [self.entityPredicate, filterPredicate])
         } else {
-            return entityPredicate
+            return self.entityPredicate
         }
-    }
+    }()
 
     // MARK: - Lifecycle
 
