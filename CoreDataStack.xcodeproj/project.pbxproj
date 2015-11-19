@@ -11,6 +11,8 @@
 		69FC00381B7DBFB80002C1AC /* TempDirectoryTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 69FC00371B7DBFB80002C1AC /* TempDirectoryTestCase.m */; };
 		E41764DB1AEE854C00D89DBE /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41764DA1AEE854C00D89DBE /* Author.swift */; };
 		E41764DD1AEE854D00D89DBE /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41764DC1AEE854D00D89DBE /* Book.swift */; };
+		E43A3C5F1BFCCB660019D6B4 /* EntityMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43A3C5E1BFCCB660019D6B4 /* EntityMonitor.swift */; };
+		E43A3C651BFCD0F00019D6B4 /* EntityMonitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43A3C641BFCD0F00019D6B4 /* EntityMonitorTests.swift */; };
 		E43A3C671BFCD81A0019D6B4 /* CoreDataModelable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43A3C661BFCD81A0019D6B4 /* CoreDataModelable.swift */; };
 		E4598B3A1B7CF80200F7DAD9 /* TestModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4C9BC531AEA857E00A6BD1B /* TestModel.xcdatamodeld */; };
 		E4598B3B1B7CF80800F7DAD9 /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41764DA1AEE854C00D89DBE /* Author.swift */; };
@@ -59,6 +61,8 @@
 		E41764DA1AEE854C00D89DBE /* Author.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Author.swift; sourceTree = "<group>"; };
 		E41764DC1AEE854D00D89DBE /* Book.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		E41AF91E1AF82046004EB4B8 /* CoreDataStackTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CoreDataStackTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		E43A3C5E1BFCCB660019D6B4 /* EntityMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = EntityMonitor.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		E43A3C641BFCD0F00019D6B4 /* EntityMonitorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = EntityMonitorTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E43A3C661BFCD81A0019D6B4 /* CoreDataModelable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataModelable.swift; sourceTree = "<group>"; };
 		E4598B391B7CF43600F7DAD9 /* TestModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "TestModel 2.xcdatamodel"; sourceTree = "<group>"; };
 		E4598B3D1B7CF86800F7DAD9 /* TestModel.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = TestModel.sqlite; sourceTree = "<group>"; };
@@ -124,6 +128,15 @@
 			path = CoreDataStackTests;
 			sourceTree = "<group>";
 		};
+		E43A3C5D1BFCC6910019D6B4 /* Type Safe Monitors */ = {
+			isa = PBXGroup;
+			children = (
+				E43A3C5E1BFCCB660019D6B4 /* EntityMonitor.swift */,
+			);
+			name = "Type Safe Monitors";
+			path = CoreDataStack;
+			sourceTree = "<group>";
+		};
 		E43A3C611BFCD0530019D6B4 /* Stack Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -144,6 +157,14 @@
 				69FC00371B7DBFB80002C1AC /* TempDirectoryTestCase.m */,
 			);
 			name = "Shared Test Utils";
+			sourceTree = "<group>";
+		};
+		E43A3C631BFCD0BB0019D6B4 /* Type Safe Monitors Tests */ = {
+			isa = PBXGroup;
+			children = (
+				E43A3C641BFCD0F00019D6B4 /* EntityMonitorTests.swift */,
+			);
+			name = "Type Safe Monitors Tests";
 			sourceTree = "<group>";
 		};
 		E4598B3F1B7CF86F00F7DAD9 /* Migration Samples */ = {
@@ -171,6 +192,7 @@
 			isa = PBXGroup;
 			children = (
 				E4C9BC2F1AEA848600A6BD1B /* Stack */,
+				E43A3C5D1BFCC6910019D6B4 /* Type Safe Monitors */,
 				E4C9BC3C1AEA848600A6BD1B /* Tests */,
 				E4B99C671B740321005B7E1A /* Example */,
 				E41764DE1AEE856F00D89DBE /* Test Model */,
@@ -213,6 +235,7 @@
 			isa = PBXGroup;
 			children = (
 				E43A3C611BFCD0530019D6B4 /* Stack Tests */,
+				E43A3C631BFCD0BB0019D6B4 /* Type Safe Monitors Tests */,
 				E43A3C621BFCD0860019D6B4 /* Shared Test Utils */,
 				E4C9BC3D1AEA848600A6BD1B /* Supporting Files */,
 			);
@@ -394,6 +417,7 @@
 			files = (
 				E4C9BC4D1AEA850600A6BD1B /* CoreDataStack.swift in Sources */,
 				E43A3C671BFCD81A0019D6B4 /* CoreDataModelable.swift in Sources */,
+				E43A3C5F1BFCCB660019D6B4 /* EntityMonitor.swift in Sources */,
 				E4C9BC4F1AEA850600A6BD1B /* NSManagedObjectContext+SaveHelpers.swift in Sources */,
 				E4C6F39C1AFD05E1004E3F1D /* NSPersistentStoreCoordinator+SQLiteHelpers.swift in Sources */,
 			);
@@ -408,6 +432,7 @@
 				E4B23F011B5EAE6C00A4F218 /* BatchOperationContextTests.swift in Sources */,
 				69FC00381B7DBFB80002C1AC /* TempDirectoryTestCase.m in Sources */,
 				E4598B411B7CF8BF00F7DAD9 /* ModelMigrationTests.swift in Sources */,
+				E43A3C651BFCD0F00019D6B4 /* EntityMonitorTests.swift in Sources */,
 				E4F59A461B505AE700C61516 /* StoreTeardownTests.swift in Sources */,
 				E45DE9DE1BFD33B8000A2F01 /* CoreDataModelableTests.swift in Sources */,
 				E41764DD1AEE854D00D89DBE /* Book.swift in Sources */,
