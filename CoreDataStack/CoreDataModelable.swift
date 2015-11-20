@@ -62,6 +62,9 @@ public extension CoreDataModelable where Self: NSManagedObject {
         let fetchRequest = NSFetchRequest()
         fetchRequest.entity = entityInContext(context)
         fetchRequest.predicate = predicate
+        fetchRequest.fetchLimit = 1
+        fetchRequest.returnsObjectsAsFaults = false
+        fetchRequest.fetchBatchSize = 1
         return try context.executeFetchRequest(fetchRequest).first as? Self
     }
 
