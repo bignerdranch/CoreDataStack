@@ -8,7 +8,7 @@
 
 import CoreData
 
-/// The freqency of notification dispatch from the EntityMonitor
+/// The frequency of notification dispatch from the EntityMonitor
 public enum FireFrequency {
     /// Notifications will be sent upon MOC being changed
     case OnChange

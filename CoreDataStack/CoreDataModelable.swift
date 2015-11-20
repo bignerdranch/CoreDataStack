@@ -23,7 +23,7 @@ public protocol CoreDataModelable {
 
 /**
  Extension to CoreDataModelable with convenience methods for 
- creating, deleting, and fetching entites from a specific NSManagedObjectContext.
+ creating, deleting, and fetching entities from a specific NSManagedObjectContext.
  */
 public extension CoreDataModelable where Self: NSManagedObject {
 
