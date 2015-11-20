@@ -10,15 +10,47 @@ import XCTest
 import CoreData
 import CoreDataStack
 
-class EntityMonitorTests: TempDirectoryTestCase, EntityMonitorDelegate {
+var insertExpectation: XCTestExpectation!
+var deleteExpectation: XCTestExpectation!
+var updateExpectation: XCTestExpectation!
+
+class AuthorMonitorDelegate: EntityMonitorDelegate {
+    func entityMonitorObservedDeletions(monitor: EntityMonitor<Author>, entities: Set<Author>) {
+        XCTAssertGreaterThan(entities.count, 0)
+        deleteExpectation.fulfill()
+    }
+
+    func entityMonitorObservedInserts(monitor: EntityMonitor<Author>, entities: Set<Author>) {
+        XCTAssertGreaterThan(entities.count, 0)
+        insertExpectation.fulfill()
+    }
+
+    func entityMonitorObservedModifications(monitor: EntityMonitor<Author>, entities: Set<Author>) {
+        XCTAssertGreaterThan(entities.count, 0)
+        XCTAssertNotNil(entities.first?.firstName)
+        updateExpectation.fulfill()
+    }
+}
+
+class BookMonitorDelegate: EntityMonitorDelegate {
+    func entityMonitorObservedDeletions(monitor: EntityMonitor<Book>, entities: Set<Book>) {
+        deleteExpectation.fulfill()
+        XCTAssertEqual(entities.count, 1)
+    }
+
+    func entityMonitorObservedInserts(monitor: EntityMonitor<Book>, entities: Set<Book>) {
+        XCTFail("Book inserts will never have a matching title so we shouldn't get this callback")
+    }
+
+    func entityMonitorObservedModifications(monitor: EntityMonitor<Book>, entities: Set<Book>) {
+        updateExpectation.fulfill()
+        XCTAssertEqual(entities.count, 1)
+    }
+}
+
+class EntityMonitorTests: TempDirectoryTestCase {
 
     var stack: CoreDataStack!
-    var monitor: EntityMonitor<Author>!
-    var filteredMonitor: EntityMonitor<Author>!
-
-    var insertExpectation: XCTestExpectation!
-    var deleteExpectation: XCTestExpectation!
-    var updateExpectation: XCTestExpectation!
 
     override func setUp() {
         super.setUp()
@@ -54,8 +86,12 @@ class EntityMonitorTests: TempDirectoryTestCase, EntityMonitorDelegate {
     func testOnSaveNotifications() {
         // Setup monitor
         let moc = stack.mainQueueContext
-        monitor = EntityMonitor<Author>(context: moc, frequency: .OnSave)
-        monitor.setDelegate(self)
+        guard let authorMonitor = EntityMonitor<Author>(context: moc, frequency: .OnSave) else {
+            XCTFail("Failed to create EntityMonitor")
+            return
+        }
+        let authorMonitorDelegate = AuthorMonitorDelegate()
+        authorMonitor.setDelegate(authorMonitorDelegate)
 
         insertExpectation = expectationWithDescription("EntityMonitor Insert Callback")
         updateExpectation = expectationWithDescription("EntityMonitor Update Callback")
@@ -84,8 +120,12 @@ class EntityMonitorTests: TempDirectoryTestCase, EntityMonitorDelegate {
     func testOnChangeNotifications() {
         // Setup monitor
         let moc = stack.mainQueueContext
-        monitor = EntityMonitor<Author>(context: moc, frequency: .OnChange)
-        monitor.setDelegate(self)
+        guard let authorMonitor = EntityMonitor<Author>(context: moc, frequency: .OnChange) else {
+            XCTFail("Failed to create EntityMonitor")
+            return
+        }
+        let authorMonitorDelegate = AuthorMonitorDelegate()
+        authorMonitor.setDelegate(authorMonitorDelegate)
 
         // Test Insert
         insertExpectation = expectationWithDescription("EntityMonitor Insert Callback")
@@ -111,62 +151,32 @@ class EntityMonitorTests: TempDirectoryTestCase, EntityMonitorDelegate {
 
     func testFilterPredicate() {
         // Create filter predicate
-        let matchingLastName = "Edwards"
-        let predicate = NSPredicate(format: "lastName = %@", matchingLastName)
+        let matchingTitle = "nerd"
+        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", matchingTitle)
 
         // Setup monitor
         let moc = stack.mainQueueContext
-        filteredMonitor = EntityMonitor<Author>(context: moc, filterPredicate: predicate)
-        filteredMonitor.setDelegate(self)
+        guard let filteredMonitor = EntityMonitor<Book>(context: moc, filterPredicate: predicate) else {
+            XCTFail("Failed to create EntityMonitor")
+            return
+        }
+        let bookMonitorDelegate = BookMonitorDelegate()
+        filteredMonitor.setDelegate(bookMonitorDelegate)
 
         // Create an initial book
-        let newAuthor = Author(managedObjectContext: moc)
+        let newBook = Book(managedObjectContext: moc)
         try! moc.saveContextAndWait()
 
         // Look for an update
         updateExpectation = expectationWithDescription("EntityMonitor Update Callback")
-        newAuthor.lastName = matchingLastName
+        newBook.title = "Swift Programming: The Big Nerd Ranch Guide"
         try! moc.saveContextAndWait()
         waitForExpectationsWithTimeout(10, handler: nil)
 
         // Look for deletion
         deleteExpectation = expectationWithDescription("EntityMonitor Delete Callback")
-        moc.deleteObject(newAuthor)
+        moc.deleteObject(newBook)
         try! moc.saveContextAndWait()
         waitForExpectationsWithTimeout(10, handler: nil)
-    }
-
-    // MARK: - EntityMonitorDelegate
-
-    // Author Monitor
-
-    func entityMonitorObservedDeletions(monitor: EntityMonitor<Author>, entities: Set<Author>) {
-        if monitor === self.monitor {
-            XCTAssertGreaterThan(entities.count, 0)
-            deleteExpectation.fulfill()
-        } else if monitor === filteredMonitor {
-            deleteExpectation.fulfill()
-            XCTAssertEqual(entities.count, 1)
-        }
-    }
-
-    func entityMonitorObservedInserts(monitor: EntityMonitor<Author>, entities: Set<Author>) {
-        if monitor === self.monitor {
-            XCTAssertGreaterThan(entities.count, 0)
-            insertExpectation.fulfill()
-        } else if monitor === self.filteredMonitor {
-            XCTFail("Book inserts will never have a matching title so we shouldn't get this callback")
-        }
-    }
-
-    func entityMonitorObservedModifications(monitor: EntityMonitor<Author>, entities: Set<Author>) {
-        if monitor === self.monitor {
-            XCTAssertGreaterThan(entities.count, 0)
-            XCTAssertNotNil(entities.first?.firstName)
-            updateExpectation.fulfill()
-        } else if monitor === self.filteredMonitor {
-            updateExpectation.fulfill()
-            XCTAssertEqual(entities.count, 1)
-        }
     }
 }
