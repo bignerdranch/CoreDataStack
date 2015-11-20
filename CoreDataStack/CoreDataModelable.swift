@@ -56,18 +56,13 @@ public extension CoreDataModelable where Self: NSManagedObject {
     - parameter predicate: An optional NSPredicate for filtering
     - parameter context: NSManagedObjectContext to find the entities within.
 
-    - returns: Self: The first entity that matches the optional predicate.
+    - returns: Self?: The first entity that matches the optional predicate or nil.
     */
-    static public func findFirst(predicate: NSPredicate?, context: NSManagedObjectContext) -> Self? {
+    static public func findFirst(predicate: NSPredicate?, context: NSManagedObjectContext) throws -> Self? {
         let fetchRequest = NSFetchRequest()
         fetchRequest.entity = entityInContext(context)
         fetchRequest.predicate = predicate
-
-        do {
             return try context.executeFetchRequest(fetchRequest).first as? Self
-        } catch {
-            return nil
-        }
     }
 
     /**
@@ -78,16 +73,11 @@ public extension CoreDataModelable where Self: NSManagedObject {
 
      - returns: [Self]: The array of matching entities.
      */
-    static public func allInContext(context: NSManagedObjectContext, sortDescriptors: [NSSortDescriptor]? = nil) -> [Self] {
+    static public func allInContext(context: NSManagedObjectContext, sortDescriptors: [NSSortDescriptor]? = nil) throws -> [Self] {
         let fetchRequest = NSFetchRequest()
         fetchRequest.entity = entityInContext(context)
         fetchRequest.sortDescriptors = sortDescriptors
-
-        do {
             return try context.executeFetchRequest(fetchRequest) as! [Self]
-        } catch {
-            return []
-        }
     }
 
     // MARK: - Removing Objects

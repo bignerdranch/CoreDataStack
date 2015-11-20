@@ -106,7 +106,7 @@ class EntityMonitorTests: TempDirectoryTestCase {
         try! moc.saveContextAndWait()
 
         // Modify an existing
-        let existing = Author.findFirst(nil, context: moc)!
+        let existing = try! Author.findFirst(nil, context: moc)!
         existing.setValue("Robert", forKey: "firstName")
         moc.saveContext()
 
@@ -137,7 +137,7 @@ class EntityMonitorTests: TempDirectoryTestCase {
 
         // Test Update
         updateExpectation = expectationWithDescription("EntityMonitor Update Callback")
-        let existing = Author.findFirst(nil, context: moc)!
+        let existing = try! Author.findFirst(nil, context: moc)!
         existing.firstName = "Robert"
         moc.processPendingChanges()
         waitForExpectationsWithTimeout(10, handler: nil)
