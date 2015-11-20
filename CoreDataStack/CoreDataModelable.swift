@@ -59,8 +59,7 @@ public extension CoreDataModelable where Self: NSManagedObject {
     - returns: Self?: The first entity that matches the optional predicate or nil.
     */
     static public func findFirst(predicate: NSPredicate?, context: NSManagedObjectContext) throws -> Self? {
-        let fetchRequest = NSFetchRequest()
-        fetchRequest.entity = entityInContext(context)
+        let fetchRequest = fetchRequestForEntity(inContext: context)
         fetchRequest.predicate = predicate
         fetchRequest.fetchLimit = 1
         fetchRequest.returnsObjectsAsFaults = false
@@ -77,8 +76,7 @@ public extension CoreDataModelable where Self: NSManagedObject {
      - returns: [Self]: The array of matching entities.
      */
     static public func allInContext(context: NSManagedObjectContext, sortDescriptors: [NSSortDescriptor]? = nil) throws -> [Self] {
-        let fetchRequest = NSFetchRequest()
-        fetchRequest.entity = entityInContext(context)
+        let fetchRequest = fetchRequestForEntity(inContext: context)
         fetchRequest.sortDescriptors = sortDescriptors
         return try context.executeFetchRequest(fetchRequest) as! [Self]
     }
@@ -91,8 +89,7 @@ public extension CoreDataModelable where Self: NSManagedObject {
     - parameter context: NSManagedObjectContext to remove the entities from.
     */
     static public func removeAll(context: NSManagedObjectContext) throws {
-        let fetchRequest = NSFetchRequest()
-        fetchRequest.entity = entityInContext(context)
+        let fetchRequest = fetchRequestForEntity(inContext: context)
         try removeAllObjectsReturnedByRequest(fetchRequest, inContext: context)
     }
 
@@ -103,8 +100,7 @@ public extension CoreDataModelable where Self: NSManagedObject {
      - parameter inContext: The NSManagedObjectContext to remove the Entities from.
      */
     static public func removeAllExcept(toKeep: [Self], inContext context: NSManagedObjectContext) throws {
-        let fetchRequest = NSFetchRequest()
-        fetchRequest.entity = entityInContext(context)
+        let fetchRequest = fetchRequestForEntity(inContext: context)
         fetchRequest.predicate = NSPredicate(format: "NOT (self IN %@)", toKeep)
         try removeAllObjectsReturnedByRequest(fetchRequest, inContext: context)
     }
@@ -118,5 +114,11 @@ public extension CoreDataModelable where Self: NSManagedObject {
         fetchRequest.includesPropertyValues = false
         fetchRequest.includesSubentities = false
         try context.executeFetchRequest(fetchRequest).lazy.map { $0 as! NSManagedObject }.forEach(context.deleteObject)
+    }
+
+    static private func fetchRequestForEntity(inContext context: NSManagedObjectContext) -> NSFetchRequest {
+        let fetchRequest = NSFetchRequest()
+        fetchRequest.entity = entityInContext(context)
+        return fetchRequest
     }
 }
