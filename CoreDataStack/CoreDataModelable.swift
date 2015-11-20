@@ -62,7 +62,7 @@ public extension CoreDataModelable where Self: NSManagedObject {
         let fetchRequest = NSFetchRequest()
         fetchRequest.entity = entityInContext(context)
         fetchRequest.predicate = predicate
-            return try context.executeFetchRequest(fetchRequest).first as? Self
+        return try context.executeFetchRequest(fetchRequest).first as? Self
     }
 
     /**
@@ -77,7 +77,7 @@ public extension CoreDataModelable where Self: NSManagedObject {
         let fetchRequest = NSFetchRequest()
         fetchRequest.entity = entityInContext(context)
         fetchRequest.sortDescriptors = sortDescriptors
-            return try context.executeFetchRequest(fetchRequest) as! [Self]
+        return try context.executeFetchRequest(fetchRequest) as! [Self]
     }
 
     // MARK: - Removing Objects
@@ -109,8 +109,11 @@ public extension CoreDataModelable where Self: NSManagedObject {
     // MARK: Private Funcs
 
     static private func removeAllObjectsReturnedByRequest(fetchRequest: NSFetchRequest, inContext context: NSManagedObjectContext) throws {
+        // TODO: rcedwards A batch delete would be more efficient here on iOS 9 and up 
+        //                  however it complicates things since the request requires a context with
+        //                  an NSPersistentStoreCoordinator.
         fetchRequest.includesPropertyValues = false
-
+        fetchRequest.includesSubentities = false
         try context.executeFetchRequest(fetchRequest).lazy.map { $0 as! NSManagedObject }.forEach(context.deleteObject)
     }
 }
