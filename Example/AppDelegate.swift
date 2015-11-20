@@ -15,19 +15,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     private var coreDataStack: CoreDataStack?
+    private let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+    private lazy var loadingVC: UIViewController = {
+        return self.mainStoryboard.instantiateViewControllerWithIdentifier("LoadingVC")
+    }()
+    private lazy var myCoreDataVC: MyCoreDataConnectedViewController = {
+        return self.mainStoryboard.instantiateViewControllerWithIdentifier("CoreDataVC")
+            as! MyCoreDataConnectedViewController
+    }()
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+
+        window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        window?.rootViewController = loadingVC
 
         CoreDataStack.constructSQLiteStack(withModelName: "TestModel") { result in
             switch result {
             case .Success(let stack):
-                self.coreDataStack = stack
-                print("Success")
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.coreDataStack = stack
+                    self.myCoreDataVC.coreDataStack = stack
+                    self.window?.rootViewController = self.myCoreDataVC
+                }
             case .Failure(let error):
-                print(error)
-                assertionFailure()
+                assertionFailure("\(error)")
             }
         }
+
+        window?.makeKeyAndVisible()
 
         return true
     }
