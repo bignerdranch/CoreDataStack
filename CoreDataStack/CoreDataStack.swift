@@ -114,6 +114,8 @@ public final class CoreDataStack {
 
     - parameter modelName: Base name of the xcdatamodel file.
     - parameter inBundle: NSBundle that contains the XCDataModel. Default value is mainBundle()
+     
+    - returns: CoreDataStack: Newly created In-Memory CoreDataStack
     */
     public static func constructInMemoryStack(withModelName modelName: String,
         inBundle bundle: NSBundle = NSBundle.mainBundle()) throws -> CoreDataStack {
