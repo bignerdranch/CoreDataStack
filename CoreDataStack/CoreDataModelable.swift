@@ -59,7 +59,8 @@ public extension CoreDataModelable where Self: NSManagedObject {
     - returns: Self: The first entity that matches the optional predicate.
     */
     static public func findFirst(predicate: NSPredicate?, context: NSManagedObjectContext) -> Self? {
-        let fetchRequest = NSFetchRequest(entityName: entityName)
+        let fetchRequest = NSFetchRequest()
+        fetchRequest.entity = entityInContext(context)
         fetchRequest.predicate = predicate
 
         do {
@@ -78,7 +79,8 @@ public extension CoreDataModelable where Self: NSManagedObject {
      - returns: [Self]: The array of matching entities.
      */
     static public func allInContext(context: NSManagedObjectContext, sortDescriptors: [NSSortDescriptor]? = nil) -> [Self] {
-        let fetchRequest = NSFetchRequest(entityName: entityName)
+        let fetchRequest = NSFetchRequest()
+        fetchRequest.entity = entityInContext(context)
         fetchRequest.sortDescriptors = sortDescriptors
 
         do {
@@ -96,7 +98,8 @@ public extension CoreDataModelable where Self: NSManagedObject {
     - parameter context: NSManagedObjectContext to remove the entities from.
     */
     static public func removeAll(context: NSManagedObjectContext) throws {
-        let fetchRequest = NSFetchRequest(entityName: entityName)
+        let fetchRequest = NSFetchRequest()
+        fetchRequest.entity = entityInContext(context)
         try removeAllObjectsReturnedByRequest(fetchRequest, inContext: context)
     }
 
@@ -107,7 +110,8 @@ public extension CoreDataModelable where Self: NSManagedObject {
      - parameter inContext: The NSManagedObjectContext to remove the Entities from.
      */
     static public func removeAllExcept(toKeep: [Self], inContext context: NSManagedObjectContext) throws {
-        let fetchRequest = NSFetchRequest(entityName: entityName)
+        let fetchRequest = NSFetchRequest()
+        fetchRequest.entity = entityInContext(context)
         fetchRequest.predicate = NSPredicate(format: "NOT (self IN %@)", toKeep)
         try removeAllObjectsReturnedByRequest(fetchRequest, inContext: context)
     }
