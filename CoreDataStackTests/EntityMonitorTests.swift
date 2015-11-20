@@ -138,7 +138,7 @@ class EntityMonitorTests: TempDirectoryTestCase {
         // Test Update
         updateExpectation = expectationWithDescription("EntityMonitor Update Callback")
         let existing = Author.findFirst(nil, context: moc)!
-        existing.setValue("Robert", forKey: "firstName")
+        existing.firstName = "Robert"
         moc.processPendingChanges()
         waitForExpectationsWithTimeout(10, handler: nil)
 
