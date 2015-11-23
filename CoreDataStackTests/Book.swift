@@ -15,6 +15,18 @@ class Book: NSManagedObject, CoreDataModelable {
 
     @NSManaged var title: String?
     @NSManaged var authors: Set<Author>
+    @NSManaged var publisher: NSManagedObject
+
+    var firstInitial: String? {
+        willAccessValueForKey("title")
+        guard let title = title,
+            let first = title.characters.first else {
+                return nil
+        }
+        let initial = String(first)
+        didAccessValueForKey("title")
+        return initial
+    }
 
     // MARK: - CoreDataModelable
 

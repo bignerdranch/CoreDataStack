@@ -46,7 +46,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SMf-Q2-Rmj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="788" y="-125"/>
+            <point key="canvasLocation" x="590" y="-125"/>
         </scene>
         <!--My Core Data Connected View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -71,14 +71,28 @@
                                 <color key="textColor" red="0.88235294818878174" green="0.34509804844856262" blue="0.16078431904315948" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tIx-6e-GVy">
+                                <rect key="frame" x="167" y="466" width="266" height="31"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="16"/>
+                                <state key="normal" title="Display Fetched Results Controller">
+                                    <color key="titleColor" red="0.41568627949999998" green="0.50588238240000005" blue="0.21176470820000001" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="showFRC:" destination="BYZ-38-t0r" eventType="touchUpInside" id="drL-2c-5eY"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" red="0.96078431606292725" green="0.95686274766921997" blue="0.94509804248809814" alpha="1" colorSpace="calibratedRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="tIx-6e-GVy" firstAttribute="top" secondItem="qEj-kg-LeY" secondAttribute="bottom" constant="16" id="HOR-rf-oCT"/>
                             <constraint firstItem="qEj-kg-LeY" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="MMx-Zq-xLN"/>
                             <constraint firstItem="qEj-kg-LeY" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Mct-VO-YEC"/>
                             <constraint firstItem="xQT-7j-YEd" firstAttribute="centerX" secondItem="qEj-kg-LeY" secondAttribute="centerX" id="h2z-0a-RBa"/>
                             <constraint firstItem="qEj-kg-LeY" firstAttribute="top" secondItem="xQT-7j-YEd" secondAttribute="bottom" constant="8" id="kRO-bp-szQ"/>
+                            <constraint firstItem="tIx-6e-GVy" firstAttribute="centerX" secondItem="qEj-kg-LeY" secondAttribute="centerX" id="xja-mt-gUp"/>
                         </constraints>
                     </view>
                 </viewController>
