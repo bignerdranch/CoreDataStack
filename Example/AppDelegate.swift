@@ -32,7 +32,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         CoreDataStack.constructSQLiteStack(withModelName: "TestModel") { result in
             switch result {
             case .Success(let stack):
-                dispatch_async(dispatch_get_main_queue()) {
+                // Note don't actually use dispatch_after
+                // Arbitrary 2 second delay to illustrate an async setup.
+                // dispatch_async(dispatch_get_main_queue()) {} should be used in production
+                let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(2 * NSEC_PER_SEC))
+                dispatch_after(delay, dispatch_get_main_queue()) {
                     self.coreDataStack = stack
                     self.myCoreDataVC.coreDataStack = stack
                     self.window?.rootViewController = self.myCoreDataVC
