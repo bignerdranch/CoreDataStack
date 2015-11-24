@@ -23,8 +23,28 @@ public enum FireFrequency {
 public protocol EntityMonitorDelegate: class { // : class for weak capture
     typealias T: NSManagedObject, CoreDataModelable
 
+    /**
+     Callback for when objects matching the predicate have been inserted
+
+     - parameter monitor: The `EntityMonitor` posting the callback
+     - parameter entities: The set of inserted matching objects
+     */
     func entityMonitorObservedInserts(monitor: EntityMonitor<T>, entities: Set<T>)
+
+    /**
+     Callback for when objects matching the predicate have been deleted
+
+     - parameter monitor: The `EntityMonitor` posting the callback
+     - parameter entities: The set of deleted matching objects
+     */
     func entityMonitorObservedDeletions(monitor: EntityMonitor<T>, entities: Set<T>)
+
+    /**
+     Callback for when objects matching the predicate have been updated
+
+     - parameter monitor: The `EntityMonitor` posting the callback
+     - parameter entities: The set of updated matching objects
+     */
     func entityMonitorObservedModifications(monitor: EntityMonitor<T>, entities: Set<T>)
 }
 
