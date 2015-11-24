@@ -161,4 +161,36 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
         }
     }
 
+    func testObjectMoves() {
+        guard let lastBook = fetchedResultsController.fetchedObjects?.last else {
+            XCTFail("Last book missing")
+            return
+        }
+
+        XCTAssertEqual(lastBook.title, "Wide Sargasso Sea")
+
+        // Remame the book
+        lastBook.title = "Narrow Sargasso Sea"
+        coreDataStack.mainQueueContext.processPendingChanges()
+
+        XCTAssertEqual(delegate.didChangeObjectCalls.count, 1)
+        guard let change = delegate.didChangeObjectCalls.first else {
+            XCTFail("Missing change object")
+            return
+        }
+
+        let expectedToPath = NSIndexPath(forRow: 1, inSection: 11)
+        let expectedFromPath = NSIndexPath(forRow: 3, inSection: 18)
+
+        switch change {
+        case let .Move(object: book, fromIndexPath: fromIndexPath, toIndexPath: toIndexPath):
+            XCTAssertEqual(book, lastBook)
+            XCTAssertEqual(fromIndexPath, expectedFromPath)
+            XCTAssertEqual(toIndexPath, expectedToPath)
+            return
+        case .Update, .Insert, .Delete:
+            XCTFail("Incorrect change type")
+        }
+    }
+
 }
