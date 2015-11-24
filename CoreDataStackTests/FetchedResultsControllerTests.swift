@@ -243,8 +243,32 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
     }
 
     func testSectionInserts() {
-        XCTFail("Not implemented")
-        //delegate.didChangeSectionCalls
+        let moc = coreDataStack.mainQueueContext
+
+        //Create a new book with a title that will create a new section
+        let newBook = Book(managedObjectContext: moc)
+        newBook.title = "##@%@#%^"
+        moc.processPendingChanges()
+
+        XCTAssertEqual(delegate.didChangeContentCount, 1)
+        XCTAssertEqual(delegate.willChangeContentCount, 1)
+        XCTAssertEqual(delegate.didChangeObjectCalls.count, 1)
+        XCTAssertEqual(delegate.didChangeSectionCalls.count, 1)
+        guard let sectionChange = delegate.didChangeSectionCalls.first else {
+            XCTFail("Missing section change assertion")
+            return
+        }
+
+        switch sectionChange {
+        case let .Insert(sectionInfo, sectionIndex):
+            XCTAssertEqual(sectionInfo.indexTitle, "#")
+            XCTAssertEqual(sectionInfo.objects.first, newBook)
+            XCTAssertEqual(sectionInfo.objects.count, 1)
+            XCTAssertEqual(sectionInfo.name, "#")
+            XCTAssertEqual(sectionIndex, 0)
+        case .Delete:
+            XCTFail("Wrong section update type")
+        }
     }
 
     func testSectionDeletions() {
