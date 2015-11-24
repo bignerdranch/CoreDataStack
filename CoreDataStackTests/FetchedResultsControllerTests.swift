@@ -157,7 +157,9 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
         moc.deleteObject(firstBook)
         moc.processPendingChanges()
 
-        XCTAssertEqual(delegate.didChangeSectionCalls.count, 1)
+        XCTAssertEqual(delegate.didChangeContentCount, 1)
+        XCTAssertEqual(delegate.willChangeContentCount, 1)
+        XCTAssertEqual(delegate.didChangeObjectCalls.count, 1)
         guard let change = delegate.didChangeObjectCalls.first else {
             XCTFail("Missing object change object")
             return
@@ -184,6 +186,8 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
         lastBook.title = "Narrow Sargasso Sea"
         coreDataStack.mainQueueContext.processPendingChanges()
 
+        XCTAssertEqual(delegate.didChangeContentCount, 1)
+        XCTAssertEqual(delegate.willChangeContentCount, 1)
         XCTAssertEqual(delegate.didChangeObjectCalls.count, 1)
         guard let change = delegate.didChangeObjectCalls.first else {
             XCTFail("Missing change object")
@@ -219,6 +223,8 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
         firstBook.authors.insert(author)
         moc.processPendingChanges()
 
+        XCTAssertEqual(delegate.didChangeContentCount, 1)
+        XCTAssertEqual(delegate.willChangeContentCount, 1)
         XCTAssertEqual(delegate.didChangeObjectCalls.count, 1)
         guard let change = delegate.didChangeObjectCalls.first else {
             XCTFail("Update missing")
