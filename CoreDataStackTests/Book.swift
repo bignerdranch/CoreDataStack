@@ -19,12 +19,13 @@ class Book: NSManagedObject, CoreDataModelable {
 
     var firstInitial: String? {
         willAccessValueForKey("title")
+        defer { didAccessValueForKey("title") }
         guard let title = title,
             let first = title.characters.first else {
                 return nil
         }
         let initial = String(first)
-        didAccessValueForKey("title")
+
         return initial
     }
 
