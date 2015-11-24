@@ -20,7 +20,7 @@ class BooksTableViewController: UITableViewController {
         let frc = FetchedResultsController<Book>(fetchRequest: fetchRequest,
             managedObjectContext: self.stack.mainQueueContext,
             sectionNameKeyPath: "firstInitial")
-        let frcDelegate = BooksFetchedResultsControllerDelegate()
+        let frcDelegate = BooksFetchedResultsControllerDelegate(tableView: self.tableView)
         frc.setDelegate(frcDelegate)
         return frc
     }()
@@ -89,25 +89,52 @@ class BooksTableViewController: UITableViewController {
 }
 
 class BooksFetchedResultsControllerDelegate: FetchedResultsControllerDelegate {
+
+    private weak var tableView: UITableView?
+
+    // MARK: - Lifecycle
+
+    init(tableView: UITableView) {
+        self.tableView = tableView
+    }
+
+    func fetchedResultsControllerDidPerformFetch(controller: FetchedResultsController<Book>) {
+        tableView?.reloadData()
+    }
+
+    func fetchedResultsControllerWillChangeContent(controller: FetchedResultsController<Book>) {
+        tableView?.beginUpdates()
+    }
+
+    func fetchedResultsControllerDidChangeContent(controller: FetchedResultsController<Book>) {
+        tableView?.endUpdates()
+    }
+
     func fetchedResultsController(controller: FetchedResultsController<Book>,
         didChangeObject change: FetchedResultsObjectChange<Book>) {
+            switch change {
+            case let .Insert(_, indexPath):
+                tableView?.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
 
+            case let .Delete(_, indexPath):
+                tableView?.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+
+            case let .Move(_, fromIndexPath, toIndexPath):
+                tableView?.moveRowAtIndexPath(fromIndexPath, toIndexPath: toIndexPath)
+
+            case let .Update(_, indexPath):
+                tableView?.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            }
     }
 
     func fetchedResultsController(controller: FetchedResultsController<Book>,
         didChangeSection change: FetchedResultsSectionChange<Book>) {
+            switch change {
+            case let .Insert(_, index):
+                tableView?.insertSections(NSIndexSet(index: index), withRowAnimation: .Automatic)
 
-    }
-
-    func fetchedResultsControllerDidChangeContent(controller: FetchedResultsController<Book>) {
-
-    }
-
-    func fetchedResultsControllerDidPerformFetch(controller: FetchedResultsController<Book>) {
-
-    }
-
-    func fetchedResultsControllerWillChangeContent(controller: FetchedResultsController<Book>) {
-
+            case let .Delete(_, index):
+                tableView?.deleteSections(NSIndexSet(index: index), withRowAnimation: .Automatic)
+            }
     }
 }
