@@ -193,4 +193,45 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
         }
     }
 
+    func testObjectUpdates() {
+        guard let firstBook = fetchedResultsController.fetchedObjects?.first else {
+            XCTFail("first fetched book missing")
+            return
+        }
+        let moc = coreDataStack.mainQueueContext
+
+        // Update a book
+        XCTAssertEqual(firstBook.authors.count, 0)
+        let author = Author(managedObjectContext: moc)
+        author.firstName = "George"
+        author.lastName = "Orwell"
+        firstBook.authors.insert(author)
+        moc.processPendingChanges()
+
+        XCTAssertEqual(delegate.didChangeObjectCalls.count, 1)
+        guard let change = delegate.didChangeObjectCalls.first else {
+            XCTFail("Update missing")
+            return
+        }
+
+        switch change {
+        case let .Update(book, indexPath):
+            XCTAssertEqual(book, firstBook)
+            XCTAssertEqual(book.authors.count, 1)
+            XCTAssertEqual(book.authors.first, author)
+            XCTAssertEqual(indexPath, NSIndexPath(forRow: 0, inSection: 0))
+        case .Delete, .Move, .Insert:
+            XCTFail("Wrong type of update")
+        }
+    }
+
+    func testSectionInserts() {
+        XCTFail("Not implemented")
+        //delegate.didChangeSectionCalls
+    }
+
+    func testSectionDeletions() {
+        XCTFail("Not implemented")
+        //delegate.didChangeSectionCalls
+    }
 }
