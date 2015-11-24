@@ -14,31 +14,31 @@ import CoreDataStack
 // MARK: - FetchedResultsControllerDelegate
 
 class SampleFetchedResultsControllerDelegate: FetchedResultsControllerDelegate {
-    var didChangeObjectCalls: [FetchedResultsObjectChange<Author>] = []
-    var didChangeSectionCalls: [FetchedResultsSectionChange<Author>] = []
+    var didChangeObjectCalls: [FetchedResultsObjectChange<Book>] = []
+    var didChangeSectionCalls: [FetchedResultsSectionChange<Book>] = []
     var willChangeContentCount = 0
     var didChangeContentCount = 0
     var didPerformFetchCount = 0
 
-    func fetchedResultsController(controller: FetchedResultsController<Author>,
-        didChangeObject change: FetchedResultsObjectChange<Author>) {
+    func fetchedResultsController(controller: FetchedResultsController<Book>,
+        didChangeObject change: FetchedResultsObjectChange<Book>) {
             didChangeObjectCalls.append(change)
     }
 
-    func fetchedResultsController(controller: FetchedResultsController<Author>,
-        didChangeSection change: FetchedResultsSectionChange<Author>) {
+    func fetchedResultsController(controller: FetchedResultsController<Book>,
+        didChangeSection change: FetchedResultsSectionChange<Book>) {
             didChangeSectionCalls.append(change)
     }
 
-    func fetchedResultsControllerWillChangeContent(controller: FetchedResultsController<Author>) {
+    func fetchedResultsControllerWillChangeContent(controller: FetchedResultsController<Book>) {
         ++willChangeContentCount
     }
 
-    func fetchedResultsControllerDidChangeContent(controller: FetchedResultsController<Author>) {
+    func fetchedResultsControllerDidChangeContent(controller: FetchedResultsController<Book>) {
         ++didChangeContentCount
     }
 
-    func fetchedResultsControllerDidPerformFetch(controller: FetchedResultsController<Author>) {
+    func fetchedResultsControllerDidPerformFetch(controller: FetchedResultsController<Book>) {
         ++didPerformFetchCount
     }
 }
@@ -48,7 +48,7 @@ class SampleFetchedResultsControllerDelegate: FetchedResultsControllerDelegate {
 class FetchedResultsControllerTests: TempDirectoryTestCase {
 
     var coreDataStack: CoreDataStack!
-    var fetchedResultsController: FetchedResultsController<Author>!
+    var fetchedResultsController: FetchedResultsController<Book>!
     var delegate = SampleFetchedResultsControllerDelegate()
 
     override func setUp() {
@@ -72,10 +72,18 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
 
         let moc = coreDataStack.mainQueueContext
 
+        // Insert some Books
+        let bookTitles = StubbedBookData.books
+        for title in bookTitles {
+            let book = Book(managedObjectContext: moc)
+            book.title = title
+        }
+        try! moc.saveContextAndWait()
+
         // Setup fetched results controller
-        let fr = NSFetchRequest(entityName: Author.entityName)
-        fr.sortDescriptors = [NSSortDescriptor(key: "firstName", ascending: true)]
-        fetchedResultsController = FetchedResultsController<Author>(fetchRequest: fr, managedObjectContext: moc)
+        let fr = NSFetchRequest(entityName: Book.entityName)
+        fr.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        fetchedResultsController = FetchedResultsController<Book>(fetchRequest: fr, managedObjectContext: moc, sectionNameKeyPath: "firstInitial")
         fetchedResultsController.setDelegate(self.delegate)
 
         do {
@@ -88,13 +96,15 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
     func testObjectInserts() {
         let moc = coreDataStack.mainQueueContext
 
-        // Insert some authors
-        for _ in 0..<10 {
-            let _ = Author(managedObjectContext: moc)
+        // Insert some Books
+        let bookTitles = StubbedBookData.books
+        for title in bookTitles {
+            let book = Book(managedObjectContext: moc)
+            book.title = title
         }
         try! moc.saveContextAndWait()
 
         XCTAssertEqual(delegate.didPerformFetchCount, 1)
-        XCTAssertEqual(delegate.didChangeObjectCalls.count, 10)
+        XCTAssertEqual(delegate.didChangeObjectCalls.count, 100)
     }
 }
