@@ -9,32 +9,32 @@
 import CoreData
 
 /**
- Protocol to be conformed to by NSManagedObject subclasses that allow for convenience
+ Protocol to be conformed to by `NSManagedObject` subclasses that allow for convenience
     methods that make fetching, inserting, deleting, and change management easier.
  */
 public protocol CoreDataModelable {
     /**
-     The name of your NSManagedObject's entity within the XCDataModel.
+     The name of your `NSManagedObject`'s entity within the `XCDataModel`.
 
-     - returns: String: Entity's name in XCDataModel
+     - returns: String: Entity's name in `XCDataModel`
      */
     static var entityName: String { get }
 }
 
 /**
- Extension to CoreDataModelable with convenience methods for 
- creating, deleting, and fetching entities from a specific NSManagedObjectContext.
+ Extension to `CoreDataModelable` with convenience methods for
+ creating, deleting, and fetching entities from a specific `NSManagedObjectContext`.
  */
 public extension CoreDataModelable where Self: NSManagedObject {
 
     // MARK: - Creating Objects
 
     /**
-    Creates a new instance of the Entity within the specified NSManagedObjectContext.
+    Creates a new instance of the Entity within the specified `NSManagedObjectContext`.
 
-    - parameter context: NSManagedObjectContext to create the object within.
+    - parameter context: `NSManagedObjectContext` to create the object within.
 
-    - returns: Self: The newly created entity.
+    - returns: `Self`: The newly created entity.
     */
     init(managedObjectContext context: NSManagedObjectContext) {
         self.init(entity: Self.entityInContext(context), insertIntoManagedObjectContext: context)
@@ -51,12 +51,14 @@ public extension CoreDataModelable where Self: NSManagedObject {
     // MARK: - Finding Objects
 
     /**
-    Fetches the first Entity that matches the optional predicate within the specified NSManagedObjectContext.
+    Fetches the first Entity that matches the optional predicate within the specified `NSManagedObjectContext`.
 
-    - parameter predicate: An optional NSPredicate for filtering
-    - parameter context: NSManagedObjectContext to find the entities within.
+    - parameter predicate: An optional `NSPredicate` for filtering
+    - parameter context: `NSManagedObjectContext` to find the entities within.
+    
+    - throws: Any error produced from `executeFetchRequest`
 
-    - returns: Self?: The first entity that matches the optional predicate or nil.
+    - returns: `Self?`: The first entity that matches the optional predicate or `nil`.
     */
     static public func findFirst(predicate: NSPredicate?, context: NSManagedObjectContext) throws -> Self? {
         let fetchRequest = fetchRequestForEntity(inContext: context)
@@ -68,12 +70,14 @@ public extension CoreDataModelable where Self: NSManagedObject {
     }
 
     /**
-     Fetches all Entities within the specified NSManagedObjectContext.
+     Fetches all Entities within the specified `NSManagedObjectContext`.
 
-     - parameter context: NSManagedObjectContext to find the entities within.
-     - parameter sortDescriptors: Optional array of NSSortDescriptors to apply to the fetch
+     - parameter context: `NSManagedObjectContext` to find the entities within.
+     - parameter sortDescriptors: Optional array of `NSSortDescriptors` to apply to the fetch
 
-     - returns: [Self]: The array of matching entities.
+     - throws: Any error produced from `executeFetchRequest`
+
+     - returns: `[Self]`: The array of matching entities.
      */
     static public func allInContext(context: NSManagedObjectContext, sortDescriptors: [NSSortDescriptor]? = nil) throws -> [Self] {
         let fetchRequest = fetchRequestForEntity(inContext: context)
@@ -84,9 +88,11 @@ public extension CoreDataModelable where Self: NSManagedObject {
     // MARK: - Removing Objects
 
     /**
-    Removes all entities from within the specified NSManagedObjectContext.
+    Removes all entities from within the specified `NSManagedObjectContext`.
 
-    - parameter context: NSManagedObjectContext to remove the entities from.
+    - parameter context: `NSManagedObjectContext` to remove the entities from.
+    
+    - throws: Any error produced from `executeFetchRequest`
     */
     static public func removeAll(context: NSManagedObjectContext) throws {
         let fetchRequest = fetchRequestForEntity(inContext: context)
@@ -94,10 +100,12 @@ public extension CoreDataModelable where Self: NSManagedObject {
     }
 
     /**
-     Removes all entities from within the specified NSManagedObjectContext excluding a supplied array of entities.
+     Removes all entities from within the specified `NSManagedObjectContext` excluding a supplied array of entities.
 
-     - parameter toKeep: An Array of NSManagedObjects belonging to the NSManagedObjectContext to exclude from deletion.
-     - parameter inContext: The NSManagedObjectContext to remove the Entities from.
+     - parameter toKeep: An Array of `NSManagedObjects` belonging to the `NSManagedObjectContext` to exclude from deletion.
+     - parameter inContext: The `NSManagedObjectContext` to remove the Entities from.
+
+     - throws: Any error produced from `executeFetchRequest`
      */
     static public func removeAllExcept(toKeep: [Self], inContext context: NSManagedObjectContext) throws {
         let fetchRequest = fetchRequestForEntity(inContext: context)

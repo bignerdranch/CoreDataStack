@@ -11,7 +11,7 @@ import CoreData
 public extension NSPersistentStoreCoordinator {
 
     /**
-    Default persistent store options used for the SQLite backed NSPersistentStoreCoordinator
+    Default persistent store options used for the `SQLite` backed `NSPersistentStoreCoordinator`
     */
     public static var stockSQLiteStoreOptions: [NSObject: AnyObject] {
         return [
@@ -22,11 +22,11 @@ public extension NSPersistentStoreCoordinator {
     }
 
     /**
-    Asynchronously creates an NSPersistentStoreCoordinator and adds a SQLite based store.
+    Asynchronously creates an `NSPersistentStoreCoordinator` and adds a `SQLite` based store.
 
-    - parameter managedObjectModel: The NSManagedObjectModel describing the data model.
+    - parameter managedObjectModel: The `NSManagedObjectModel` describing the data model.
     - parameter storeFileURL: The URL where the SQLite store file will reside.
-    - parameter completion: A completion closure with a CoordinatorResult that will be executed following the persistent store being added to the coordinator.
+    - parameter completion: A completion closure with a `CoordinatorResult` that will be executed following the `NSPersistentStore` being added to the `NSPersistentStoreCoordinator`.
     */
     public class func setupSQLiteBackedCoordinator(managedObjectModel: NSManagedObjectModel, storeFileURL: NSURL, completion: (CoreDataStack.CoordinatorResult) -> Void) {
         let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
