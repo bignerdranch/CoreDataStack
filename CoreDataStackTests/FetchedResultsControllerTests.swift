@@ -93,6 +93,33 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
         }
     }
 
+    func testInitialFetch() {
+        guard let books = fetchedResultsController.fetchedObjects else {
+            XCTFail("Books missing from fetch")
+            return
+        }
+        XCTAssertEqual(books.count, 100)
+
+        guard let sections = fetchedResultsController.sections else {
+            XCTFail("Sections missing")
+            return
+        }
+        XCTAssertEqual(sections.count, 19)
+
+        let topSection = sections[0]
+        XCTAssertEqual(topSection.objects.count, 1)
+
+        guard let topBook = topSection.objects.first else {
+            XCTFail("Top book missing from first section")
+            return
+        }
+        XCTAssertEqual(topBook.title, "1984")
+
+        let aSection = sections[1]
+        XCTAssertEqual(aSection.name, "A")
+        XCTAssertEqual(aSection.indexTitle, "A")
+    }
+
     func testObjectInserts() {
         let moc = coreDataStack.mainQueueContext
 
