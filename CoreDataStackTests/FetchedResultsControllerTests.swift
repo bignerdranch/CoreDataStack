@@ -134,4 +134,31 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
         XCTAssertEqual(delegate.didPerformFetchCount, 1)
         XCTAssertEqual(delegate.didChangeObjectCalls.count, 100)
     }
+
+    func testObjectDeletions() {
+        guard let firstBook = fetchedResultsController.fetchedObjects?.first else {
+            XCTFail("first fetched book missing")
+            return
+        }
+
+        // Delete a book
+        let moc = coreDataStack.mainQueueContext
+        moc.deleteObject(firstBook)
+        moc.processPendingChanges()
+
+        XCTAssertEqual(delegate.didChangeSectionCalls.count, 1)
+        guard let change = delegate.didChangeObjectCalls.first else {
+            XCTFail("Missing object change object")
+            return
+        }
+
+        switch change {
+        case .Delete(let book, let indexPath):
+            XCTAssertEqual(book, firstBook)
+            XCTAssertEqual(indexPath, NSIndexPath(forRow: 0, inSection: 0))
+        case .Update, .Move, .Insert:
+            XCTFail("Unexpected change type")
+        }
+    }
+
 }
