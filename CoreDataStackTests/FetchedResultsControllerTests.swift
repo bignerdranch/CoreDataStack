@@ -124,15 +124,26 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
         let moc = coreDataStack.mainQueueContext
 
         // Insert some Books
-        let bookTitles = StubbedBookData.books
-        for title in bookTitles {
-            let book = Book(managedObjectContext: moc)
-            book.title = title
-        }
-        try! moc.saveContextAndWait()
+        let newBook = Book(managedObjectContext: moc)
+        newBook.title = "1111"
+        moc.processPendingChanges()
 
-        XCTAssertEqual(delegate.didPerformFetchCount, 1)
-        XCTAssertEqual(delegate.didChangeObjectCalls.count, 100)
+        XCTAssertEqual(delegate.didChangeContentCount, 1)
+        XCTAssertEqual(delegate.willChangeContentCount, 1)
+        XCTAssertEqual(delegate.didChangeObjectCalls.count, 1)
+
+        guard let change = delegate.didChangeObjectCalls.first else {
+            XCTFail("Missing object change")
+            return
+        }
+        switch change {
+        case let .Insert(book, indexPath):
+            XCTAssertEqual(book, newBook)
+            XCTAssertEqual(indexPath, NSIndexPath(forRow: 0, inSection: 0))
+            break
+        case .Move, .Delete, .Update:
+            XCTFail("Incorrect update type")
+        }
     }
 
     func testObjectDeletions() {
