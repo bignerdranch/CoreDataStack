@@ -215,31 +215,43 @@ public class FetchedResultsController<T: NSManagedObject where T: CoreDataModela
 
     // Note: Normally these methods would be put in an extension, but @objc methods cannot be added to generic classes in an extension.
 
-    @objc public func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-        let object = anObject as! T
+    @objc public func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject,
+        atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
 
-        let change: FetchedResultsObjectChange<T>
-        switch type {
-        case .Insert: change = .Insert(object: object, indexPath: newIndexPath!)
-        case .Delete: change = .Delete(object: object, indexPath: indexPath!)
-        case .Move:   change = .Move(object: object, fromIndexPath: indexPath!, toIndexPath: newIndexPath!)
-        case .Update: change = .Update(object: object, indexPath: indexPath!)
-        }
+            let object = anObject as! T
 
-        delegate?.didChangeObject(self, change)
+            let change: FetchedResultsObjectChange<T>
+            switch (type, indexPath, newIndexPath) {
+            case let (.Insert, .None, indexPath?):
+                change = .Insert(object: object, indexPath: indexPath)
+            case let (.Delete, indexPath?, .None):
+                change = .Delete(object: object, indexPath: indexPath)
+            case let (.Update, indexPath?, .None):
+                change = .Update(object: object, indexPath: indexPath)
+            case let (.Move, fromIndexPath?, toIndexPath?):
+                change = .Move(object: object, fromIndexPath: fromIndexPath, toIndexPath: toIndexPath)
+            default:
+                preconditionFailure("Invalid update. Missing a required index path for corresponding change type.")
+                break
+            }
+
+            delegate?.didChangeObject(self, change)
     }
 
-    @objc public func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
-        let info = FetchedResultsSectionInfo<T>(sectionInfo)
+    @objc public func controller(controller: NSFetchedResultsController,
+        didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int,
+        forChangeType type: NSFetchedResultsChangeType) {
 
-        let change: FetchedResultsSectionChange<T>
-        switch type {
-        case .Insert: change = .Insert(info: info, index: sectionIndex)
-        case .Delete: change = .Delete(info: info, index: sectionIndex)
-        case .Move, .Update: fatalError("Invalid section change type reported by NSFetchedResultsController")
-        }
+            let info = FetchedResultsSectionInfo<T>(sectionInfo)
 
-        delegate?.didChangeSection(self, change)
+            let change: FetchedResultsSectionChange<T>
+            switch type {
+            case .Insert: change = .Insert(info: info, index: sectionIndex)
+            case .Delete: change = .Delete(info: info, index: sectionIndex)
+            case .Move, .Update: preconditionFailure("Invalid section change type reported by NSFetchedResultsController")
+            }
+            
+            delegate?.didChangeSection(self, change)
     }
 
     @objc public func controllerWillChangeContent(controller: NSFetchedResultsController) {
