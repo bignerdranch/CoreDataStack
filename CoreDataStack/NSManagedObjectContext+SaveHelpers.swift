@@ -20,7 +20,7 @@ public extension NSManagedObjectContext {
     Convenience method to synchronously save the `NSManagedObjectContext` if changes are present.
     Method also ensures that the save is executed on the correct queue when using Main/Private queue concurrency types.
      
-     - throws: Errros produced by the `save()` function on the `NSManagedObjectContext`
+     - throws: Errors produced by the `save()` function on the `NSManagedObjectContext`
     */
     public func saveContextAndWait() throws {
         var saveError: ErrorType?
