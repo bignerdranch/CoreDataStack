@@ -153,7 +153,7 @@ public class FetchedResultsController<T: NSManagedObject where T: CoreDataModela
     /// The sections returned by the `FetchedResultsController` see `FetchedResultsSectionInfo`
     public var sections: [FetchedResultsSectionInfo<T>]? {
         return internalController.sections.map { sections -> [FetchedResultsSectionInfo<T>] in
-            (sections ).map { FetchedResultsSectionInfo<T>($0) }
+            sections.map(FetchedResultsSectionInfo.init)
         }
     }
     /// Subscript access to the sections
