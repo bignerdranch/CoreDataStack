@@ -20,9 +20,11 @@ class BooksTableViewController: UITableViewController {
         let frc = FetchedResultsController<Book>(fetchRequest: fetchRequest,
             managedObjectContext: self.stack.mainQueueContext,
             sectionNameKeyPath: "firstInitial")
-        let frcDelegate = BooksFetchedResultsControllerDelegate(tableView: self.tableView)
-        frc.setDelegate(frcDelegate)
+        frc.setDelegate(self.frcDelegate)
         return frc
+    }()
+    private lazy var frcDelegate: BooksFetchedResultsControllerDelegate = {
+        return BooksFetchedResultsControllerDelegate(tableView: self.tableView)
     }()
 
     // MARK: - Lifecycle
