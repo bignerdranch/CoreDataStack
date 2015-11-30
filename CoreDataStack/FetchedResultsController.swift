@@ -135,12 +135,6 @@ public struct FetchedResultsSectionInfo<T: NSManagedObject> {
         name = info.name
         indexTitle = info.indexTitle
     }
-
-    private init(_ info: FetchedResultsSectionInfo<T>, _ sortPredicate: (T, T) -> Bool) {
-        objects = info.objects.sort(sortPredicate)
-        name = info.name
-        indexTitle = info.indexTitle
-    }
 }
 
 /**
