@@ -8,9 +8,9 @@
 
 import CoreData
 
-// NOTE: T should have a bound of `: NSManagedObject`, but that causes the Swift 2.0 compiler
+// NOTE: T should have a bound of `: NSManagedObject`, but that causes the Swift 2.1 compiler
 // to fail with no useful error output upon switching on the enum. 
-// Maybe in 2.1. :-( This is not a deal-breaker, because
+// :-( This is not a deal-breaker, because
 // this enum in particular doesn't rely on T being an NSManagedObject.
 /**
 Enum representing the four types of object changes
