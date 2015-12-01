@@ -222,17 +222,31 @@ public class FetchedResultsController<T: NSManagedObject where T: CoreDataModela
 
             let change: FetchedResultsObjectChange<T>
             switch (type, indexPath, newIndexPath) {
-            case let (.Insert, .None, indexPath?):
+
+            case let (.Insert, nil, newIndexPath?):
+                // Work around a bug in Xcode 7.0 and 7.1 when running on iOS 8 - updated objects
+                // sometimes result in both an Update *and* and Insert call to didChangeObject, which
+                // makes no sense. Thankfully the bad Inserts have a non-nil "old" indexPath (which
+                // also makes no sense) - we check for that here and ignore those erroneous messages.
+                // For more discussion, see https://forums.developer.apple.com/thread/12184
+                change = .Insert(object: object, indexPath: newIndexPath)
+
+            case let (.Insert, indexPath?, nil):
                 change = .Insert(object: object, indexPath: indexPath)
-            case let (.Delete, indexPath?, .None):
+
+            case let (.Delete, indexPath?, nil):
                 change = .Delete(object: object, indexPath: indexPath)
-            case let (.Update, indexPath?, .None):
+
+            case let (.Update, indexPath?, nil):
                 change = .Update(object: object, indexPath: indexPath)
+
             case let (.Move, fromIndexPath?, toIndexPath?):
                 change = .Move(object: object, fromIndexPath: fromIndexPath, toIndexPath: toIndexPath)
+
             default:
                 preconditionFailure("Invalid update. Missing a required index path for corresponding change type.")
                 break
+
             }
 
             delegate?.didChangeObject(self, change)
