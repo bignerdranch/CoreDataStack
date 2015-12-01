@@ -14,12 +14,18 @@
 		E43A3C5F1BFCCB660019D6B4 /* EntityMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43A3C5E1BFCCB660019D6B4 /* EntityMonitor.swift */; };
 		E43A3C651BFCD0F00019D6B4 /* EntityMonitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43A3C641BFCD0F00019D6B4 /* EntityMonitorTests.swift */; };
 		E43A3C671BFCD81A0019D6B4 /* CoreDataModelable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43A3C661BFCD81A0019D6B4 /* CoreDataModelable.swift */; };
+		E43A3C691BFCDDC50019D6B4 /* FetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43A3C681BFCDDC50019D6B4 /* FetchedResultsController.swift */; };
 		E4598B3A1B7CF80200F7DAD9 /* TestModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4C9BC531AEA857E00A6BD1B /* TestModel.xcdatamodeld */; };
 		E4598B3B1B7CF80800F7DAD9 /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41764DA1AEE854C00D89DBE /* Author.swift */; };
 		E4598B3C1B7CF80800F7DAD9 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41764DC1AEE854D00D89DBE /* Book.swift */; };
 		E4598B3E1B7CF86800F7DAD9 /* TestModel.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = E4598B3D1B7CF86800F7DAD9 /* TestModel.sqlite */; };
 		E4598B411B7CF8BF00F7DAD9 /* ModelMigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4598B401B7CF8BF00F7DAD9 /* ModelMigrationTests.swift */; };
 		E45DE9DE1BFD33B8000A2F01 /* CoreDataModelableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45DE9DD1BFD33B8000A2F01 /* CoreDataModelableTests.swift */; };
+		E47A83E01C038871001A047E /* BooksTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47A83DE1C038871001A047E /* BooksTableViewController.swift */; };
+		E47A83E91C03A4CD001A047E /* BooksTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E47A83E81C03A4CD001A047E /* BooksTableViewController.xib */; };
+		E47A83EA1C03A4CD001A047E /* BooksTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E47A83E81C03A4CD001A047E /* BooksTableViewController.xib */; };
+		E47A83EC1C03AE6A001A047E /* BooksTestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47A83EB1C03AE6A001A047E /* BooksTestData.swift */; };
+		E47A83ED1C03AE6A001A047E /* BooksTestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47A83EB1C03AE6A001A047E /* BooksTestData.swift */; };
 		E4B23F011B5EAE6C00A4F218 /* BatchOperationContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B23F001B5EAE6C00A4F218 /* BatchOperationContextTests.swift */; };
 		E4B99C691B740321005B7E1A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B99C681B740321005B7E1A /* AppDelegate.swift */; };
 		E4B99C6E1B740321005B7E1A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4B99C6C1B740321005B7E1A /* Main.storyboard */; };
@@ -33,6 +39,7 @@
 		E4C9BC401AEA848600A6BD1B /* InitializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C9BC3F1AEA848600A6BD1B /* InitializationTests.swift */; };
 		E4C9BC4D1AEA850600A6BD1B /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C9BC4A1AEA850600A6BD1B /* CoreDataStack.swift */; };
 		E4C9BC4F1AEA850600A6BD1B /* NSManagedObjectContext+SaveHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C9BC4C1AEA850600A6BD1B /* NSManagedObjectContext+SaveHelpers.swift */; };
+		E4DB61441BFE771300BD3E6B /* FetchedResultsControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DB61431BFE771300BD3E6B /* FetchedResultsControllerTests.swift */; };
 		E4DB61461BFFBB4400BD3E6B /* bnr-logo-square.png in Resources */ = {isa = PBXBuildFile; fileRef = E4DB61451BFFBB4400BD3E6B /* bnr-logo-square.png */; };
 		E4DB61481BFFBBD200BD3E6B /* MyCoreDataConnectedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DB61471BFFBBD200BD3E6B /* MyCoreDataConnectedViewController.swift */; };
 		E4F59A461B505AE700C61516 /* StoreTeardownTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F59A451B505AE700C61516 /* StoreTeardownTests.swift */; };
@@ -65,10 +72,14 @@
 		E43A3C5E1BFCCB660019D6B4 /* EntityMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = EntityMonitor.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E43A3C641BFCD0F00019D6B4 /* EntityMonitorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = EntityMonitorTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E43A3C661BFCD81A0019D6B4 /* CoreDataModelable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataModelable.swift; sourceTree = "<group>"; };
+		E43A3C681BFCDDC50019D6B4 /* FetchedResultsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsController.swift; sourceTree = "<group>"; };
 		E4598B391B7CF43600F7DAD9 /* TestModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "TestModel 2.xcdatamodel"; sourceTree = "<group>"; };
 		E4598B3D1B7CF86800F7DAD9 /* TestModel.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = TestModel.sqlite; sourceTree = "<group>"; };
 		E4598B401B7CF8BF00F7DAD9 /* ModelMigrationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelMigrationTests.swift; sourceTree = "<group>"; };
 		E45DE9DD1BFD33B8000A2F01 /* CoreDataModelableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataModelableTests.swift; sourceTree = "<group>"; };
+		E47A83DE1C038871001A047E /* BooksTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooksTableViewController.swift; sourceTree = "<group>"; };
+		E47A83E81C03A4CD001A047E /* BooksTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BooksTableViewController.xib; sourceTree = "<group>"; };
+		E47A83EB1C03AE6A001A047E /* BooksTestData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BooksTestData.swift; path = CoreDataStackTests/BooksTestData.swift; sourceTree = SOURCE_ROOT; };
 		E4B23F001B5EAE6C00A4F218 /* BatchOperationContextTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatchOperationContextTests.swift; sourceTree = "<group>"; };
 		E4B99C661B740321005B7E1A /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B99C681B740321005B7E1A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -86,6 +97,7 @@
 		E4C9BC4A1AEA850600A6BD1B /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		E4C9BC4C1AEA850600A6BD1B /* NSManagedObjectContext+SaveHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+SaveHelpers.swift"; sourceTree = "<group>"; };
 		E4C9BC541AEA857E00A6BD1B /* TestModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TestModel.xcdatamodel; sourceTree = "<group>"; };
+		E4DB61431BFE771300BD3E6B /* FetchedResultsControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsControllerTests.swift; sourceTree = "<group>"; };
 		E4DB61451BFFBB4400BD3E6B /* bnr-logo-square.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bnr-logo-square.png"; sourceTree = "<group>"; };
 		E4DB61471BFFBBD200BD3E6B /* MyCoreDataConnectedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCoreDataConnectedViewController.swift; sourceTree = "<group>"; };
 		E4F59A451B505AE700C61516 /* StoreTeardownTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreTeardownTests.swift; sourceTree = "<group>"; };
@@ -121,6 +133,7 @@
 		E41764DE1AEE856F00D89DBE /* Test Model */ = {
 			isa = PBXGroup;
 			children = (
+				E47A83EB1C03AE6A001A047E /* BooksTestData.swift */,
 				E4598B3F1B7CF86F00F7DAD9 /* Migration Samples */,
 				E41764DA1AEE854C00D89DBE /* Author.swift */,
 				E41764DC1AEE854D00D89DBE /* Book.swift */,
@@ -134,6 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				E43A3C5E1BFCCB660019D6B4 /* EntityMonitor.swift */,
+				E43A3C681BFCDDC50019D6B4 /* FetchedResultsController.swift */,
 			);
 			name = "Type Safe Monitors";
 			path = CoreDataStack;
@@ -165,6 +179,7 @@
 			isa = PBXGroup;
 			children = (
 				E43A3C641BFCD0F00019D6B4 /* EntityMonitorTests.swift */,
+				E4DB61431BFE771300BD3E6B /* FetchedResultsControllerTests.swift */,
 			);
 			name = "Type Safe Monitors Tests";
 			sourceTree = "<group>";
@@ -182,6 +197,8 @@
 			children = (
 				E4B99C681B740321005B7E1A /* AppDelegate.swift */,
 				E4DB61471BFFBBD200BD3E6B /* MyCoreDataConnectedViewController.swift */,
+				E47A83DE1C038871001A047E /* BooksTableViewController.swift */,
+				E47A83E81C03A4CD001A047E /* BooksTableViewController.xib */,
 				E4B99C6C1B740321005B7E1A /* Main.storyboard */,
 				E4B99C711B740321005B7E1A /* LaunchScreen.storyboard */,
 				E4DB61491BFFBD4E00BD3E6B /* Supporting Files */,
@@ -386,6 +403,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E47A83EA1C03A4CD001A047E /* BooksTableViewController.xib in Resources */,
 				E4DB61461BFFBB4400BD3E6B /* bnr-logo-square.png in Resources */,
 				E4B99C731B740321005B7E1A /* LaunchScreen.storyboard in Resources */,
 				E4B99C701B740321005B7E1A /* Assets.xcassets in Resources */,
@@ -404,6 +422,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E47A83E91C03A4CD001A047E /* BooksTableViewController.xib in Resources */,
 				E4598B3E1B7CF86800F7DAD9 /* TestModel.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -417,8 +436,10 @@
 			files = (
 				E4DB61481BFFBBD200BD3E6B /* MyCoreDataConnectedViewController.swift in Sources */,
 				E4598B3A1B7CF80200F7DAD9 /* TestModel.xcdatamodeld in Sources */,
+				E47A83E01C038871001A047E /* BooksTableViewController.swift in Sources */,
 				E4598B3B1B7CF80800F7DAD9 /* Author.swift in Sources */,
 				E4598B3C1B7CF80800F7DAD9 /* Book.swift in Sources */,
+				E47A83ED1C03AE6A001A047E /* BooksTestData.swift in Sources */,
 				E4B99C691B740321005B7E1A /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -431,6 +452,7 @@
 				E43A3C671BFCD81A0019D6B4 /* CoreDataModelable.swift in Sources */,
 				E43A3C5F1BFCCB660019D6B4 /* EntityMonitor.swift in Sources */,
 				E4C9BC4F1AEA850600A6BD1B /* NSManagedObjectContext+SaveHelpers.swift in Sources */,
+				E43A3C691BFCDDC50019D6B4 /* FetchedResultsController.swift in Sources */,
 				E4C6F39C1AFD05E1004E3F1D /* NSPersistentStoreCoordinator+SQLiteHelpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -445,6 +467,8 @@
 				69FC00381B7DBFB80002C1AC /* TempDirectoryTestCase.m in Sources */,
 				E4598B411B7CF8BF00F7DAD9 /* ModelMigrationTests.swift in Sources */,
 				E43A3C651BFCD0F00019D6B4 /* EntityMonitorTests.swift in Sources */,
+				E4DB61441BFE771300BD3E6B /* FetchedResultsControllerTests.swift in Sources */,
+				E47A83EC1C03AE6A001A047E /* BooksTestData.swift in Sources */,
 				E4F59A461B505AE700C61516 /* StoreTeardownTests.swift in Sources */,
 				E45DE9DE1BFD33B8000A2F01 /* CoreDataModelableTests.swift in Sources */,
 				E41764DD1AEE854D00D89DBE /* Book.swift in Sources */,

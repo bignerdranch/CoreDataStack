@@ -8,37 +8,59 @@
 
 import CoreData
 
-/// The frequency of notification dispatch from the EntityMonitor
+/// The frequency of notification dispatch from the `EntityMonitor`
 public enum FireFrequency {
-    /// Notifications will be sent upon MOC being changed
+    /// Notifications will be sent upon `NSManagedObjectContext` being changed
     case OnChange
-    /// Notifications will be sent upon MOC being saved
+
+    /// Notifications will be sent upon `NSManagedObjectContext` being saved
     case OnSave
 }
 
 /**
- Protocol for delegate callbacks of NSManagedObject entity change events.
+ Protocol for delegate callbacks of `NSManagedObject` entity change events.
  */
 public protocol EntityMonitorDelegate: class { // : class for weak capture
+    /// Type of object being monitored. Must inheirt from `NSManagedObject` and implement `CoreDataModelable`
     typealias T: NSManagedObject, CoreDataModelable
 
+    /**
+     Callback for when objects matching the predicate have been inserted
+
+     - parameter monitor: The `EntityMonitor` posting the callback
+     - parameter entities: The set of inserted matching objects
+     */
     func entityMonitorObservedInserts(monitor: EntityMonitor<T>, entities: Set<T>)
+
+    /**
+     Callback for when objects matching the predicate have been deleted
+
+     - parameter monitor: The `EntityMonitor` posting the callback
+     - parameter entities: The set of deleted matching objects
+     */
     func entityMonitorObservedDeletions(monitor: EntityMonitor<T>, entities: Set<T>)
+
+    /**
+     Callback for when objects matching the predicate have been updated
+
+     - parameter monitor: The `EntityMonitor` posting the callback
+     - parameter entities: The set of updated matching objects
+     */
     func entityMonitorObservedModifications(monitor: EntityMonitor<T>, entities: Set<T>)
 }
 
 /**
- Class for monitoring changes within a given NSManagedObjectContext
-    to a specific Core Data Entity with optional filtering via an NSPredicate.
+ Class for monitoring changes within a given `NSManagedObjectContext`
+    to a specific Core Data Entity with optional filtering via an `NSPredicate`.
  */
 public class EntityMonitor<T: NSManagedObject where T: CoreDataModelable> {
 
     // MARK: - Public Properties
 
     /**
-     Function for setting the EntityMonitorDelegate that will receive callback events.
+     Function for setting the `EntityMonitorDelegate` that will receive callback events.
 
-     - parameter U: Your delegate must implement the methods in EntityMonitorDelegate with the matching CoreDataModelable type being monitored.
+     - parameter U: Your delegate must implement the methods in `EntityMonitorDelegate` with the matching `CoreDataModelable` type being monitored.
      */
     public func setDelegate<U: EntityMonitorDelegate where U.T == T>(delegate: U) {
         self.delegate = InternalEntityMonitorDelegate(delegate)
@@ -66,12 +88,12 @@ public class EntityMonitor<T: NSManagedObject where T: CoreDataModelable> {
     // MARK: - Lifecycle
 
     /**
-    Initializer to create an EntityMonitor to monitor changes to a specific Core Data Entity.
+    Initializer to create an `EntityMonitor` to monitor changes to a specific Core Data Entity.
 
-    This initializer is failable in the event your Entity is not within the supplied NSManagedObjectContext.
+    This initializer is failable in the event your Entity is not within the supplied `NSManagedObjectContext`.
 
-    - parameter context: NSManagedObjectContext the context you want to monitor changes within.
-    - parameter frequency: FireFrequency How frequently you wish to receive callbacks of changes. Default value is OnSave.
+    - parameter context: `NSManagedObjectContext` the context you want to monitor changes within.
+    - parameter frequency: `FireFrequency` How frequently you wish to receive callbacks of changes. Default value is `.OnSave`.
     - parameter filterPredicate: An optional filtering predicate to be applied to entities being monitored.
     */
     public init?(context: NSManagedObjectContext, frequency: FireFrequency = .OnSave, filterPredicate: NSPredicate? = nil) {

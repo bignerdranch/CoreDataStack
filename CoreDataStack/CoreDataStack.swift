@@ -18,31 +18,30 @@ public typealias CoreDataStackBatchMOCCallback = CoreDataStack.BatchContextResul
 
 /// CoreDataStack specific ErrorTypes
 public enum CoreDataStackError: ErrorType {
-    /// Case when an NSPersistentStore is not found for the supplied store URL
+    /// Case when an `NSPersistentStore` is not found for the supplied store URL
     case StoreNotFoundAtURL(url: NSURL)
     /// Case when an In-Memory store is not found
     case InMemoryStoreMissing
 }
 
 /**
-Three layer CoreData stack comprised of:
+Three layer Core Data stack comprised of:
 
-* A primary background queue context with a persistent store coordinator
+* A primary background queue context with an `NSPersistentStoreCoordinator`
 * A main queue context that is a child of the primary queue
 * A method for spawning many background worker contexts that are children of the main queue context
 
-Calling save() on any NSMangedObjectContext belonging to the stack will automatically bubble the changes all the way to the NSPersistentStore
+Calling `save()` on any `NSMangedObjectContext` belonging to the stack will automatically bubble the changes all the way to the `NSPersistentStore`
 */
 public final class CoreDataStack {
     
     /**
     Primary persisting background managed object context. This is the top level context that possess an
-    NSPersistentStoreCoordinator and saves changes to disk on a background queue.
+    `NSPersistentStoreCoordinator` and saves changes to disk on a background queue.
 
     Fetching, Inserting, Deleting or Updating managed objects should occur on a child of this context rather than directly.
 
-    NSBatchUpdateRequest and NSAsynchronousFetchRequest require a context with a persistent store connected directly,
-    if this was not the case this context would be marked private.
+    note: `NSBatchUpdateRequest` and `NSAsynchronousFetchRequest` require a context with a persistent store connected directly.
     */
     public private(set) lazy var privateQueueContext: NSManagedObjectContext = {
         return self.constructPersistingContext()
@@ -57,7 +56,7 @@ public final class CoreDataStack {
     /**
     The main queue context for any work that will be performed on the main queue.
     Its parent context is the primary private queue context that persist the data to disk.
-    Making a save() call on this context will automatically trigger a save on its parent via NSNotification.
+    Making a `save()` call on this context will automatically trigger a save on its parent via `NSNotification`.
     */
     public private(set) lazy var mainQueueContext: NSManagedObjectContext = {
         return self.constructMainQueueContext()
@@ -83,12 +82,12 @@ public final class CoreDataStack {
     // MARK: - Lifecycle
 
     /**
-    Creates a SQLite backed CoreData stack for a given model in the supplied NSBundle.
+    Creates a `SQLite` backed Core Data stack for a given model in the supplied `NSBundle`.
 
-    - parameter modelName: Base name of the xcdatamodel file.
-    - parameter inBundle: NSBundle that contains the XCDataModel. Default value is mainBundle()
-    - parameter withStoreURL: Optional URL to use for storing the SQLite file. Defaults to "\\(modelName).sqlite" in the Documents directory.
-    - parameter callback: The SQLite persistent store coordinator will be setup asynchronously. This callback will be passed either an initialized CoreDataStack object or an ErrorType value.
+    - parameter modelName: Base name of the `XCDataModel` file.
+    - parameter inBundle: NSBundle that contains the `XCDataModel`. Default value is mainBundle()
+    - parameter withStoreURL: Optional URL to use for storing the `SQLite` file. Defaults to "(modelName).sqlite" in the Documents directory.
+    - parameter callback: The `SQLite` persistent store coordinator will be setup asynchronously. This callback will be passed either an initialized `CoreDataStack` object or an `ErrorType` value.
     */
     public static func constructSQLiteStack(withModelName modelName: String,
         inBundle bundle: NSBundle = NSBundle.mainBundle(),
@@ -108,14 +107,16 @@ public final class CoreDataStack {
     }
 
     /**
-    Creates an in-memory Core Data stack for a given model in the supplied NSBundle.
+    Creates an in-memory Core Data stack for a given model in the supplied `NSBundle`.
     
-    This stack is configured with the same concurrency and persistence model as the SQLite stack, but everything is in-memory.
+    This stack is configured with the same concurrency and persistence model as the `SQLite` stack, but everything is in-memory.
 
-    - parameter modelName: Base name of the xcdatamodel file.
-    - parameter inBundle: NSBundle that contains the XCDataModel. Default value is mainBundle()
-     
-    - returns: CoreDataStack: Newly created In-Memory CoreDataStack
+    - parameter modelName: Base name of the `XCDataModel` file.
+    - parameter inBundle: `NSBundle` that contains the `XCDataModel`. Default value is `mainBundle()`
+
+    - throws: Any error produced from `NSPersistentStoreCoordinator`'s `addPersistentStoreWithType`
+
+    - returns: CoreDataStack: Newly created In-Memory `CoreDataStack`
     */
     public static func constructInMemoryStack(withModelName modelName: String,
         inBundle bundle: NSBundle = NSBundle.mainBundle()) throws -> CoreDataStack {
@@ -175,28 +176,28 @@ public extension CoreDataStack {
 
     // MARK: - Operation Result Types
 
-    /// Result containing either an instance of NSPersistentStoreCoordinator or ErrorType
+    /// Result containing either an instance of `NSPersistentStoreCoordinator` or `ErrorType`
     public enum CoordinatorResult {
-        /// A success case with associated NSPersistentStoreCoordinator instance
+        /// A success case with associated `NSPersistentStoreCoordinator` instance
         case Success(NSPersistentStoreCoordinator)
-        /// A failure case with associated ErrorType instance
+        /// A failure case with associated `ErrorType` instance
         case Failure(ErrorType)
     }
-    /// Result containing either an instance of NSManagedObjectContext or ErrorType
+    /// Result containing either an instance of `NSManagedObjectContext` or `ErrorType`
     public enum BatchContextResult {
-        /// A success case with associated NSManagedObjectContext instance
+        /// A success case with associated `NSManagedObjectContext` instance
         case Success(NSManagedObjectContext)
-        /// A failure case with associated ErrorType instance
+        /// A failure case with associated `ErrorType` instance
         case Failure(ErrorType)
     }
-    /// Result containing either an instance of CoreDataStack or ErrorType
+    /// Result containing either an instance of `CoreDataStack` or `ErrorType`
     public enum SetupResult {
-        /// A success case with associated CoreDataStack instance
+        /// A success case with associated `CoreDataStack` instance
         case Success(CoreDataStack)
-        /// A failure case with associated ErrorType instance
+        /// A failure case with associated `ErrorType` instance
         case Failure(ErrorType)
     }
-    /// Result of void representing success or an instance of ErrorType
+    /// Result of void representing `Success` or an instance of `ErrorType`
     public enum SuccessResult {
         /// A success case
         case Success
@@ -209,10 +210,10 @@ public extension CoreDataStack {
 
 public extension CoreDataStack {
     /**
-    This function resets the persistent store connected to the coordinator.
-    For SQLite based stacks, this function will also remove the SQLite store from disk.
+    This function resets the `NSPersistentStore` connected to the `NSPersistentStoreCoordinator`.
+    For `SQLite` based stacks, this function will also remove the `SQLite` store from disk.
 
-    - parameter resetCallback: A callback with a Success or an ErrorType value with the error
+    - parameter resetCallback: A callback with a `Success` or an `ErrorType` value with the error
     */
     public func resetStore(resetCallback: CoreDataStackStoreResetCallback) {
         let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
@@ -279,11 +280,11 @@ public extension CoreDataStack {
 
 public extension CoreDataStack {
     /**
-    Returns a new background worker managed object context as a child of the main queue context.
+    Returns a new background worker `NSManagedObjectContext` as a child of the main queue context.
 
-    Calling save() on this managed object context will automatically trigger a save on its parent context via NSNotification observing.
+    Calling `save()` on this managed object context will automatically trigger a save on its parent context via `NSNotification` observing.
 
-    - returns: NSManagedObjectContext The new worker context.
+    - returns: `NSManagedObjectContext` The new worker context.
     */
     public func newBackgroundWorkerMOC() -> NSManagedObjectContext {
         let moc = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
@@ -300,10 +301,10 @@ public extension CoreDataStack {
     }
 
     /**
-    Creates a new background managed object context connected to
-    a discrete persistent store coordinator created with the same store used by the stack in construction.
+    Creates a new background `NSManagedObjectContext` connected to
+    a discrete `NSPersistentStoreCoordinator` created with the same store used by the stack in construction.
 
-    - parameter setupCallback: A callback with either the new managed object context or an ErrorType value with the error
+    - parameter setupCallback: A callback with either the new `NSManagedObjectContext` or an `ErrorType` value with the error
     */
     public func newBatchOperationContext(setupCallback: CoreDataStackBatchMOCCallback) {
         let moc = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)

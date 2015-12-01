@@ -32,7 +32,7 @@ DESC
   # s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
 
 
-  s.authors              = ["Robert Edwards", "Brian Hardy"]
+  s.authors              = ["Robert Edwards", "John Gallagher", "Brian Hardy", "Zachary Waldowski"]
 
   s.ios.deployment_target = "8.0"
   s.osx.deployment_target = "10.10"

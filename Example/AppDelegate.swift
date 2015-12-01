@@ -32,8 +32,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         CoreDataStack.constructSQLiteStack(withModelName: "TestModel") { result in
             switch result {
             case .Success(let stack):
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.coreDataStack = stack
+                self.coreDataStack = stack
+                self.seedInitialData()
+
+                // Note don't actually use dispatch_after
+                // Arbitrary 2 second delay to illustrate an async setup.
+                // dispatch_async(dispatch_get_main_queue()) {} should be used in production
+                let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(2 * NSEC_PER_SEC))
+                dispatch_after(delay, dispatch_get_main_queue()) {
                     self.myCoreDataVC.coreDataStack = stack
                     self.window?.rootViewController = self.myCoreDataVC
                 }
@@ -45,6 +51,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
 
         return true
+    }
+
+    private func seedInitialData() {
+        guard let stack = coreDataStack else {
+            assertionFailure("Stack was not setup first")
+            return
+        }
+
+        let moc = stack.newBackgroundWorkerMOC()
+        moc.performBlockAndWait() {
+            do {
+                let existingBooks = try Book.allInContext(moc)
+                if existingBooks.count == 0 {
+                    let books = StubbedBookData.books
+                    for bookTitle in books {
+                        let book = Book(managedObjectContext: moc)
+                        book.title = bookTitle
+                    }
+                    try moc.saveContextAndWait()
+                }
+            } catch {
+                print("Error creating inital data: \(error)")
+            }
+        }
     }
 }
 
