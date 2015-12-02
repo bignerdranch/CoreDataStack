@@ -151,10 +151,11 @@ public class FetchedResultsController<T: NSManagedObject where T: CoreDataModela
     /// The number of objects matching the fetch request
     public var count: Int { return fetchedObjects?.count ?? 0 }
     /// The sections returned by the `FetchedResultsController` see `FetchedResultsSectionInfo`
-    public var sections: [FetchedResultsSectionInfo<T>]? {
-        return internalController.sections.map { sections -> [FetchedResultsSectionInfo<T>] in
-            sections.map(FetchedResultsSectionInfo.init)
+    public var sections: LazyMapCollection<[NSFetchedResultsSectionInfo], FetchedResultsSectionInfo<T>>? {
+        guard let sections = internalController.sections else {
+            return nil
         }
+        return sections.lazy.map(FetchedResultsSectionInfo<T>.init)
     }
     /// Subscript access to the sections
     public subscript(indexPath: NSIndexPath) -> T { return internalController.objectAtIndexPath(indexPath) as! T }
