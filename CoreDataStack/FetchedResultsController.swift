@@ -177,7 +177,6 @@ public class FetchedResultsController<T: NSManagedObject where T: CoreDataModela
 
         internalController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: sectionNameKeyPath, cacheName: cacheName)
         super.init()
-        internalController.delegate = self
     }
 
     deinit {
