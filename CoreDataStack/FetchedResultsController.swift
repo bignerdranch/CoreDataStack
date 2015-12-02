@@ -181,6 +181,8 @@ public class FetchedResultsController<T: NSManagedObject where T: CoreDataModela
     }
 
     deinit {
+        // Core Data does not yet use weak references for delegates; the
+        // delegate must be nilled out for thread safety reasons.
         internalController.delegate = nil
     }
 
