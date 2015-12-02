@@ -140,7 +140,7 @@ public struct FetchedResultsSectionInfo<T: NSManagedObject> {
 /**
  A type safe wrapper around an `NSFetchedResultsController`
  */
-public class FetchedResultsController<T: NSManagedObject where T: CoreDataModelable>: NSObject, NSFetchedResultsControllerDelegate {
+public final class FetchedResultsController<T: NSManagedObject where T: CoreDataModelable> {
 
     /// The `NSFetchRequest` being used by the `FetchedResultsController`
     public var fetchRequest: NSFetchRequest { return internalController.fetchRequest }
@@ -174,9 +174,7 @@ public class FetchedResultsController<T: NSManagedObject where T: CoreDataModela
     */
     public init(fetchRequest: NSFetchRequest, managedObjectContext context: NSManagedObjectContext, sectionNameKeyPath: String? = nil, cacheName: String? = nil) {
         assert(fetchRequest.entityName == T.entityName, "FetchResultsController created with incorrect NSFetchRequest entity type")
-
         internalController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: sectionNameKeyPath, cacheName: cacheName)
-        super.init()
     }
 
     deinit {
