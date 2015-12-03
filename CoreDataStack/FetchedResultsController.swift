@@ -140,7 +140,7 @@ public struct FetchedResultsSectionInfo<T: NSManagedObject> {
 /**
  A type safe wrapper around an `NSFetchedResultsController`
  */
-public final class FetchedResultsController<T: NSManagedObject where T: CoreDataModelable> {
+public class FetchedResultsController<T: NSManagedObject where T: CoreDataModelable> {
 
     /// The `NSFetchRequest` being used by the `FetchedResultsController`
     public var fetchRequest: NSFetchRequest { return internalController.fetchRequest }
