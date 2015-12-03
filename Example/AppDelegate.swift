@@ -60,20 +60,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         let moc = stack.newBackgroundWorkerMOC()
-        moc.performBlockAndWait() {
-            do {
+        do {
+            try moc.performAndWaitOrThrow {
                 let existingBooks = try Book.allInContext(moc)
-                if existingBooks.count == 0 {
-                    let books = StubbedBookData.books
-                    for bookTitle in books {
-                        let book = Book(managedObjectContext: moc)
-                        book.title = bookTitle
-                    }
-                    try moc.saveContextAndWait()
+                guard existingBooks.isEmpty else { return }
+                let books = StubbedBookData.books
+                for bookTitle in books {
+                    let book = Book(managedObjectContext: moc)
+                    book.title = bookTitle
                 }
-            } catch {
-                print("Error creating inital data: \(error)")
+                try moc.saveContextAndWait()
             }
+        } catch {
+            print("Error creating inital data: \(error)")
         }
     }
 }
