@@ -103,7 +103,7 @@ public class EntityMonitor<T: NSManagedObject where T: CoreDataModelable> {
     - parameter frequency: `FireFrequency` How frequently you wish to receive callbacks of changes. Default value is `.OnSave`.
     - parameter filterPredicate: An optional filtering predicate to be applied to entities being monitored.
     */
-    public init?(context: NSManagedObjectContext, frequency: FireFrequency = .OnSave, filterPredicate: NSPredicate? = nil) {
+    public init(context: NSManagedObjectContext, frequency: FireFrequency = .OnSave, filterPredicate: NSPredicate? = nil) {
         self.context = context
         self.frequency = frequency
         self.filterPredicate = filterPredicate
