@@ -23,23 +23,12 @@ public extension NSManagedObjectContext {
      - throws: Errors produced by the `save()` function on the `NSManagedObjectContext`
     */
     public func saveContextAndWait() throws {
-        var saveError: ErrorType?
         switch concurrencyType {
         case .ConfinementConcurrencyType:
             try sharedSaveFlow()
         case .MainQueueConcurrencyType,
              .PrivateQueueConcurrencyType:
-            self.performBlockAndWait {
-                do {
-                    try self.sharedSaveFlow()
-                } catch let error {
-                    saveError = error
-                }
-            }
-        }
-
-        if let saveError = saveError {
-            throw saveError
+            try performAndWaitOrThrow(sharedSaveFlow)
         }
     }
 
@@ -50,9 +39,9 @@ public extension NSManagedObjectContext {
     - parameter completion: Completion closure with a `SaveResult` to be executed upon the completion of the save operation.
     */
     public func saveContext(completion: CoreDataStackSaveCompletion? = nil) {
-        let saveFlow: (CoreDataStackSaveCompletion?) -> () = { completion in
+        func saveFlow() {
             do {
-                try self.sharedSaveFlow()
+                try sharedSaveFlow()
                 completion?(.Success)
             } catch let saveError {
                 completion?(.Failure(saveError))
@@ -61,22 +50,18 @@ public extension NSManagedObjectContext {
 
         switch concurrencyType {
         case .ConfinementConcurrencyType:
-            saveFlow(completion)
+            saveFlow()
         case .PrivateQueueConcurrencyType,
         .MainQueueConcurrencyType:
-            self.performBlock {
-                saveFlow(completion)
-            }
+            performBlock(saveFlow)
         }
     }
 
     private func sharedSaveFlow() throws {
-        if hasChanges {
-            do {
-                try save()
-            } catch let error {
-                throw error
-            }
+        guard hasChanges else {
+            return
         }
+
+        try save()
     }
 }
