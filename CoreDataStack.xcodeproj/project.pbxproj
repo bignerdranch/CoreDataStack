@@ -10,6 +10,7 @@
 		6979C2F11B8F58FA006E521B /* SaveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6979C2EF1B8F58BB006E521B /* SaveTests.swift */; };
 		69FC00381B7DBFB80002C1AC /* TempDirectoryTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 69FC00371B7DBFB80002C1AC /* TempDirectoryTestCase.m */; };
 		DB2E9B751C0F8D8D00DAFF8F /* NSManagedObjectContext+AsyncHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2E9B741C0F8D8D00DAFF8F /* NSManagedObjectContext+AsyncHelpers.swift */; };
+		DB2E9B771C0F8E9F00DAFF8F /* NSPersistentStoreCoordinator+AsyncHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2E9B761C0F8E9F00DAFF8F /* NSPersistentStoreCoordinator+AsyncHelpers.swift */; };
 		E41764DB1AEE854C00D89DBE /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41764DA1AEE854C00D89DBE /* Author.swift */; };
 		E41764DD1AEE854D00D89DBE /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41764DC1AEE854D00D89DBE /* Book.swift */; };
 		E43A3C5F1BFCCB660019D6B4 /* EntityMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43A3C5E1BFCCB660019D6B4 /* EntityMonitor.swift */; };
@@ -68,6 +69,7 @@
 		69FC00361B7DBFB80002C1AC /* TempDirectoryTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TempDirectoryTestCase.h; sourceTree = "<group>"; };
 		69FC00371B7DBFB80002C1AC /* TempDirectoryTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TempDirectoryTestCase.m; sourceTree = "<group>"; };
 		DB2E9B741C0F8D8D00DAFF8F /* NSManagedObjectContext+AsyncHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+AsyncHelpers.swift"; sourceTree = "<group>"; };
+		DB2E9B761C0F8E9F00DAFF8F /* NSPersistentStoreCoordinator+AsyncHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSPersistentStoreCoordinator+AsyncHelpers.swift"; sourceTree = "<group>"; };
 		E41764DA1AEE854C00D89DBE /* Author.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Author.swift; sourceTree = "<group>"; };
 		E41764DC1AEE854D00D89DBE /* Book.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		E41AF91E1AF82046004EB4B8 /* CoreDataStackTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CoreDataStackTests-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -278,6 +280,7 @@
 				DB2E9B741C0F8D8D00DAFF8F /* NSManagedObjectContext+AsyncHelpers.swift */,
 				E4C9BC4C1AEA850600A6BD1B /* NSManagedObjectContext+SaveHelpers.swift */,
 				E4C6F39B1AFD05E1004E3F1D /* NSPersistentStoreCoordinator+SQLiteHelpers.swift */,
+				DB2E9B761C0F8E9F00DAFF8F /* NSPersistentStoreCoordinator+AsyncHelpers.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -452,6 +455,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4C9BC4D1AEA850600A6BD1B /* CoreDataStack.swift in Sources */,
+				DB2E9B771C0F8E9F00DAFF8F /* NSPersistentStoreCoordinator+AsyncHelpers.swift in Sources */,
 				E43A3C671BFCD81A0019D6B4 /* CoreDataModelable.swift in Sources */,
 				E43A3C5F1BFCCB660019D6B4 /* EntityMonitor.swift in Sources */,
 				E4C9BC4F1AEA850600A6BD1B /* NSManagedObjectContext+SaveHelpers.swift in Sources */,

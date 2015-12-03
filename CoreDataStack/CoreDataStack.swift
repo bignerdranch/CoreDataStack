@@ -225,7 +225,7 @@ public extension CoreDataStack {
                         resetCallback(.Failure(CoreDataStackError.InMemoryStoreMissing))
                         break
                     }
-                    try self.persistentStoreCoordinator.performAndWait() {
+                    try self.persistentStoreCoordinator.performAndWaitOrThrow {
                         try self.persistentStoreCoordinator.removePersistentStore(store)
                         try self.persistentStoreCoordinator.addPersistentStoreWithType(NSInMemoryStoreType, configuration: nil, URL: nil, options: nil)
                     }
@@ -249,13 +249,15 @@ public extension CoreDataStack {
                     if #available(iOS 9, OSX 10.11, *) {
                         try coordinator.destroyPersistentStoreAtURL(storeURL, withType: NSSQLiteStoreType, options: nil)
                     } else {
-                        try coordinator.performAndWait() {
+                        let fm = NSFileManager()
+                        try coordinator.performAndWaitOrThrow {
                             try coordinator.removePersistentStore(store)
-                            try NSFileManager.defaultManager().removeItemAtURL(storeURL)
+                            try fm.removeItemAtURL(storeURL)
 
                             // Remove journal files if present
-                            let _ = try? NSFileManager.defaultManager().removeItemAtURL(storeURL.URLByAppendingPathComponent("-shm"))
-                            let _ = try? NSFileManager.defaultManager().removeItemAtURL(storeURL.URLByAppendingPathComponent("-wal"))
+                            // Eat the error because different versions of SQLite might have different journal files
+                            let _ = try? fm.removeItemAtURL(storeURL.URLByAppendingPathComponent("-shm"))
+                            let _ = try? fm.removeItemAtURL(storeURL.URLByAppendingPathComponent("-wal"))
                         }
                     }
                 } catch let resetError {
@@ -366,26 +368,5 @@ private extension NSBundle {
     func managedObjectModel(modelName modelName: String) -> NSManagedObjectModel {
         let URL = URLForResource(modelName, withExtension: NSBundle.modelExtension)!
         return NSManagedObjectModel(contentsOfURL: URL)!
-    }
-}
-
-private extension NSPersistentStoreCoordinator {
-    private func performAndWait<Return>(body: () throws -> Return) throws -> Return {
-        var value: Return!
-        var error: ErrorType?
-
-        performBlockAndWait {
-            do {
-                value = try body()
-            } catch let theError {
-                error = theError
-            }
-        }
-
-        if let error = error {
-            throw error
-        } else {
-            return value
-        }
     }
 }
