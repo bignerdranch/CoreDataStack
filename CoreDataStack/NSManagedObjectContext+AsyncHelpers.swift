@@ -14,7 +14,13 @@ extension NSManagedObjectContext {
      Synchronously exexcutes a given function on the receiver’s queue.
 
      You use this method to safely address managed objects on a concurrent
-     queue. This method may safely be called reentrantly.
+     queue.
+     
+     - attention: This method may safely be called reentrantly.
+     - parameter body: The method body to perform on the reciever.
+     - returns: The value returned from the inner function.
+     - throws: Any error thrown by the inner function. This method should be
+       technically `rethrows`, but cannot be due to Swift limitations.
     **/
     public func performAndWaitOrThrow<Return>(body: () throws -> Return) throws -> Return {
         var result: Return!
