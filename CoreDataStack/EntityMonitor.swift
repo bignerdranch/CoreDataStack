@@ -63,12 +63,19 @@ public class EntityMonitor<T: NSManagedObject where T: CoreDataModelable> {
      - parameter U: Your delegate must implement the methods in `EntityMonitorDelegate` with the matching `CoreDataModelable` type being monitored.
      */
     public func setDelegate<U: EntityMonitorDelegate where U.T == T>(delegate: U) {
-        self.delegate = InternalEntityMonitorDelegate(delegate)
+        self.delegateHost = ForwardingEntityMonitorDelegate(owner: self, delegate: delegate)
     }
 
     // MARK: - Private Properties
 
-    private var delegate: InternalEntityMonitorDelegate<T>?
+    private var delegateHost: BaseEntityMonitorDelegate<T>? {
+        willSet {
+            delegateHost?.removeObservers()
+        }
+        didSet {
+            delegateHost?.setupObservers()
+        }
+    }
 
     private typealias EntitySet = Set<T>
 
@@ -100,24 +107,30 @@ public class EntityMonitor<T: NSManagedObject where T: CoreDataModelable> {
         self.context = context
         self.frequency = frequency
         self.filterPredicate = filterPredicate
-        guard let entity = NSEntityDescription.entityForName(T.entityName, inManagedObjectContext: context) else {
-            entityPredicate = NSPredicate()
-            return nil
-        }
-
-        entityPredicate = NSPredicate(format: "entity == %@", entity)
-        setupObservers()
+        self.entityPredicate = NSPredicate(format: "entity == %@", T.entityInContext(context))
     }
 
     deinit {
-        removeObservers()
+        delegateHost?.removeObservers()
+    }
+}
+
+private let ChangeObserverSelectorName: Selector = "evaluateChangeNotification:"
+
+private class BaseEntityMonitorDelegate<T: NSManagedObject where T: CoreDataModelable>: NSObject {
+
+    typealias Owner = EntityMonitor<T>
+    typealias EntitySet = Owner.EntitySet
+
+    unowned let owner: Owner
+
+    init(owner: Owner) {
+        self.owner = owner
     }
 
-    // MARK: - Private
-
-    private func setupObservers() {
+    final func setupObservers() {
         let notificationName: String
-        switch frequency {
+        switch owner.frequency {
         case .OnChange:
             notificationName = NSManagedObjectContextObjectsDidChangeNotification
         case .OnSave:
@@ -127,58 +140,57 @@ public class EntityMonitor<T: NSManagedObject where T: CoreDataModelable> {
         NSNotificationCenter.defaultCenter().addObserver(self,
             selector: ChangeObserverSelectorName,
             name: notificationName,
-            object: context)
+            object: owner.context)
     }
 
-    private func removeObservers() {
+    final func removeObservers() {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
-    // MARK: - Notifications
-
-    @objc private func evaluateChangeNotification(notification: NSNotification) {
+    @objc final func evaluateChangeNotification(notification: NSNotification) {
         guard let changeSet = notification.userInfo else {
             return
         }
 
-        context.performBlockAndWait() {
-            if let inserted = changeSet[NSInsertedObjectsKey],
-                filtered = inserted.filteredSetUsingPredicate(self.combinedPredicate)
-                    as? EntitySet where filtered.count > 0 {
-                        self.delegate?.objectsInserted(self, filtered)
+        owner.context.performBlockAndWait { [predicate = owner.combinedPredicate] in
+            func process(value: AnyObject?) -> EntitySet {
+                return value.flatMap { $0.filteredSetUsingPredicate(predicate) as? EntitySet } ?? []
             }
 
-            if let deleted = changeSet[NSDeletedObjectsKey],
-                filtered = deleted.filteredSetUsingPredicate(self.combinedPredicate)
-                    as? EntitySet where filtered.count > 0 {
-                       self.delegate?.objectsRemoved(self, filtered)
-            }
-
-            if let updated = changeSet[NSUpdatedObjectsKey],
-                filtered = updated.filteredSetUsingPredicate(self.combinedPredicate)
-                    as? EntitySet where filtered.count > 0 {
-                        self.delegate?.objectsUpdated(self, filtered)
-            }
+            let inserted = process(changeSet[NSInsertedObjectsKey])
+            let deleted = process(changeSet[NSDeletedObjectsKey])
+            let updated = process(changeSet[NSUpdatedObjectsKey])
+            self.handleChanges(inserted: inserted, deleted: deleted, updated: updated)
         }
+    }
+
+    func handleChanges(inserted inserted: EntitySet, deleted: EntitySet, updated: EntitySet) {
+        fatalError()
     }
 }
 
-private let ChangeObserverSelectorName: Selector = "evaluateChangeNotification:"
+private final class ForwardingEntityMonitorDelegate<Delegate: EntityMonitorDelegate>: BaseEntityMonitorDelegate<Delegate.T> {
 
-private struct InternalEntityMonitorDelegate<T: NSManagedObject where T: CoreDataModelable> {
-    let objectsInserted: (EntityMonitor<T>, Set<T>) -> Void
-    let objectsRemoved: (EntityMonitor<T>, Set<T>) -> Void
-    let objectsUpdated: (EntityMonitor<T>, Set<T>) -> Void
+    weak var delegate: Delegate?
 
-    init<U: EntityMonitorDelegate where U.T == T>(_ delegate: U) {
-        objectsInserted = { [weak delegate] in
-            delegate?.entityMonitorObservedInserts($0, entities: $1)
+    init(owner: Owner, delegate: Delegate) {
+        super.init(owner: owner)
+        self.delegate = delegate
+    }
+
+    override func handleChanges(inserted inserted: EntitySet, deleted: EntitySet, updated: EntitySet) {
+        guard let delegate = delegate else { return }
+
+        if !inserted.isEmpty {
+            delegate.entityMonitorObservedInserts(owner, entities: inserted)
         }
-        objectsRemoved = { [weak delegate] in
-            delegate?.entityMonitorObservedDeletions($0, entities: $1)
+
+        if !deleted.isEmpty {
+            delegate.entityMonitorObservedDeletions(owner, entities: deleted)
         }
-        objectsUpdated = { [weak delegate] in
-            delegate?.entityMonitorObservedModifications($0, entities: $1)
+
+        if !updated.isEmpty {
+            delegate.entityMonitorObservedModifications(owner, entities: updated)
         }
     }
 }
