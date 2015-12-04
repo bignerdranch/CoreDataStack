@@ -92,7 +92,7 @@ class CoreDataModelableTests: TempDirectoryTestCase {
             var allBooks = try Book.allInContext(stack.mainQueueContext)
             XCTAssertEqual(allBooks.count, totalBooks)
 
-            try Book.removeAllExcept(exceptionBooks, inContext: stack.mainQueueContext)
+            try Book.removeAllInContext(stack.mainQueueContext, except: exceptionBooks)
             allBooks = try Book.allInContext(stack.mainQueueContext)
             XCTAssertEqual(allBooks.count, exceptionBooks.count)
         } catch {
