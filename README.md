@@ -158,6 +158,22 @@ myCoreDataStack.resetStore() { result in
 }
 ```
 
+### Core Data Modelable Protocol
+
+`CoreDataModelable` is a simple protocol that enables convenience methods on `NSManagedObject` subclasses that make fetching, inserting, deleting, and change management easier.
+
+#### Example
+
+```
+class Book: NSManagedObject, CoreDataModelable {
+    static let entityName = "Book"
+}
+
+let allBooks = try Books.allInContext(moc)
+let anyBook = try Book.findFirst(context: moc)
+try Book.removeAllInContext(moc)
+```
+
 ### Type Safe Monitors
 
 #### Fetched Results Controller
