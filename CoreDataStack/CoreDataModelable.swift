@@ -60,7 +60,7 @@ extension CoreDataModelable where Self: NSManagedObject {
 
     - returns: `Self?`: The first entity that matches the optional predicate or `nil`.
     */
-    static public func findFirst(predicate: NSPredicate?, context: NSManagedObjectContext) throws -> Self? {
+    static public func findFirst(predicate: NSPredicate? = nil, context: NSManagedObjectContext) throws -> Self? {
         let fetchRequest = fetchRequestForEntity(inContext: context)
         fetchRequest.predicate = predicate
         fetchRequest.fetchLimit = 1
