@@ -160,7 +160,7 @@ myCoreDataStack.resetStore() { result in
 
 ### Core Data Modelable Protocol
 
-`CoreDataModelable` is a simple protocol that enables convenience methods on `NSManagedObject` subclasses that make fetching, inserting, deleting, and change management easier.
+'CoreDataModelable' is a simple protocol that adds convenience methods on 'NSManagedObject' subclasses. These methods make fetching, inserting, deleting, and change management easier.
 
 #### Example
 
