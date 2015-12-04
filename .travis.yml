@@ -3,8 +3,6 @@ xcode_project: CoreDataStack.xcodeproj
 xcode_scheme: CoreDataStack
 xcode_sdk: iphonesimulator
 osx_image: xcode7.1
-before_install:
-- brew uninstall xctool && brew install --HEAD xctool
 after_success:
 - ./Resources/scripts/publish_docs.sh
 notifications:
