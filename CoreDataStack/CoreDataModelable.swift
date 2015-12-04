@@ -53,14 +53,14 @@ extension CoreDataModelable where Self: NSManagedObject {
     /**
     Fetches the first Entity that matches the optional predicate within the specified `NSManagedObjectContext`.
 
-    - parameter predicate: An optional `NSPredicate` for filtering
     - parameter context: `NSManagedObjectContext` to find the entities within.
+    - parameter predicate: An optional `NSPredicate` for filtering
     
     - throws: Any error produced from `executeFetchRequest`
 
     - returns: `Self?`: The first entity that matches the optional predicate or `nil`.
     */
-    static public func findFirst(predicate: NSPredicate?, context: NSManagedObjectContext) throws -> Self? {
+    static public func findFirstInContext(context: NSManagedObjectContext, predicate: NSPredicate? = nil) throws -> Self? {
         let fetchRequest = fetchRequestForEntity(inContext: context)
         fetchRequest.predicate = predicate
         fetchRequest.fetchLimit = 1
@@ -94,7 +94,7 @@ extension CoreDataModelable where Self: NSManagedObject {
     
     - throws: Any error produced from `executeFetchRequest`
     */
-    static public func removeAll(context: NSManagedObjectContext) throws {
+    static public func removeAllInContext(context: NSManagedObjectContext) throws {
         let fetchRequest = fetchRequestForEntity(inContext: context)
         try removeAllObjectsReturnedByRequest(fetchRequest, inContext: context)
     }
@@ -102,12 +102,12 @@ extension CoreDataModelable where Self: NSManagedObject {
     /**
      Removes all entities from within the specified `NSManagedObjectContext` excluding a supplied array of entities.
 
-     - parameter toKeep: An Array of `NSManagedObjects` belonging to the `NSManagedObjectContext` to exclude from deletion.
-     - parameter inContext: The `NSManagedObjectContext` to remove the Entities from.
+     - parameter context: The `NSManagedObjectContext` to remove the Entities from.
+     - parameter except: An Array of `NSManagedObjects` belonging to the `NSManagedObjectContext` to exclude from deletion.
 
      - throws: Any error produced from `executeFetchRequest`
      */
-    static public func removeAllExcept(toKeep: [Self], inContext context: NSManagedObjectContext) throws {
+    static public func removeAllInContext(context: NSManagedObjectContext, except toKeep: [Self]) throws {
         let fetchRequest = fetchRequestForEntity(inContext: context)
         fetchRequest.predicate = NSPredicate(format: "NOT (self IN %@)", toKeep)
         try removeAllObjectsReturnedByRequest(fetchRequest, inContext: context)
@@ -118,7 +118,7 @@ extension CoreDataModelable where Self: NSManagedObject {
     static private func removeAllObjectsReturnedByRequest(fetchRequest: NSFetchRequest, inContext context: NSManagedObjectContext) throws {
         // TODO: rcedwards A batch delete would be more efficient here on iOS 9 and up 
         //                  however it complicates things since the request requires a context with
-        //                  an NSPersistentStoreCoordinator.
+        //                  an NSPersistentStoreCoordinator directly connected. (MOC cannot be a child of another MOC)
         fetchRequest.includesPropertyValues = false
         fetchRequest.includesSubentities = false
         try context.executeFetchRequest(fetchRequest).lazy.map { $0 as! NSManagedObject }.forEach(context.deleteObject)
