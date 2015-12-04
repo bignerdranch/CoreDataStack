@@ -25,7 +25,7 @@ public protocol CoreDataModelable {
  Extension to `CoreDataModelable` with convenience methods for
  creating, deleting, and fetching entities from a specific `NSManagedObjectContext`.
  */
-public extension CoreDataModelable where Self: NSManagedObject {
+extension CoreDataModelable where Self: NSManagedObject {
 
     // MARK: - Creating Objects
 
@@ -36,11 +36,11 @@ public extension CoreDataModelable where Self: NSManagedObject {
 
     - returns: `Self`: The newly created entity.
     */
-    init(managedObjectContext context: NSManagedObjectContext) {
+    public init(managedObjectContext context: NSManagedObjectContext) {
         self.init(entity: Self.entityInContext(context), insertIntoManagedObjectContext: context)
     }
 
-    private static func entityInContext(context: NSManagedObjectContext) -> NSEntityDescription! {
+    static func entityInContext(context: NSManagedObjectContext) -> NSEntityDescription! {
         guard let entity = NSEntityDescription.entityForName(entityName, inManagedObjectContext: context) else {
             assertionFailure("Entity named \(entityName) doesn't exist. Fix the entity description or naming of \(Self.self).")
             return nil

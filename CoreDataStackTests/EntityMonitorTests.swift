@@ -86,10 +86,7 @@ class EntityMonitorTests: TempDirectoryTestCase {
     func testOnSaveNotifications() {
         // Setup monitor
         let moc = stack.mainQueueContext
-        guard let authorMonitor = EntityMonitor<Author>(context: moc, frequency: .OnSave) else {
-            XCTFail("Failed to create EntityMonitor")
-            return
-        }
+        let authorMonitor = EntityMonitor<Author>(context: moc, frequency: .OnSave)
         let authorMonitorDelegate = AuthorMonitorDelegate()
         authorMonitor.setDelegate(authorMonitorDelegate)
 
@@ -120,10 +117,7 @@ class EntityMonitorTests: TempDirectoryTestCase {
     func testOnChangeNotifications() {
         // Setup monitor
         let moc = stack.mainQueueContext
-        guard let authorMonitor = EntityMonitor<Author>(context: moc, frequency: .OnChange) else {
-            XCTFail("Failed to create EntityMonitor")
-            return
-        }
+        let authorMonitor = EntityMonitor<Author>(context: moc, frequency: .OnChange)
         let authorMonitorDelegate = AuthorMonitorDelegate()
         authorMonitor.setDelegate(authorMonitorDelegate)
 
@@ -156,10 +150,7 @@ class EntityMonitorTests: TempDirectoryTestCase {
 
         // Setup monitor
         let moc = stack.mainQueueContext
-        guard let filteredMonitor = EntityMonitor<Book>(context: moc, filterPredicate: predicate) else {
-            XCTFail("Failed to create EntityMonitor")
-            return
-        }
+        let filteredMonitor = EntityMonitor<Book>(context: moc, filterPredicate: predicate)
         let bookMonitorDelegate = BookMonitorDelegate()
         filteredMonitor.setDelegate(bookMonitorDelegate)
 
