@@ -169,8 +169,8 @@ class Book: NSManagedObject, CoreDataModelable {
     static let entityName = "Book"
 }
 
-let allBooks = try Books.allInContext(moc)
-let anyBook = try Book.findFirst(context: moc)
+let allBooks = try Book.allInContext(moc)
+let anyBook = try Book.findFirstInContext(moc)
 try Book.removeAllInContext(moc)
 ```
 

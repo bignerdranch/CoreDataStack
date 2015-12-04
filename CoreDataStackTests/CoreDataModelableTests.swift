@@ -42,18 +42,18 @@ class CoreDataModelableTests: TempDirectoryTestCase {
             let _ = Book(managedObjectContext: stack.mainQueueContext)
             try stack.mainQueueContext.saveContextAndWait()
 
-            guard let firstBook = try Book.findFirst(nil, context: stack.mainQueueContext) else {
+            guard let firstBook = try Book.findFirstInContext(stack.mainQueueContext) else {
                 XCTFail("First Book not found"); return
             }
             firstBook.title = "Testing"
             try! stack.mainQueueContext.saveContextAndWait()
 
             let predicate1 = NSPredicate(format: "title CONTAINS[cd] %@", "Bob")
-            let notFound = try Book.findFirst(predicate1, context: stack.mainQueueContext)
+            let notFound = try Book.findFirstInContext(stack.mainQueueContext, predicate: predicate1)
             XCTAssertNil(notFound)
 
             let predicate2 = NSPredicate(format: "title CONTAINS[cd] %@", "Test")
-            guard let _ = try Book.findFirst(predicate2, context: stack.mainQueueContext) else {
+            guard let _ = try Book.findFirstInContext(stack.mainQueueContext, predicate: predicate2) else {
                 XCTFail("Failed to find first with matching title."); return
             }
         } catch {
