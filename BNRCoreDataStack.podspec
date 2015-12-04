@@ -35,7 +35,6 @@ DESC
   s.authors              = ["Robert Edwards", "John Gallagher", "Brian Hardy", "Zachary Waldowski"]
 
   s.ios.deployment_target = "8.0"
-  s.osx.deployment_target = "10.10"
 
 
   s.source       = { :git => "https://github.com/bignerdranch/CoreDataStack.git", :tag => "v#{s.version}" }
