@@ -94,7 +94,7 @@ extension CoreDataModelable where Self: NSManagedObject {
     
     - throws: Any error produced from `executeFetchRequest`
     */
-    static public func removeAll(context: NSManagedObjectContext) throws {
+    static public func removeAllInContext(context: NSManagedObjectContext) throws {
         let fetchRequest = fetchRequestForEntity(inContext: context)
         try removeAllObjectsReturnedByRequest(fetchRequest, inContext: context)
     }
