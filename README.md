@@ -158,6 +158,24 @@ myCoreDataStack.resetStore() { result in
 }
 ```
 
+### Type Safe Monitors
+
+#### Fetched Results Controller
+
+`FetchedResultsController<T>` is a type safe wrapper around `NSFetchedResultsController` using Swift generics.
+
+##### Example
+
+See [BooksTableViewController.swift](./Example/BooksTableViewController.swift) for an example.
+
+#### Entity Monitor
+
+`EntityMonitor<T>` is a class for monitoring inserts, deletes, and updates of a specific `NSManagedObject` subclass within an `NSManagedObjectContext`.
+
+##### Example
+
+See [EntityMonitorTests.swift](./CoreDataStackTests/EntityMonitorTests.swift) for an example.
+
 ## Debugging Tips
 
 To validate that you are honoring all of the threading rules it's common to add the following to a project scheme under `Run > Arguments > Arguments Passed On Launch`.
