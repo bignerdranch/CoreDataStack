@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		6979C2F11B8F58FA006E521B /* SaveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6979C2EF1B8F58BB006E521B /* SaveTests.swift */; };
-		69FC00381B7DBFB80002C1AC /* TempDirectoryTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 69FC00371B7DBFB80002C1AC /* TempDirectoryTestCase.m */; };
 		DB2E9B751C0F8D8D00DAFF8F /* NSManagedObjectContext+AsyncHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2E9B741C0F8D8D00DAFF8F /* NSManagedObjectContext+AsyncHelpers.swift */; };
 		DB2E9B771C0F8E9F00DAFF8F /* NSPersistentStoreCoordinator+AsyncHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2E9B761C0F8E9F00DAFF8F /* NSPersistentStoreCoordinator+AsyncHelpers.swift */; };
 		E41764DB1AEE854C00D89DBE /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41764DA1AEE854C00D89DBE /* Author.swift */; };
@@ -17,6 +16,7 @@
 		E43A3C651BFCD0F00019D6B4 /* EntityMonitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43A3C641BFCD0F00019D6B4 /* EntityMonitorTests.swift */; };
 		E43A3C671BFCD81A0019D6B4 /* CoreDataModelable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43A3C661BFCD81A0019D6B4 /* CoreDataModelable.swift */; };
 		E43A3C691BFCDDC50019D6B4 /* FetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43A3C681BFCDDC50019D6B4 /* FetchedResultsController.swift */; };
+		E45013201C233A1600ADC83B /* TempDirectoryTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E450131F1C233A1600ADC83B /* TempDirectoryTestCase.swift */; };
 		E4598B3A1B7CF80200F7DAD9 /* TestModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4C9BC531AEA857E00A6BD1B /* TestModel.xcdatamodeld */; };
 		E4598B3B1B7CF80800F7DAD9 /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41764DA1AEE854C00D89DBE /* Author.swift */; };
 		E4598B3C1B7CF80800F7DAD9 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41764DC1AEE854D00D89DBE /* Book.swift */; };
@@ -36,7 +36,6 @@
 		E4B99C781B74032B005B7E1A /* CoreDataStack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C9BC2D1AEA848600A6BD1B /* CoreDataStack.framework */; };
 		E4C6F39C1AFD05E1004E3F1D /* NSPersistentStoreCoordinator+SQLiteHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C6F39B1AFD05E1004E3F1D /* NSPersistentStoreCoordinator+SQLiteHelpers.swift */; };
 		E4C6F3A01AFD4825004E3F1D /* TestModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4C9BC531AEA857E00A6BD1B /* TestModel.xcdatamodeld */; };
-		E4C9BC331AEA848600A6BD1B /* CoreDataStack.h in Headers */ = {isa = PBXBuildFile; fileRef = E4C9BC321AEA848600A6BD1B /* CoreDataStack.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E4C9BC391AEA848600A6BD1B /* CoreDataStack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C9BC2D1AEA848600A6BD1B /* CoreDataStack.framework */; };
 		E4C9BC401AEA848600A6BD1B /* InitializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C9BC3F1AEA848600A6BD1B /* InitializationTests.swift */; };
 		E4C9BC4D1AEA850600A6BD1B /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C9BC4A1AEA850600A6BD1B /* CoreDataStack.swift */; };
@@ -66,17 +65,15 @@
 
 /* Begin PBXFileReference section */
 		6979C2EF1B8F58BB006E521B /* SaveTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SaveTests.swift; sourceTree = "<group>"; };
-		69FC00361B7DBFB80002C1AC /* TempDirectoryTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TempDirectoryTestCase.h; sourceTree = "<group>"; };
-		69FC00371B7DBFB80002C1AC /* TempDirectoryTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TempDirectoryTestCase.m; sourceTree = "<group>"; };
 		DB2E9B741C0F8D8D00DAFF8F /* NSManagedObjectContext+AsyncHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+AsyncHelpers.swift"; sourceTree = "<group>"; };
 		DB2E9B761C0F8E9F00DAFF8F /* NSPersistentStoreCoordinator+AsyncHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSPersistentStoreCoordinator+AsyncHelpers.swift"; sourceTree = "<group>"; };
 		E41764DA1AEE854C00D89DBE /* Author.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Author.swift; sourceTree = "<group>"; };
 		E41764DC1AEE854D00D89DBE /* Book.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
-		E41AF91E1AF82046004EB4B8 /* CoreDataStackTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CoreDataStackTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		E43A3C5E1BFCCB660019D6B4 /* EntityMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = EntityMonitor.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E43A3C641BFCD0F00019D6B4 /* EntityMonitorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = EntityMonitorTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E43A3C661BFCD81A0019D6B4 /* CoreDataModelable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataModelable.swift; sourceTree = "<group>"; };
 		E43A3C681BFCDDC50019D6B4 /* FetchedResultsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsController.swift; sourceTree = "<group>"; };
+		E450131F1C233A1600ADC83B /* TempDirectoryTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempDirectoryTestCase.swift; sourceTree = "<group>"; };
 		E4598B391B7CF43600F7DAD9 /* TestModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "TestModel 2.xcdatamodel"; sourceTree = "<group>"; };
 		E4598B3D1B7CF86800F7DAD9 /* TestModel.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = TestModel.sqlite; sourceTree = "<group>"; };
 		E4598B401B7CF8BF00F7DAD9 /* ModelMigrationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelMigrationTests.swift; sourceTree = "<group>"; };
@@ -94,7 +91,6 @@
 		E4C6F39B1AFD05E1004E3F1D /* NSPersistentStoreCoordinator+SQLiteHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSPersistentStoreCoordinator+SQLiteHelpers.swift"; sourceTree = "<group>"; };
 		E4C9BC2D1AEA848600A6BD1B /* CoreDataStack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreDataStack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4C9BC311AEA848600A6BD1B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E4C9BC321AEA848600A6BD1B /* CoreDataStack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreDataStack.h; sourceTree = "<group>"; };
 		E4C9BC381AEA848600A6BD1B /* CoreDataStackTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreDataStackTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4C9BC3E1AEA848600A6BD1B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4C9BC3F1AEA848600A6BD1B /* InitializationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializationTests.swift; sourceTree = "<group>"; };
@@ -173,8 +169,7 @@
 		E43A3C621BFCD0860019D6B4 /* Shared Test Utils */ = {
 			isa = PBXGroup;
 			children = (
-				69FC00361B7DBFB80002C1AC /* TempDirectoryTestCase.h */,
-				69FC00371B7DBFB80002C1AC /* TempDirectoryTestCase.m */,
+				E450131F1C233A1600ADC83B /* TempDirectoryTestCase.swift */,
 			);
 			name = "Shared Test Utils";
 			sourceTree = "<group>";
@@ -247,7 +242,6 @@
 		E4C9BC301AEA848600A6BD1B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				E4C9BC321AEA848600A6BD1B /* CoreDataStack.h */,
 				E4C9BC311AEA848600A6BD1B /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -268,7 +262,6 @@
 		E4C9BC3D1AEA848600A6BD1B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				E41AF91E1AF82046004EB4B8 /* CoreDataStackTests-Bridging-Header.h */,
 				E4C9BC3E1AEA848600A6BD1B /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -302,7 +295,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4C9BC331AEA848600A6BD1B /* CoreDataStack.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -472,10 +464,10 @@
 				E4C6F3A01AFD4825004E3F1D /* TestModel.xcdatamodeld in Sources */,
 				6979C2F11B8F58FA006E521B /* SaveTests.swift in Sources */,
 				E4B23F011B5EAE6C00A4F218 /* BatchOperationContextTests.swift in Sources */,
-				69FC00381B7DBFB80002C1AC /* TempDirectoryTestCase.m in Sources */,
 				E4598B411B7CF8BF00F7DAD9 /* ModelMigrationTests.swift in Sources */,
 				E43A3C651BFCD0F00019D6B4 /* EntityMonitorTests.swift in Sources */,
 				E4DB61441BFE771300BD3E6B /* FetchedResultsControllerTests.swift in Sources */,
+				E45013201C233A1600ADC83B /* TempDirectoryTestCase.swift in Sources */,
 				E47A83EC1C03AE6A001A047E /* BooksTestData.swift in Sources */,
 				E4F59A461B505AE700C61516 /* StoreTeardownTests.swift in Sources */,
 				E45DE9DE1BFD33B8000A2F01 /* CoreDataModelableTests.swift in Sources */,
@@ -687,7 +679,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.bignerdranch.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "CoreDataStackTests/CoreDataStackTests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -701,7 +693,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.bignerdranch.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "CoreDataStackTests/CoreDataStackTests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;
 		};
