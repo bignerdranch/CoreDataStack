@@ -1,6 +1,6 @@
 language: objective-c
 xcode_project: CoreDataStack.xcodeproj
-xcode_scheme: CoreDataStack
+xcode_scheme: [ CoreDataStack, CoreDataStackTV ]
 xcode_sdk: iphonesimulator
 osx_image: xcode7.1
 after_success:
