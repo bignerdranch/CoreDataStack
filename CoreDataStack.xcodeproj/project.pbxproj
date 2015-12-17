@@ -32,6 +32,7 @@
 		E45013421C2357E000ADC83B /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41764DC1AEE854D00D89DBE /* Book.swift */; };
 		E45013431C2357E300ADC83B /* TestModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4C9BC531AEA857E00A6BD1B /* TestModel.xcdatamodeld */; };
 		E45013451C2358CA00ADC83B /* Info_tvOS.plist in Resources */ = {isa = PBXBuildFile; fileRef = E45013441C2358CA00ADC83B /* Info_tvOS.plist */; };
+		E45013461C23664900ADC83B /* TempDirectoryTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E450131F1C233A1600ADC83B /* TempDirectoryTestCase.swift */; };
 		E4598B3A1B7CF80200F7DAD9 /* TestModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4C9BC531AEA857E00A6BD1B /* TestModel.xcdatamodeld */; };
 		E4598B3B1B7CF80800F7DAD9 /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41764DA1AEE854C00D89DBE /* Author.swift */; };
 		E4598B3C1B7CF80800F7DAD9 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41764DC1AEE854D00D89DBE /* Book.swift */; };
@@ -573,6 +574,7 @@
 				E45013411C2357E000ADC83B /* Author.swift in Sources */,
 				E45013401C2357E000ADC83B /* BooksTestData.swift in Sources */,
 				E45013351C23572400ADC83B /* CoreDataStackTVTests.swift in Sources */,
+				E45013461C23664900ADC83B /* TempDirectoryTestCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -933,6 +935,7 @@
 				E450133C1C23572400ADC83B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E4B99C751B740321005B7E1A /* Build configuration list for PBXNativeTarget "Example" */ = {
 			isa = XCConfigurationList;
