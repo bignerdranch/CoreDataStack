@@ -95,7 +95,12 @@
 		E43A3C641BFCD0F00019D6B4 /* EntityMonitorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = EntityMonitorTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E43A3C661BFCD81A0019D6B4 /* CoreDataModelable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataModelable.swift; sourceTree = "<group>"; };
 		E43A3C681BFCDDC50019D6B4 /* FetchedResultsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsController.swift; sourceTree = "<group>"; };
+		E45013091C23393500ADC83B /* CoreDataStack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreDataStack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E450130D1C23393500ADC83B /* Info_tvOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info_tvOS.plist; path = CoreDataStack/Info_tvOS.plist; sourceTree = SOURCE_ROOT; };
 		E450131F1C233A1600ADC83B /* TempDirectoryTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempDirectoryTestCase.swift; sourceTree = "<group>"; };
+		E45013321C23572400ADC83B /* CoreDataStackTVTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreDataStackTVTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E45013341C23572400ADC83B /* CoreDataStackTVTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStackTVTests.swift; sourceTree = "<group>"; };
+		E45013441C2358CA00ADC83B /* Info_tvOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info_tvOS.plist; sourceTree = "<group>"; };
 		E4598B391B7CF43600F7DAD9 /* TestModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "TestModel 2.xcdatamodel"; sourceTree = "<group>"; };
 		E4598B3D1B7CF86800F7DAD9 /* TestModel.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = TestModel.sqlite; sourceTree = "<group>"; };
 		E4598B401B7CF8BF00F7DAD9 /* ModelMigrationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelMigrationTests.swift; sourceTree = "<group>"; };
@@ -220,6 +225,14 @@
 			name = "Type Safe Monitors Tests";
 			sourceTree = "<group>";
 		};
+		E450133F1C23576F00ADC83B /* tvOS Tests */ = {
+			isa = PBXGroup;
+			children = (
+				E45013341C23572400ADC83B /* CoreDataStackTVTests.swift */,
+			);
+			name = "tvOS Tests";
+			sourceTree = "<group>";
+		};
 		E4598B3F1B7CF86F00F7DAD9 /* Migration Samples */ = {
 			isa = PBXGroup;
 			children = (
@@ -261,6 +274,7 @@
 				E4C9BC381AEA848600A6BD1B /* CoreDataStackTests.xctest */,
 				E4B99C661B740321005B7E1A /* Example.app */,
 				E45013091C23393500ADC83B /* CoreDataStack.framework */,
+				E45013321C23572400ADC83B /* CoreDataStackTVTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -292,6 +306,7 @@
 				E43A3C611BFCD0530019D6B4 /* Stack Tests */,
 				E43A3C631BFCD0BB0019D6B4 /* Type Safe Monitors Tests */,
 				E43A3C621BFCD0860019D6B4 /* Shared Test Utils */,
+				E450133F1C23576F00ADC83B /* tvOS Tests */,
 				E4C9BC3D1AEA848600A6BD1B /* Supporting Files */,
 			);
 			name = Tests;
@@ -301,6 +316,7 @@
 		E4C9BC3D1AEA848600A6BD1B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				E45013441C2358CA00ADC83B /* Info_tvOS.plist */,
 				E4C9BC3E1AEA848600A6BD1B /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -450,6 +466,9 @@
 					E45013081C23393500ADC83B = {
 						CreatedOnToolsVersion = 7.2;
 					};
+					E45013311C23572400ADC83B = {
+						CreatedOnToolsVersion = 7.2;
+					};
 					E4B99C651B740321005B7E1A = {
 						CreatedOnToolsVersion = 7.0;
 					};
@@ -477,6 +496,7 @@
 				E4C9BC2C1AEA848600A6BD1B /* CoreDataStack */,
 				E45013081C23393500ADC83B /* CoreDataStackTV */,
 				E4C9BC371AEA848600A6BD1B /* CoreDataStackTests */,
+				E45013311C23572400ADC83B /* CoreDataStackTVTests */,
 				E4B99C651B740321005B7E1A /* Example */,
 			);
 		};
@@ -484,6 +504,13 @@
 
 /* Begin PBXResourcesBuildPhase section */
 		E45013071C23393500ADC83B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E45013301C23572400ADC83B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -506,6 +533,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E45013451C2358CA00ADC83B /* Info_tvOS.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -533,6 +561,18 @@
 				E450131B1C23398100ADC83B /* NSPersistentStoreCoordinator+AsyncHelpers.swift in Sources */,
 				E45013191C23398100ADC83B /* NSManagedObjectContext+SaveHelpers.swift in Sources */,
 				E45013181C23398100ADC83B /* NSManagedObjectContext+AsyncHelpers.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E450132E1C23572400ADC83B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E45013421C2357E000ADC83B /* Book.swift in Sources */,
+				E45013431C2357E300ADC83B /* TestModel.xcdatamodeld in Sources */,
+				E45013411C2357E000ADC83B /* Author.swift in Sources */,
+				E45013401C2357E000ADC83B /* BooksTestData.swift in Sources */,
+				E45013351C23572400ADC83B /* CoreDataStackTVTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -588,6 +628,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		E45013391C23572400ADC83B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E45013081C23393500ADC83B /* CoreDataStackTV */;
+			targetProxy = E45013381C23572400ADC83B /* PBXContainerItemProxy */;
+		};
 		E4B99C7A1B740330005B7E1A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E4C9BC2C1AEA848600A6BD1B /* CoreDataStack */;
@@ -655,6 +700,31 @@
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.1;
+			};
+			name = Release;
+		};
+		E450133B1C23572400ADC83B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				INFOPLIST_FILE = CoreDataStackTests/Info_tvOS.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.bignerdranch.CoreDataStackTVTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TVOS_DEPLOYMENT_TARGET = 9.1;
+			};
+			name = Debug;
+		};
+		E450133C1C23572400ADC83B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = CoreDataStackTests/Info_tvOS.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.bignerdranch.CoreDataStackTVTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
 				TVOS_DEPLOYMENT_TARGET = 9.1;
 			};
 			name = Release;
@@ -855,6 +925,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		E450133A1C23572400ADC83B /* Build configuration list for PBXNativeTarget "CoreDataStackTVTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E450133B1C23572400ADC83B /* Debug */,
+				E450133C1C23572400ADC83B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		E4B99C751B740321005B7E1A /* Build configuration list for PBXNativeTarget "Example" */ = {
 			isa = XCConfigurationList;
