@@ -92,9 +92,10 @@ public final class CoreDataStack {
     public static func constructSQLiteStack(withModelName modelName: String,
         inBundle bundle: NSBundle = NSBundle.mainBundle(),
         withStoreURL desiredStoreURL: NSURL? = nil,
+        inDirectory directory:NSSearchPathDirectory = .DocumentDirectory,
         callback: CoreDataStackSetupCallback) {
             let model = bundle.managedObjectModel(modelName: modelName)
-            let storeFileURL = desiredStoreURL ?? NSURL(string: "\(modelName).sqlite", relativeToURL: documentsDirectory)!
+            let storeFileURL = desiredStoreURL ?? NSURL(string: "\(modelName).sqlite", relativeToURL: urlForDirectory(directory))!
             NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(model, storeFileURL: storeFileURL) { coordinatorResult in
                 switch coordinatorResult {
                 case .Success(let coordinator):
@@ -164,6 +165,7 @@ public final class CoreDataStack {
             object: mainQueueContext)
     }
 
+    
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
@@ -355,11 +357,9 @@ private extension CoreDataStack {
 }
 
 private extension CoreDataStack {
-    private static var documentsDirectory: NSURL? {
-        get {
-            let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
-            return urls.first
-        }
+    private static func urlForDirectory(directory:NSSearchPathDirectory) -> NSURL? {
+        let urls = NSFileManager.defaultManager().URLsForDirectory(directory, inDomains: .UserDomainMask)
+        return urls.first
     }
 }
 
