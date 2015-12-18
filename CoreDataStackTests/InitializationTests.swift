@@ -89,22 +89,6 @@ class CoreDataStackTests: TempDirectoryTestCase {
         XCTAssertTrue(fileExists("TestModel.sqlite", directory: .CachesDirectory))
     }
     
-    func testInitializationToInvalidiOSDirectoryReturnsFailure() {
-        let ex1 = expectationWithDescription("SQLite Callback")
-
-        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: bundle, inDirectory: NSSearchPathDirectory.SharedPublicDirectory) { result in
-            switch result {
-            case .Success(_):
-                XCTFail()
-            case .Failure(let error):
-                print(error)
-            }
-            ex1.fulfill()
-        }
-        
-        waitForExpectationsWithTimeout(10, handler: nil)
-    }
-    
     private func fileExists(fileName:String,directory:NSSearchPathDirectory) -> Bool {
         let urls = NSFileManager.defaultManager().URLsForDirectory(directory, inDomains: .UserDomainMask)
         let fileURL = urls.first?.URLByAppendingPathComponent(fileName)
