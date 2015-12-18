@@ -17,7 +17,7 @@ class CoreDataStackTests: TempDirectoryTestCase {
     var stack: CoreDataStack!
     var memoryStore: CoreDataStack!
 
-    func testInitialization() throws {
+    func testInitialization() {
         let bundle = NSBundle(forClass: CoreDataStackTests.self)
         let ex1 = expectationWithDescription("SQLite Callback")
 
@@ -33,7 +33,7 @@ class CoreDataStackTests: TempDirectoryTestCase {
         }
 
         do {
-            try stack = CoreDataStack.constructInMemoryStack(withModelName: "TestModel", inBundle: bundle)
+            try memoryStore = CoreDataStack.constructInMemoryStack(withModelName: "TestModel", inBundle: bundle)
         } catch {
             XCTFail("\(error)")
         }
@@ -47,4 +47,25 @@ class CoreDataStackTests: TempDirectoryTestCase {
         XCTAssertNotNil(memoryStore.privateQueueContext)
     }
 
+    func testInitializationToDefaultDirectory() {
+        let bundle = NSBundle(forClass: CoreDataStackTests.self)
+        let ex1 = expectationWithDescription("SQLite Callback")
+        
+        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: bundle) { result in
+            switch result {
+            case .Success(let stack):
+                self.stack = stack
+            case .Failure(let error):
+                print(error)
+                XCTFail()
+            }
+            ex1.fulfill()
+        }
+        
+        waitForExpectationsWithTimeout(10, handler: nil)
+        
+        XCTAssertNotNil(stack.mainQueueContext)
+        XCTAssertNotNil(stack.privateQueueContext)
+    }
+    
 }
