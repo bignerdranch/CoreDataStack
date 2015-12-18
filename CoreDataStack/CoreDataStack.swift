@@ -22,6 +22,8 @@ public enum CoreDataStackError: ErrorType {
     case StoreNotFoundAtURL(url: NSURL)
     /// Case when an In-Memory store is not found
     case InMemoryStoreMissing
+    /// Case when using an invalid directory while creating a store
+    case InvalidDirectoryForStore
 }
 
 /**
@@ -94,7 +96,7 @@ public final class CoreDataStack {
         withStoreURL desiredStoreURL: NSURL? = nil,
         callback: CoreDataStackSetupCallback) {
             let model = bundle.managedObjectModel(modelName: modelName)
-            let storeFileURL = desiredStoreURL ?? NSURL(string: "\(modelName).sqlite", relativeToURL: documentsDirectory)!
+            let storeFileURL = desiredStoreURL ?? NSURL(string: "\(modelName).sqlite", relativeToURL: urlForDirectory(.DocumentDirectory))!
             NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(model, storeFileURL: storeFileURL) { coordinatorResult in
                 switch coordinatorResult {
                 case .Success(let coordinator):
@@ -105,7 +107,28 @@ public final class CoreDataStack {
                 }
             }
     }
-
+    
+    /**
+     Creates a `SQLite` backed Core Data stack for a given model in the supplied `NSBundle` using a specific directory.
+     
+     - parameter modelName: Base name of the `XCDataModel` file.
+     - parameter inBundle: NSBundle that contains the `XCDataModel`. Default value is mainBundle()
+     - parameter inDirectory: Directory that will be used to create the `SQLite` file
+     - parameter callback: The `SQLite` persistent store coordinator will be setup asynchronously. This callback will be passed either an initialized `CoreDataStack` object or an `ErrorType` value.
+     */
+    public static func constructSQLiteStack(withModelName modelName: String,
+        inBundle bundle: NSBundle = NSBundle.mainBundle(),
+        inDirectory directory: NSSearchPathDirectory,
+        callback: CoreDataStackSetupCallback) {
+            if let directoryURL = urlForDirectory(directory) {
+                let storeURL = NSURL(string: "\(modelName).sqlite", relativeToURL: directoryURL)
+                constructSQLiteStack(withModelName: modelName, inBundle: bundle, withStoreURL: storeURL, callback: callback)
+            }
+            else {
+                callback(.Failure(CoreDataStackError.InvalidDirectoryForStore))
+            }
+    }
+    
     /**
     Creates an in-memory Core Data stack for a given model in the supplied `NSBundle`.
     
@@ -164,6 +187,7 @@ public final class CoreDataStack {
             object: mainQueueContext)
     }
 
+    
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
@@ -355,11 +379,8 @@ private extension CoreDataStack {
 }
 
 private extension CoreDataStack {
-    private static var documentsDirectory: NSURL? {
-        get {
-            let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
-            return urls.first
-        }
+    private static func urlForDirectory(directory: NSSearchPathDirectory) -> NSURL? {
+        return try? NSFileManager.defaultManager().URLForDirectory(directory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false)
     }
 }
 
