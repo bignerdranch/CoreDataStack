@@ -12,13 +12,13 @@ import CoreData
 
 @testable import CoreDataStack
 
-class CoreDataStackTests: TempDirectoryTestCase {
+class InitializationTests: TempDirectoryTestCase {
 
     var stack: CoreDataStack!
     var memoryStore: CoreDataStack!
 
-    func testInitialization() throws {
-        let bundle = NSBundle(forClass: CoreDataStackTests.self)
+    func testInitialization() {
+        let bundle = NSBundle(forClass: InitializationTests.self)
         let ex1 = expectationWithDescription("SQLite Callback")
 
         CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: bundle, withStoreURL: tempStoreURL) { result in
@@ -33,7 +33,7 @@ class CoreDataStackTests: TempDirectoryTestCase {
         }
 
         do {
-            try stack = CoreDataStack.constructInMemoryStack(withModelName: "TestModel", inBundle: bundle)
+            try memoryStore = CoreDataStack.constructInMemoryStack(withModelName: "TestModel", inBundle: bundle)
         } catch {
             XCTFail("\(error)")
         }
