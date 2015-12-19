@@ -29,7 +29,7 @@ class BatchOperationContextTests: TempDirectoryTestCase {
         let ex1 = expectationWithDescription("StackSetup")
         let ex2 = expectationWithDescription("MocSetup")
 
-        let bundle = NSBundle(forClass: CoreDataStackTests.self)
+        let bundle = NSBundle(forClass: BatchOperationContextTests.self)
 
         CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: bundle, withStoreURL: tempStoreURL) { result in
             switch result {

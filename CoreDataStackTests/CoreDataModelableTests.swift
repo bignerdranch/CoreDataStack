@@ -17,7 +17,7 @@ class CoreDataModelableTests: TempDirectoryTestCase {
     override func setUp() {
         super.setUp()
 
-        let bundle = NSBundle(forClass: CoreDataStackTests.self)
+        let bundle = NSBundle(forClass: CoreDataModelableTests.self)
         let expectation = expectationWithDescription("callback")
         CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: bundle, withStoreURL: tempStoreURL) { result in
             switch result {

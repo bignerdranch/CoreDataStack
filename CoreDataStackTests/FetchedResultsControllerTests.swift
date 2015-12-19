@@ -55,7 +55,7 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
         super.setUp()
 
         let setupEx = expectationWithDescription("Setup")
-        let bundle = NSBundle(forClass: CoreDataStackTests.self)
+        let bundle = NSBundle(forClass: FetchedResultsControllerTests.self)
 
         // Setup Stack
         CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: bundle, withStoreURL: tempStoreURL) { result in

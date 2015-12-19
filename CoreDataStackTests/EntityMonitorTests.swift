@@ -56,7 +56,7 @@ class EntityMonitorTests: TempDirectoryTestCase {
         super.setUp()
 
         let setupEx = expectationWithDescription("Setup")
-        let bundle = NSBundle(forClass: CoreDataStackTests.self)
+        let bundle = NSBundle(forClass: EntityMonitorTests.self)
 
         CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: bundle, withStoreURL: tempStoreURL) { result in
             switch result {
