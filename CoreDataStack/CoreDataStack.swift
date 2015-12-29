@@ -142,6 +142,11 @@ public final class CoreDataStack {
             privateQueueContext = constructPersistingContext()
             privateQueueContext.persistentStoreCoordinator = persistentStoreCoordinator
             mainQueueContext = constructMainQueueContext()
+            
+            NSNotificationCenter.defaultCenter().addObserver(self,
+                selector: "stackMemberContextDidSaveNotification:",
+                name: NSManagedObjectContextDidSaveNotification,
+                object: mainQueueContext)
         }
     }
     private var managedObjectModel: NSManagedObjectModel {
