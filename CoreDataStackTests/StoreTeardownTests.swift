@@ -20,7 +20,7 @@ class StoreTeardownTests: TempDirectoryTestCase {
     override func setUp() {
         super.setUp()
 
-        let expectation = expectationWithDescription("callback")
+        weak var expectation = expectationWithDescription("callback")
         CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
             switch result {
             case .Success(let stack):
@@ -28,7 +28,7 @@ class StoreTeardownTests: TempDirectoryTestCase {
             case .Failure(let error):
                 XCTFail("Error constructing stack: \(error)")
             }
-            expectation.fulfill()
+            expectation?.fulfill()
         }
 
         memoryStack = try! CoreDataStack.constructInMemoryStack(withModelName: "TestModel", inBundle: unitTestBundle)
@@ -50,7 +50,7 @@ class StoreTeardownTests: TempDirectoryTestCase {
         try! worker.saveContextAndWait()
 
         // The reset function will wait for all changes to bubble up before removing the store file.
-        let expectation = expectationWithDescription("callback")
+        weak var expectation = expectationWithDescription("callback")
         expectationForNotification(NSManagedObjectContextDidSaveNotification, object: sqlStack.privateQueueContext, handler: nil)
         sqlStack.resetStore() { result in
             switch result {
@@ -69,7 +69,7 @@ class StoreTeardownTests: TempDirectoryTestCase {
                 print(error)
                 XCTFail()
             }
-            expectation.fulfill()
+            expectation?.fulfill()
         }
         waitForExpectationsWithTimeout(10, handler: nil)
     }
@@ -87,7 +87,7 @@ class StoreTeardownTests: TempDirectoryTestCase {
         try! worker.saveContextAndWait()
 
         // The reset function will wait for all changes to bubble up before removing the store file.
-        let expectation = expectationWithDescription("callback")
+        weak var expectation = expectationWithDescription("callback")
         memoryStack.resetStore() { result in
             switch result {
             case .Success:
@@ -104,7 +104,7 @@ class StoreTeardownTests: TempDirectoryTestCase {
                 print(error)
                 XCTFail()
             }
-            expectation.fulfill()
+            expectation?.fulfill()
         }
         waitForExpectationsWithTimeout(10, handler: nil)
     }

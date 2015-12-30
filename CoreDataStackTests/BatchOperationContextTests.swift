@@ -26,8 +26,8 @@ class BatchOperationContextTests: TempDirectoryTestCase {
     override func setUp() {
         super.setUp()
 
-        let ex1 = expectationWithDescription("StackSetup")
-        let ex2 = expectationWithDescription("MocSetup")
+        weak var ex1 = expectationWithDescription("StackSetup")
+        weak var ex2 = expectationWithDescription("MocSetup")
 
         CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
             switch result {
@@ -40,12 +40,12 @@ class BatchOperationContextTests: TempDirectoryTestCase {
                     case .Failure(let error):
                         XCTFail("Error creating batch operation context: \(error)")
                     }
-                    ex2.fulfill()
+                    ex2?.fulfill()
                 }
             case .Failure(let error):
                 XCTFail("Error constructing stack: \(error)")
             }
-            ex1.fulfill()
+            ex1?.fulfill()
         }
 
         waitForExpectationsWithTimeout(10, handler: nil)

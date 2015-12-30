@@ -15,7 +15,7 @@ import CoreData
 class ModelMigrationTests: TempDirectoryTestCase {
     
     func testVersionMigration() throws {
-        let ex1 = expectationWithDescription("Setup Expectation")
+        weak var ex1 = expectationWithDescription("Setup Expectation")
         CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
             switch result {
             case .Success(let stack):
@@ -23,7 +23,7 @@ class ModelMigrationTests: TempDirectoryTestCase {
             case .Failure(let error):
                 XCTFail("Error constructing stack: \(error)")
             }
-            ex1.fulfill()
+            ex1?.fulfill()
         }
         waitForExpectationsWithTimeout(20, handler: nil)
     }

@@ -55,7 +55,7 @@ class EntityMonitorTests: TempDirectoryTestCase {
     override func setUp() {
         super.setUp()
 
-        let setupEx = expectationWithDescription("Setup")
+        weak var setupEx = expectationWithDescription("Setup")
 
         CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
             switch result {
@@ -65,7 +65,7 @@ class EntityMonitorTests: TempDirectoryTestCase {
                 print(error)
                 XCTFail()
             }
-            setupEx.fulfill()
+            setupEx?.fulfill()
         }
 
         waitForExpectationsWithTimeout(10, handler: nil)

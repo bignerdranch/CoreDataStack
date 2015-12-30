@@ -39,7 +39,7 @@ class CoreDataStackTVTests: TempDirectoryTestCase {
             case .Failure(let error):
                 XCTFail("\(error)")
             }
-            ex1.fulfill()
+            ex1?.fulfill()
         }
         waitForExpectationsWithTimeout(10, handler: nil)
     }

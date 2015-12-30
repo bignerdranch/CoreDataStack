@@ -17,7 +17,7 @@ class CoreDataModelableTests: TempDirectoryTestCase {
     override func setUp() {
         super.setUp()
 
-        let expectation = expectationWithDescription("callback")
+        weak var expectation = expectationWithDescription("callback")
         CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
             switch result {
             case .Success(let stack):
@@ -25,7 +25,7 @@ class CoreDataModelableTests: TempDirectoryTestCase {
             case .Failure(let error):
                 XCTFail("Error constructing stack: \(error)")
             }
-            expectation.fulfill()
+            expectation?.fulfill()
         }
 
         waitForExpectationsWithTimeout(10, handler: nil)

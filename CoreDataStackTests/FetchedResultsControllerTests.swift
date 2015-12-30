@@ -54,7 +54,7 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
     override func setUp() {
         super.setUp()
 
-        let setupEx = expectationWithDescription("Setup")
+        weak var setupEx = expectationWithDescription("Setup")
 
         // Setup Stack
         CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
@@ -65,7 +65,7 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
                 print(error)
                 XCTFail()
             }
-            setupEx.fulfill()
+            setupEx?.fulfill()
         }
         waitForExpectationsWithTimeout(10, handler: nil)
 
