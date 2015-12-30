@@ -13,21 +13,19 @@ import CoreData
 @testable import CoreDataStack
 
 class ModelMigrationTests: TempDirectoryTestCase {
-
-    let bundle = NSBundle(forClass: ModelMigrationTests.self)
     
     func testVersionMigration() throws {
-        let ex1 = expectationWithDescription("Setup Expectation")
-        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: bundle, withStoreURL: tempStoreURL) { result in
+        weak var ex1 = expectationWithDescription("Setup Expectation")
+        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
             switch result {
             case .Success(let stack):
                 XCTAssertNotNil(stack.mainQueueContext)
             case .Failure(let error):
                 XCTFail("Error constructing stack: \(error)")
             }
-            ex1.fulfill()
+            ex1?.fulfill()
         }
         waitForExpectationsWithTimeout(20, handler: nil)
     }
-    
+
 }

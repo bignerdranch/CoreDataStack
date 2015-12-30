@@ -17,16 +17,15 @@ class CoreDataModelableTests: TempDirectoryTestCase {
     override func setUp() {
         super.setUp()
 
-        let bundle = NSBundle(forClass: CoreDataStackTests.self)
-        let expectation = expectationWithDescription("callback")
-        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: bundle, withStoreURL: tempStoreURL) { result in
+        weak var expectation = expectationWithDescription("callback")
+        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
             switch result {
             case .Success(let stack):
                 self.stack = stack
             case .Failure(let error):
                 XCTFail("Error constructing stack: \(error)")
             }
-            expectation.fulfill()
+            expectation?.fulfill()
         }
 
         waitForExpectationsWithTimeout(10, handler: nil)

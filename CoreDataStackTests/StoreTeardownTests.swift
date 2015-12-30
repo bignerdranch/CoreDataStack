@@ -14,25 +14,24 @@ import CoreData
 
 class StoreTeardownTests: TempDirectoryTestCase {
 
-    var stack: CoreDataStack!
+    var sqlStack: CoreDataStack!
     var memoryStack: CoreDataStack!
 
     override func setUp() {
         super.setUp()
 
-        let bundle = NSBundle(forClass: CoreDataStackTests.self)
-        let expectation = expectationWithDescription("callback")
-        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: bundle, withStoreURL: tempStoreURL) { result in
+        weak var expectation = expectationWithDescription("callback")
+        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
             switch result {
             case .Success(let stack):
-                self.stack = stack
+                self.sqlStack = stack
             case .Failure(let error):
                 XCTFail("Error constructing stack: \(error)")
             }
-            expectation.fulfill()
+            expectation?.fulfill()
         }
 
-        memoryStack = try! CoreDataStack.constructInMemoryStack(withModelName: "TestModel", inBundle: bundle)
+        memoryStack = try! CoreDataStack.constructInMemoryStack(withModelName: "TestModel", inBundle: unitTestBundle)
 
         waitForExpectationsWithTimeout(10, handler: nil)
     }
@@ -40,7 +39,7 @@ class StoreTeardownTests: TempDirectoryTestCase {
 
     func testPersistentStoreReset() {
         // Insert some fresh objects
-        let worker = stack.newBackgroundWorkerMOC()
+        let worker = sqlStack.newBackgroundWorkerMOC()
         worker.performBlockAndWait() {
             for _ in 0..<100 {
                 NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: worker)
@@ -51,13 +50,13 @@ class StoreTeardownTests: TempDirectoryTestCase {
         try! worker.saveContextAndWait()
 
         // The reset function will wait for all changes to bubble up before removing the store file.
-        let expectation = expectationWithDescription("callback")
-        expectationForNotification(NSManagedObjectContextDidSaveNotification, object: stack.privateQueueContext, handler: nil)
-        stack.resetStore() { result in
+        weak var expectation = expectationWithDescription("callback")
+        expectationForNotification(NSManagedObjectContextDidSaveNotification, object: sqlStack.privateQueueContext, handler: nil)
+        sqlStack.resetStore() { result in
             switch result {
             case .Success:
                 // Insert some objects after a reset
-                let worker = self.stack.newBackgroundWorkerMOC()
+                let worker = self.sqlStack.newBackgroundWorkerMOC()
                 worker.performBlockAndWait() {
                     for _ in 0..<100 {
                         NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: worker)
@@ -70,7 +69,7 @@ class StoreTeardownTests: TempDirectoryTestCase {
                 print(error)
                 XCTFail()
             }
-            expectation.fulfill()
+            expectation?.fulfill()
         }
         waitForExpectationsWithTimeout(10, handler: nil)
     }
@@ -88,12 +87,12 @@ class StoreTeardownTests: TempDirectoryTestCase {
         try! worker.saveContextAndWait()
 
         // The reset function will wait for all changes to bubble up before removing the store file.
-        let expectation = expectationWithDescription("callback")
+        weak var expectation = expectationWithDescription("callback")
         memoryStack.resetStore() { result in
             switch result {
             case .Success:
                 // Insert some objects after a reset
-                let worker = self.stack.newBackgroundWorkerMOC()
+                let worker = self.sqlStack.newBackgroundWorkerMOC()
                 worker.performBlockAndWait() {
                     for _ in 0..<100 {
                         NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: worker)
@@ -105,7 +104,7 @@ class StoreTeardownTests: TempDirectoryTestCase {
                 print(error)
                 XCTFail()
             }
-            expectation.fulfill()
+            expectation?.fulfill()
         }
         waitForExpectationsWithTimeout(10, handler: nil)
     }

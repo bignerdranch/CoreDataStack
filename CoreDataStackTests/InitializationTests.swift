@@ -12,39 +12,56 @@ import CoreData
 
 @testable import CoreDataStack
 
-class CoreDataStackTests: TempDirectoryTestCase {
+class InitializationTests: TempDirectoryTestCase {
 
-    var stack: CoreDataStack!
-    var memoryStore: CoreDataStack!
+    var sqlStack: CoreDataStack!
+    var memoryStack: CoreDataStack!
 
-    func testInitialization() throws {
-        let bundle = NSBundle(forClass: CoreDataStackTests.self)
-        let ex1 = expectationWithDescription("SQLite Callback")
+    func testInitialization() {
+        weak var ex1 = expectationWithDescription("SQLite Callback")
 
-        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: bundle, withStoreURL: tempStoreURL) { result in
+        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
             switch result {
             case .Success(let stack):
-                self.stack = stack
+                self.sqlStack = stack
             case .Failure(let error):
                 print(error)
                 XCTFail()
             }
-            ex1.fulfill()
+            ex1?.fulfill()
         }
 
         do {
-            try stack = CoreDataStack.constructInMemoryStack(withModelName: "TestModel", inBundle: bundle)
+            try memoryStack = CoreDataStack.constructInMemoryStack(withModelName: "TestModel", inBundle: unitTestBundle)
         } catch {
             XCTFail("\(error)")
         }
 
         waitForExpectationsWithTimeout(10, handler: nil)
 
-        XCTAssertNotNil(stack.mainQueueContext)
-        XCTAssertNotNil(stack.privateQueueContext)
+        XCTAssertNotNil(sqlStack.mainQueueContext)
+        XCTAssertNotNil(sqlStack.privateQueueContext)
 
-        XCTAssertNotNil(memoryStore.mainQueueContext)
-        XCTAssertNotNil(memoryStore.privateQueueContext)
+        XCTAssertNotNil(memoryStack.mainQueueContext)
+        XCTAssertNotNil(memoryStack.privateQueueContext)
     }
 
+    func testExpectedFailureOfInitializationUsingInvalidURL() {
+        weak var ex1 = expectationWithDescription("SQLite Callback")
+        let storeURL = NSURL(fileURLWithPath: "/store.sqlite")
+        
+        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: unitTestBundle, withStoreURL: storeURL) { result in
+            switch result {
+            case .Success(_):
+                XCTFail()
+            case .Failure(let error):
+                print(error)
+            }
+            ex1?.fulfill()
+        }
+        
+        waitForExpectationsWithTimeout(10, handler: nil)
+        
+        XCTAssertNil(sqlStack)
+    }
 }

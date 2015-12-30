@@ -14,7 +14,7 @@ import CoreData
 
 class BatchOperationContextTests: TempDirectoryTestCase {
 
-    var stack: CoreDataStack!
+    var sqlStack: CoreDataStack!
     var operationContext: NSManagedObjectContext!
 
     var bookFetchRequest: NSFetchRequest {
@@ -26,15 +26,13 @@ class BatchOperationContextTests: TempDirectoryTestCase {
     override func setUp() {
         super.setUp()
 
-        let ex1 = expectationWithDescription("StackSetup")
-        let ex2 = expectationWithDescription("MocSetup")
+        weak var ex1 = expectationWithDescription("StackSetup")
+        weak var ex2 = expectationWithDescription("MocSetup")
 
-        let bundle = NSBundle(forClass: CoreDataStackTests.self)
-
-        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: bundle, withStoreURL: tempStoreURL) { result in
+        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
             switch result {
             case .Success(let stack):
-                self.stack = stack
+                self.sqlStack = stack
                 stack.newBatchOperationContext() { (result) in
                     switch result {
                     case .Success(let context):
@@ -42,12 +40,12 @@ class BatchOperationContextTests: TempDirectoryTestCase {
                     case .Failure(let error):
                         XCTFail("Error creating batch operation context: \(error)")
                     }
-                    ex2.fulfill()
+                    ex2?.fulfill()
                 }
             case .Failure(let error):
                 XCTFail("Error constructing stack: \(error)")
             }
-            ex1.fulfill()
+            ex1?.fulfill()
         }
 
         waitForExpectationsWithTimeout(10, handler: nil)
@@ -68,7 +66,7 @@ class BatchOperationContextTests: TempDirectoryTestCase {
             try! operationMOC.save()
         }
 
-        let mainMOC = stack.mainQueueContext
+        let mainMOC = sqlStack.mainQueueContext
 
         do {
             if let books = try mainMOC.executeFetchRequest(bookFetchRequest) as? [Book] {
