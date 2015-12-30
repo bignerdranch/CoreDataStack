@@ -46,7 +46,7 @@ class InitializationTests: TempDirectoryTestCase {
         XCTAssertNotNil(memoryStack.privateQueueContext)
     }
 
-    func testInitializationWithInvalidStoreURL() {
+    func testExpectedFailureOfInitializationUsingInvalidURL() {
         weak var ex1 = expectationWithDescription("SQLite Callback")
         let storeURL = NSURL(fileURLWithPath: "/store.sqlite")
         
