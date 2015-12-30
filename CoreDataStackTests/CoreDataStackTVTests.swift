@@ -18,11 +18,10 @@ class CoreDataStackTVTests: TempDirectoryTestCase {
     override func setUp() {
         super.setUp()
 
-        let bundle = NSBundle(forClass: CoreDataStackTVTests.self)
         let modelName = "TestModel"
 
         do {
-            inMemoryStack = try CoreDataStack.constructInMemoryStack(withModelName: modelName, inBundle: bundle)
+            inMemoryStack = try CoreDataStack.constructInMemoryStack(withModelName: modelName, inBundle: unitTestBundle)
         } catch {
             XCTFail("\(error)")
         }
@@ -32,8 +31,8 @@ class CoreDataStackTVTests: TempDirectoryTestCase {
             return
         }
 
-        let ex1 = expectationWithDescription("SQLite Setup")
-        CoreDataStack.constructSQLiteStack(withModelName: modelName, inBundle: bundle, withStoreURL: tempStoreURL) { result in
+        weak var ex1 = expectationWithDescription("SQLite Setup")
+        CoreDataStack.constructSQLiteStack(withModelName: modelName, inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
             switch result {
             case .Success(let stack):
                 self.sqlStack = stack
