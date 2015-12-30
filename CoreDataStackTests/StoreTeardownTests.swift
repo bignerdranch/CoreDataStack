@@ -52,6 +52,7 @@ class StoreTeardownTests: TempDirectoryTestCase {
 
         // The reset function will wait for all changes to bubble up before removing the store file.
         let expectation = expectationWithDescription("callback")
+        expectationForNotification(NSManagedObjectContextDidSaveNotification, object: stack.privateQueueContext, handler: nil)
         stack.resetStore() { result in
             switch result {
             case .Success:

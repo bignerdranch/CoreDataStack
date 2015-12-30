@@ -67,6 +67,11 @@ public final class CoreDataStack {
             managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
             managedObjectContext.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
             managedObjectContext.parentContext = self.privateQueueContext
+            
+            NSNotificationCenter.defaultCenter().addObserver(self,
+                selector: "stackMemberContextDidSaveNotification:",
+                name: NSManagedObjectContextDidSaveNotification,
+                object: managedObjectContext)
         }
         // Always create the main-queue ManagedObjectContext on the main queue.
         if !NSThread.isMainThread() {
@@ -157,11 +162,6 @@ public final class CoreDataStack {
 
         self.persistentStoreCoordinator = persistentStoreCoordinator
         privateQueueContext.persistentStoreCoordinator = persistentStoreCoordinator
-
-        NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: "stackMemberContextDidSaveNotification:",
-            name: NSManagedObjectContextDidSaveNotification,
-            object: mainQueueContext)
     }
 
     deinit {
