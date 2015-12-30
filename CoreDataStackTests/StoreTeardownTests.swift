@@ -14,7 +14,7 @@ import CoreData
 
 class StoreTeardownTests: TempDirectoryTestCase {
 
-    var stack: CoreDataStack!
+    var sqlStack: CoreDataStack!
     var memoryStack: CoreDataStack!
 
     override func setUp() {
@@ -25,7 +25,7 @@ class StoreTeardownTests: TempDirectoryTestCase {
         CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: bundle, withStoreURL: tempStoreURL) { result in
             switch result {
             case .Success(let stack):
-                self.stack = stack
+                self.sqlStack = stack
             case .Failure(let error):
                 XCTFail("Error constructing stack: \(error)")
             }
@@ -40,7 +40,7 @@ class StoreTeardownTests: TempDirectoryTestCase {
 
     func testPersistentStoreReset() {
         // Insert some fresh objects
-        let worker = stack.newBackgroundWorkerMOC()
+        let worker = sqlStack.newBackgroundWorkerMOC()
         worker.performBlockAndWait() {
             for _ in 0..<100 {
                 NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: worker)
@@ -52,12 +52,12 @@ class StoreTeardownTests: TempDirectoryTestCase {
 
         // The reset function will wait for all changes to bubble up before removing the store file.
         let expectation = expectationWithDescription("callback")
-        expectationForNotification(NSManagedObjectContextDidSaveNotification, object: stack.privateQueueContext, handler: nil)
-        stack.resetStore() { result in
+        expectationForNotification(NSManagedObjectContextDidSaveNotification, object: sqlStack.privateQueueContext, handler: nil)
+        sqlStack.resetStore() { result in
             switch result {
             case .Success:
                 // Insert some objects after a reset
-                let worker = self.stack.newBackgroundWorkerMOC()
+                let worker = self.sqlStack.newBackgroundWorkerMOC()
                 worker.performBlockAndWait() {
                     for _ in 0..<100 {
                         NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: worker)
@@ -93,7 +93,7 @@ class StoreTeardownTests: TempDirectoryTestCase {
             switch result {
             case .Success:
                 // Insert some objects after a reset
-                let worker = self.stack.newBackgroundWorkerMOC()
+                let worker = self.sqlStack.newBackgroundWorkerMOC()
                 worker.performBlockAndWait() {
                     for _ in 0..<100 {
                         NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: worker)

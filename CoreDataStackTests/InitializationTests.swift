@@ -14,8 +14,8 @@ import CoreData
 
 class InitializationTests: TempDirectoryTestCase {
 
-    var stack: CoreDataStack!
-    var memoryStore: CoreDataStack!
+    var sqlStack: CoreDataStack!
+    var memoryStack: CoreDataStack!
     let bundle = NSBundle(forClass: InitializationTests.self)
 
     func testInitialization() {
@@ -24,7 +24,7 @@ class InitializationTests: TempDirectoryTestCase {
         CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: bundle, withStoreURL: tempStoreURL) { result in
             switch result {
             case .Success(let stack):
-                self.stack = stack
+                self.sqlStack = stack
             case .Failure(let error):
                 print(error)
                 XCTFail()
@@ -33,18 +33,18 @@ class InitializationTests: TempDirectoryTestCase {
         }
 
         do {
-            try memoryStore = CoreDataStack.constructInMemoryStack(withModelName: "TestModel", inBundle: bundle)
+            try memoryStack = CoreDataStack.constructInMemoryStack(withModelName: "TestModel", inBundle: bundle)
         } catch {
             XCTFail("\(error)")
         }
 
         waitForExpectationsWithTimeout(10, handler: nil)
 
-        XCTAssertNotNil(stack.mainQueueContext)
-        XCTAssertNotNil(stack.privateQueueContext)
+        XCTAssertNotNil(sqlStack.mainQueueContext)
+        XCTAssertNotNil(sqlStack.privateQueueContext)
 
-        XCTAssertNotNil(memoryStore.mainQueueContext)
-        XCTAssertNotNil(memoryStore.privateQueueContext)
+        XCTAssertNotNil(memoryStack.mainQueueContext)
+        XCTAssertNotNil(memoryStack.privateQueueContext)
     }
 
     func testInitializationWithInvalidStoreURL() {
@@ -63,6 +63,6 @@ class InitializationTests: TempDirectoryTestCase {
         
         waitForExpectationsWithTimeout(10, handler: nil)
         
-        XCTAssertNil(stack)
+        XCTAssertNil(sqlStack)
     }
 }

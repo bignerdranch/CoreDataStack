@@ -14,7 +14,7 @@ import CoreData
 
 class BatchOperationContextTests: TempDirectoryTestCase {
 
-    var stack: CoreDataStack!
+    var sqlStack: CoreDataStack!
     var operationContext: NSManagedObjectContext!
 
     var bookFetchRequest: NSFetchRequest {
@@ -34,7 +34,7 @@ class BatchOperationContextTests: TempDirectoryTestCase {
         CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: bundle, withStoreURL: tempStoreURL) { result in
             switch result {
             case .Success(let stack):
-                self.stack = stack
+                self.sqlStack = stack
                 stack.newBatchOperationContext() { (result) in
                     switch result {
                     case .Success(let context):
@@ -68,7 +68,7 @@ class BatchOperationContextTests: TempDirectoryTestCase {
             try! operationMOC.save()
         }
 
-        let mainMOC = stack.mainQueueContext
+        let mainMOC = sqlStack.mainQueueContext
 
         do {
             if let books = try mainMOC.executeFetchRequest(bookFetchRequest) as? [Book] {
