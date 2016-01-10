@@ -366,7 +366,10 @@ private extension CoreDataStack {
 private extension NSBundle {
     static private let modelExtension = "momd"
     func managedObjectModel(modelName modelName: String) -> NSManagedObjectModel {
-        let URL = URLForResource(modelName, withExtension: NSBundle.modelExtension)!
-        return NSManagedObjectModel(contentsOfURL: URL)!
+        guard let URL = URLForResource(modelName, withExtension: NSBundle.modelExtension),
+            let model = NSManagedObjectModel(contentsOfURL: URL) else {
+                preconditionFailure("Model not found or corrupted with name: \(modelName) in bundle: \(self)")
+        }
+        return model
     }
 }
