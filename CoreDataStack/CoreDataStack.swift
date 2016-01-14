@@ -92,15 +92,17 @@ public final class CoreDataStack {
     - parameter modelName: Base name of the `XCDataModel` file.
     - parameter inBundle: NSBundle that contains the `XCDataModel`. Default value is mainBundle()
     - parameter withStoreURL: Optional URL to use for storing the `SQLite` file. Defaults to "(modelName).sqlite" in the Documents directory.
+    - parameter asynchronously: Bool to define if you want to create this stack asynchronously or synchronously.
     - parameter callback: The `SQLite` persistent store coordinator will be setup asynchronously. This callback will be passed either an initialized `CoreDataStack` object or an `ErrorType` value.
     */
     public static func constructSQLiteStack(withModelName modelName: String,
         inBundle bundle: NSBundle = NSBundle.mainBundle(),
         withStoreURL desiredStoreURL: NSURL? = nil,
+        asynchronously: Bool = true,
         callback: CoreDataStackSetupCallback) {
             let model = bundle.managedObjectModel(modelName: modelName)
             let storeFileURL = desiredStoreURL ?? NSURL(string: "\(modelName).sqlite", relativeToURL: documentsDirectory)!
-            NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(model, storeFileURL: storeFileURL) { coordinatorResult in
+            NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(model, storeFileURL: storeFileURL, asynchronously: asynchronously) { coordinatorResult in
                 switch coordinatorResult {
                 case .Success(let coordinator):
                     let stack = CoreDataStack(modelName : modelName, bundle: bundle, persistentStoreCoordinator: coordinator, storeType: .SQLite(storeURL: storeFileURL))

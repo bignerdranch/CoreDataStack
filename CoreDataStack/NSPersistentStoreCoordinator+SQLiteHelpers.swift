@@ -26,11 +26,12 @@ public extension NSPersistentStoreCoordinator {
 
     - parameter managedObjectModel: The `NSManagedObjectModel` describing the data model.
     - parameter storeFileURL: The URL where the SQLite store file will reside.
+    - parameter asynchronously: Bool to define if you want to create this asynchronously or synchronously.
     - parameter completion: A completion closure with a `CoordinatorResult` that will be executed following the `NSPersistentStore` being added to the `NSPersistentStoreCoordinator`.
     */
-    public class func setupSQLiteBackedCoordinator(managedObjectModel: NSManagedObjectModel, storeFileURL: NSURL, completion: (CoreDataStack.CoordinatorResult) -> Void) {
+    public class func setupSQLiteBackedCoordinator(managedObjectModel: NSManagedObjectModel, storeFileURL: NSURL, asynchronously: Bool = true, completion: (CoreDataStack.CoordinatorResult) -> Void) {
         let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
-        dispatch_async(backgroundQueue) {
+        let dispatchCompletionBlock = {
             do {
                 let coordinator = NSPersistentStoreCoordinator(managedObjectModel: managedObjectModel)
                 try coordinator.addPersistentStoreWithType(NSSQLiteStoreType,
@@ -42,5 +43,6 @@ public extension NSPersistentStoreCoordinator {
                 completion(.Failure(error))
             }
         }
+        asynchronously ? dispatch_async(backgroundQueue, dispatchCompletionBlock) : dispatch_sync(backgroundQueue, dispatchCompletionBlock)
     }
 }
