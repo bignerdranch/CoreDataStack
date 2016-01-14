@@ -194,8 +194,8 @@ public extension CoreDataStack {
     /// Result containing either an instance of `CoreDataStack` or `ErrorType`
     typealias SetupResult = CoreDataStackGenericResult<CoreDataStack>
     /// Result of void representing `Success` or an instance of `ErrorType`
-    
     public typealias SuccessResult = CoreDataStackResult
+    
     public typealias SaveResult = SuccessResult
     public typealias ResetResult = SuccessResult
 }
