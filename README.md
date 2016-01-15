@@ -25,7 +25,7 @@ For complete source documentation see: [Documentation](http://bignerdranch.githu
 
 Add the following to your Cartfile:
 
-```
+```ruby
 github "BigNerdRanch/CoreDataStack"
 ```
 
@@ -62,19 +62,19 @@ Then run `pod install`.
 
 via: Carthage
 
-```
+```swift
 import CoreDataStack
 ```
 
 or via CocoaPods
 
-```
+```swift
 import BNRCoreDataStack
 ```
 
 #### <a id="sqlite_construct"></a> Standard SQLite Backed
 
-```
+```swift
 CoreDataStack.constructSQLiteStack(withModelName: "TestModel") { result in
 	switch result {
 	case .Success(let stack):
@@ -88,7 +88,7 @@ CoreDataStack.constructSQLiteStack(withModelName: "TestModel") { result in
 
 #### In-Memory Only
 
-```
+```swift
 do {
 	myCoreDataStack = try CoreDataStack.constructInMemoryStack(withModelName: "TestModel")
 } catch {
@@ -102,7 +102,7 @@ do {
 
 This is the root level context with a `PrivateQueueConcurrencyType` for asynchronous saving to the `NSPersistentStore`. Fetching, Inserting, Deleting or Updating managed objects should occur on a child of this context rather than directly.
 
-```
+```swift
 myCoreDataStack.privateQueueContext
 ```
 
@@ -110,7 +110,7 @@ myCoreDataStack.privateQueueContext
 
 This is our `MainQueueConcurrencyType` context with its parent being the [private persisting context](#persisting_moc). This context should be used for any main queue or UI related tasks. Examples include setting up an `NSFetchedResultsController`, performing quick fetches, making UI related updates like a bookmark or favoriting an object. Performing a save() call on this context will automatically trigger a save on its parent via `NSNotification`.
 
-```
+```swift
 myCoreDataStack.mainQueueContext
 ``` 
 
@@ -118,7 +118,7 @@ myCoreDataStack.mainQueueContext
 
 Calling `newBackgroundWorkerMOC()` will vend us a `PrivateQueueConcurrencyType` child context of the [main queue context](#main_moc). Useful for any longer running task, such as inserting or updating data from a web service. Calling save() on this managed object context will automatically trigger a save on its parent context via `NSNotification`.
 
-```
+```swift
 let workerContext = myCoreDataStack.newBackgroundWorkerMOC()
 workerContext.performBlock() {
     // fetch data from web-service
@@ -131,7 +131,7 @@ workerContext.performBlock() {
 
 In most cases, offloading your longer running work to a [background worker context](#worker_moc) will be sufficient in alleviating performance woes. If you find yourself inserting or updating thousands of objects then perhaps opting for a stand alone managed object context with a discrete persistent store like so would be the best option:
 
-```
+```swift
 myCoreDataStack.newBatchOperationContext() { result in
     switch result {
     case .Success(let batchContext):
@@ -144,10 +144,11 @@ myCoreDataStack.newBatchOperationContext() { result in
 
 ### Resetting The Stack
 
-At times it can be necessary to completely reset your Core Data store and remove the file from disk, for example when a user logs out of your application. An instance of `CoreDataStack` can be reset by using the function `resetStore(resetCallback: CoreDataStackStoreResetCallback)`.
+At times it can be necessary to completely reset your Core Data store and remove the file from disk, for example when a user logs out of your application. An instance of `CoreDataStack` can be reset by using the function 
+`resetStore(resetCallback: CoreDataStackStoreResetCallback)`.
 
 
-```
+```swift
 myCoreDataStack.resetStore() { result in
     switch result {
     case .Success:
@@ -160,11 +161,11 @@ myCoreDataStack.resetStore() { result in
 
 ### Core Data Modelable Protocol
 
-'CoreDataModelable' is a simple protocol that adds convenience methods on 'NSManagedObject' subclasses. These methods make fetching, inserting, deleting, and change management easier.
+`CoreDataModelable` is a simple protocol that adds convenience methods on `NSManagedObject` subclasses. These methods make fetching, inserting, deleting, and change management easier.
 
 #### Example
 
-```
+```swift
 class Book: NSManagedObject, CoreDataModelable {
     static let entityName = "Book"
 }
@@ -196,9 +197,7 @@ See [EntityMonitorTests.swift](./CoreDataStackTests/EntityMonitorTests.swift) fo
 
 To validate that you are honoring all of the threading rules it's common to add the following to a project scheme under `Run > Arguments > Arguments Passed On Launch`.
 
-```
--com.apple.CoreData.ConcurrencyDebug 1
-```
+`-com.apple.CoreData.ConcurrencyDebug 1`
 
 This will throw an exception if you happen to break a threading rule. For more on setting up Launch Arguments check out this [article by NSHipster](http://nshipster.com/launch-arguments-and-environment-variables/).
 
