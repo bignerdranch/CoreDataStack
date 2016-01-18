@@ -8,7 +8,7 @@
 
 import XCTest
 
-import CoreDataStack
+@testable import CoreDataStack
 
 class CoreDataStackTVTests: TempDirectoryTestCase {
 
