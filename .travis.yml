@@ -5,6 +5,7 @@ xcode_sdk: iphonesimulator
 osx_image: xcode7.1
 after_success:
 - ./Resources/scripts/publish_docs.sh
+branches:
 only:
 - master
 env:
