@@ -1,18 +1,22 @@
 language: objective-c
-xcode_project: CoreDataStack.xcodeproj
-xcode_scheme: [ CoreDataStack, CoreDataStackTV ]
 xcode_sdk: iphonesimulator
-osx_image: xcode7.1
+osx_image: xcode7.2
+
+before_script:
+    - brew install carthage
+
 after_success:
-- ./Resources/scripts/publish_docs.sh
-notifications:
-  slack:
-    rooms:
-        secure: jMXLr9HZ8D4mZ3IFdXVaYMSmx2mYFqw4VjlvQyDKG5g1tLRdpjJz6pdjBjU5fFutRke3JyApBHXC+6MwI6N5mj0xhAGnEmTFFsnVI0fjI3RQfMqphGzQw3mTBw4shdq/l82lBgZ/fz0fXj2IuF/lJdSPqpXPePfTMBAe1b6okNQbxrTWDfQsE2MZzZKiROUZeGy9YvQi515XH67ysXoz9AHDyOOQPlbmM2ruKCJOFn7pywYXumAPhgV8E1PGtaBja6Zp+1zT7tH63H1R455/Coy5eh2FSMx3TPtGrIdw0ew8XGAkneKDsqU1eQSQxezpYl/mb/8JF5mRZOTa9Es1n4PyOWXBfcpuwnZnXvHJsbaLuHadS9EPVhyoPrlIMMUHSlZYKbDXzfLZedA7KmYQuwtR7R9b7SaXEyR/n2HvQpv0H8aTPlORxG2BElFxmyjNPQpCrKg8h+qo36Kgs9480zUQE2VWg+drc6A5JEMT/id9srFoDf4QoYXy6JS79rnkhAjne2PZ4ptv6dysUZqOZ5KBKWATINeYDs0ps2O3p5KHsWQGfdh7krHvLK/ZFUUtkh+VY4Th4UJ2sCKGIXkjtPcj7lK5dHWrbki5CJlw1roEj1Ah/meBILGC6tm/zn9Utr5qL4imhPwMz06JZiXvY6SKuCPvhK/ZOQ74iolH/7o=
-        on_failure: change
-        on_start: never
-only:
-- master
+    - ./Resources/scripts/publish_docs.sh
+
+branches:
+    only:
+        - master
 env:
-  global:
-    secure: MkSIUBcC2r81tYPf4an39/hd5eB98Q96HwpCQpu/11O3SDg9q/nIRDUzN8+N/jFXlaboqAEVTHFHIXIk2x8LFJojib8WOJdqXpERXOPbS483cJenmi/1vCcij7wW9O7+24Xo5/H/bprO3P3wbpYPb8mQWnpmdqyQs0IuXOVqsmfS6gftN9mgNlV8bwEPa5V9MbdJviA6kFryfruAVlFUcKd39bv1wRaPGPRZIWM+QzMNK3J+dPsyWBb+f7XBZa3bQ2/hYEdfWW5NU6GN93OZJjP7gwXssZbDZjPDVpM9lvx5suYVKeMyFL4QFTYo9TsNk/V94KnxYcqnhDZ/BFHyjysto3K5bixYTaWUJPBqUJi9F0+Vd9ldt627xaNHHiGevptHyUvWWwgH1S8cF55FGE/Ptwc3MRmrr3IFOqbFDHV/hpMr5Sroz2dCHJohzJZRnWUppMgSY4SXu+1bB3F1P40y22yUKirsjmwWfJEEBcWNpOnMQCgKvFKG89shGqGfXYcRXkouhOqnGVpSUV+92Fli7O9GzjvLxAVm127kPypTZYYUwAaowm0BF4+lLMLZxmpUP42fTzENhbYLofVrpOuR7tisEJshrmjF9XYZVvu9R39EyMscXN+fnMlGWGLFAkimd4lUZVAAcZT++GL3BCEFKD9gGEAGbdtW9M42Nyk=
+    global:
+        secure: MkSIUBcC2r81tYPf4an39/hd5eB98Q96HwpCQpu/11O3SDg9q/nIRDUzN8+N/jFXlaboqAEVTHFHIXIk2x8LFJojib8WOJdqXpERXOPbS483cJenmi/1vCcij7wW9O7+24Xo5/H/bprO3P3wbpYPb8mQWnpmdqyQs0IuXOVqsmfS6gftN9mgNlV8bwEPa5V9MbdJviA6kFryfruAVlFUcKd39bv1wRaPGPRZIWM+QzMNK3J+dPsyWBb+f7XBZa3bQ2/hYEdfWW5NU6GN93OZJjP7gwXssZbDZjPDVpM9lvx5suYVKeMyFL4QFTYo9TsNk/V94KnxYcqnhDZ/BFHyjysto3K5bixYTaWUJPBqUJi9F0+Vd9ldt627xaNHHiGevptHyUvWWwgH1S8cF55FGE/Ptwc3MRmrr3IFOqbFDHV/hpMr5Sroz2dCHJohzJZRnWUppMgSY4SXu+1bB3F1P40y22yUKirsjmwWfJEEBcWNpOnMQCgKvFKG89shGqGfXYcRXkouhOqnGVpSUV+92Fli7O9GzjvLxAVm127kPypTZYYUwAaowm0BF4+lLMLZxmpUP42fTzENhbYLofVrpOuR7tisEJshrmjF9XYZVvu9R39EyMscXN+fnMlGWGLFAkimd4lUZVAAcZT++GL3BCEFKD9gGEAGbdtW9M42Nyk=
+
+script:
+    - ./Resources/scripts/validate_carthage.sh
+    - pod spec lint BNRCoreDataStack.podspec
+    - xctool build test -parallelize -scheme CoreDataStackTV -project CoreDataStack.xcodeproj -sdk iphonesimulator
+    - xctool build test -parallelize -scheme CoreDataStack   -project CoreDataStack.xcodeproj -sdk iphonesimulator
