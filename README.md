@@ -203,7 +203,7 @@ This will throw an exception if you happen to break a threading rule. For more o
 
 ## About
 
-[![Big Nerd Ranch](./Resources/logo.png)](http://bignerdranch.com)
+[![Big Nerd Ranch](https://raw.githubusercontent.com/bignerdranch/CoreDataStack/master/Resources/logo.png)](http://bignerdranch.com)
 
 - We [Develop][develop] custom apps for clients around the world.
 - We [Teach][teach] immersive development bootcamps.
