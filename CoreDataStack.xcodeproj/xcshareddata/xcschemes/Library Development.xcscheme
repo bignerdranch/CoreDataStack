@@ -14,65 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E4C9BC2C1AEA848600A6BD1B"
-               BuildableName = "CoreDataStack.framework"
-               BlueprintName = "CoreDataStack"
-               ReferencedContainer = "container:CoreDataStack.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E45013081C23393500ADC83B"
-               BuildableName = "CoreDataStack.framework"
-               BlueprintName = "CoreDataStackTV"
-               ReferencedContainer = "container:CoreDataStack.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E45013311C23572400ADC83B"
-               BuildableName = "CoreDataStackTVTests.xctest"
-               BlueprintName = "CoreDataStackTVTests"
-               ReferencedContainer = "container:CoreDataStack.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E4C9BC371AEA848600A6BD1B"
-               BuildableName = "CoreDataStackTests.xctest"
-               BlueprintName = "CoreDataStackTests"
-               ReferencedContainer = "container:CoreDataStack.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E4B99C651B740321005B7E1A"
-               BuildableName = "Example.app"
-               BlueprintName = "Example"
+               BlueprintIdentifier = "E48714611C6119EC00365E48"
+               BuildableName = "LibraryDevelopment"
+               BlueprintName = "LibraryDevelopment"
                ReferencedContainer = "container:CoreDataStack.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -108,9 +52,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E4C9BC2C1AEA848600A6BD1B"
-            BuildableName = "CoreDataStack.framework"
-            BlueprintName = "CoreDataStack"
+            BlueprintIdentifier = "E48714611C6119EC00365E48"
+            BuildableName = "LibraryDevelopment"
+            BlueprintName = "LibraryDevelopment"
             ReferencedContainer = "container:CoreDataStack.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -130,9 +74,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E4C9BC2C1AEA848600A6BD1B"
-            BuildableName = "CoreDataStack.framework"
-            BlueprintName = "CoreDataStack"
+            BlueprintIdentifier = "E48714611C6119EC00365E48"
+            BuildableName = "LibraryDevelopment"
+            BlueprintName = "LibraryDevelopment"
             ReferencedContainer = "container:CoreDataStack.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -148,15 +92,15 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E4C9BC2C1AEA848600A6BD1B"
-            BuildableName = "CoreDataStack.framework"
-            BlueprintName = "CoreDataStack"
+            BlueprintIdentifier = "E48714611C6119EC00365E48"
+            BuildableName = "LibraryDevelopment"
+            BlueprintName = "LibraryDevelopment"
             ReferencedContainer = "container:CoreDataStack.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "Release">
+      buildConfiguration = "Debug">
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release"

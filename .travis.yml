@@ -4,6 +4,7 @@ osx_image: xcode7.2
 
 before_script:
     - brew install carthage
+    - gem install jazzy --no-rdoc --no-ri --no-document
 
 after_success:
     - ./Resources/scripts/publish_docs.sh

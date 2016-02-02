@@ -6,7 +6,7 @@
 
 if [ -z ${TRAVIS+x} ]; then
     TRAVIS_BUILD_DIR="/Users/redwards/workspace/CoreDataStack"
-    TRAVIS_BRANCH="rcedwards/testability_fix"
+    TRAVIS_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 fi
 
 echo "=================Creating Cartfile================="
@@ -32,3 +32,5 @@ echo "=================Cleaning Up================="
 rm ./Cartfile
 rm ./Cartfile.resolved
 rm -rf ./Carthage
+
+exit $EXIT_CODE
