@@ -6,6 +6,24 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		E48714611C6119EC00365E48 /* LibraryDevelopment */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = E48714641C6119EC00365E48 /* Build configuration list for PBXAggregateTarget "LibraryDevelopment" */;
+			buildPhases = (
+			);
+			dependencies = (
+				E48714661C611A0B00365E48 /* PBXTargetDependency */,
+				E48714681C611A0B00365E48 /* PBXTargetDependency */,
+				E487146A1C611A0B00365E48 /* PBXTargetDependency */,
+				E487146C1C611A0B00365E48 /* PBXTargetDependency */,
+				E487146E1C611A0B00365E48 /* PBXTargetDependency */,
+			);
+			name = LibraryDevelopment;
+			productName = LibraryDevelopment;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		6979C2F11B8F58FA006E521B /* SaveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6979C2EF1B8F58BB006E521B /* SaveTests.swift */; };
 		DB2E9B751C0F8D8D00DAFF8F /* NSManagedObjectContext+AsyncHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2E9B741C0F8D8D00DAFF8F /* NSManagedObjectContext+AsyncHelpers.swift */; };
@@ -69,6 +87,41 @@
 			proxyType = 1;
 			remoteGlobalIDString = E45013081C23393500ADC83B;
 			remoteInfo = CoreDataStackTV;
+		};
+		E48714651C611A0B00365E48 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4C9BC241AEA848600A6BD1B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4C9BC2C1AEA848600A6BD1B;
+			remoteInfo = CoreDataStack;
+		};
+		E48714671C611A0B00365E48 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4C9BC241AEA848600A6BD1B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E45013081C23393500ADC83B;
+			remoteInfo = CoreDataStackTV;
+		};
+		E48714691C611A0B00365E48 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4C9BC241AEA848600A6BD1B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4C9BC371AEA848600A6BD1B;
+			remoteInfo = CoreDataStackTests;
+		};
+		E487146B1C611A0B00365E48 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4C9BC241AEA848600A6BD1B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E45013311C23572400ADC83B;
+			remoteInfo = CoreDataStackTVTests;
+		};
+		E487146D1C611A0B00365E48 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4C9BC241AEA848600A6BD1B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4B99C651B740321005B7E1A;
+			remoteInfo = Example;
 		};
 		E4B99C791B740330005B7E1A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -470,6 +523,9 @@
 					E45013311C23572400ADC83B = {
 						CreatedOnToolsVersion = 7.2;
 					};
+					E48714611C6119EC00365E48 = {
+						CreatedOnToolsVersion = 7.2;
+					};
 					E4B99C651B740321005B7E1A = {
 						CreatedOnToolsVersion = 7.0;
 					};
@@ -499,6 +555,7 @@
 				E4C9BC371AEA848600A6BD1B /* CoreDataStackTests */,
 				E45013311C23572400ADC83B /* CoreDataStackTVTests */,
 				E4B99C651B740321005B7E1A /* Example */,
+				E48714611C6119EC00365E48 /* LibraryDevelopment */,
 			);
 		};
 /* End PBXProject section */
@@ -635,6 +692,31 @@
 			target = E45013081C23393500ADC83B /* CoreDataStackTV */;
 			targetProxy = E45013381C23572400ADC83B /* PBXContainerItemProxy */;
 		};
+		E48714661C611A0B00365E48 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4C9BC2C1AEA848600A6BD1B /* CoreDataStack */;
+			targetProxy = E48714651C611A0B00365E48 /* PBXContainerItemProxy */;
+		};
+		E48714681C611A0B00365E48 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E45013081C23393500ADC83B /* CoreDataStackTV */;
+			targetProxy = E48714671C611A0B00365E48 /* PBXContainerItemProxy */;
+		};
+		E487146A1C611A0B00365E48 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4C9BC371AEA848600A6BD1B /* CoreDataStackTests */;
+			targetProxy = E48714691C611A0B00365E48 /* PBXContainerItemProxy */;
+		};
+		E487146C1C611A0B00365E48 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E45013311C23572400ADC83B /* CoreDataStackTVTests */;
+			targetProxy = E487146B1C611A0B00365E48 /* PBXContainerItemProxy */;
+		};
+		E487146E1C611A0B00365E48 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4B99C651B740321005B7E1A /* Example */;
+			targetProxy = E487146D1C611A0B00365E48 /* PBXContainerItemProxy */;
+		};
 		E4B99C7A1B740330005B7E1A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E4C9BC2C1AEA848600A6BD1B /* CoreDataStack */;
@@ -728,6 +810,20 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TVOS_DEPLOYMENT_TARGET = 9.1;
+			};
+			name = Release;
+		};
+		E48714621C6119EC00365E48 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		E48714631C6119EC00365E48 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -937,6 +1033,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		E48714641C6119EC00365E48 /* Build configuration list for PBXAggregateTarget "LibraryDevelopment" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E48714621C6119EC00365E48 /* Debug */,
+				E48714631C6119EC00365E48 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		E4B99C751B740321005B7E1A /* Build configuration list for PBXNativeTarget "Example" */ = {
 			isa = XCConfigurationList;
