@@ -32,3 +32,5 @@ echo "=================Cleaning Up================="
 rm ./Cartfile
 rm ./Cartfile.resolved
 rm -rf ./Carthage
+
+exit $EXIT_CODE
