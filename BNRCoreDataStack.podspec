@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "BNRCoreDataStack"
-  s.version      = "1.1.3"
+  s.version      = "1.1.4"
   s.summary      = "The Big Nerd Ranch Core Data stack."
 
   s.description  = <<-DESC
