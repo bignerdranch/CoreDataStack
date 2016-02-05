@@ -88,6 +88,10 @@ class BooksTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return fetchedResultsController.sections?[section].indexTitle
     }
+
+    override func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
+        return fetchedResultsController.sections?.map() { $0.indexTitle ?? "" }
+    }
 }
 
 class BooksFetchedResultsControllerDelegate: FetchedResultsControllerDelegate {
