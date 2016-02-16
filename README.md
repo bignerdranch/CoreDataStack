@@ -1,6 +1,6 @@
 # BNR Core Data Stack
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Cocoapods Compatible](https://img.shields.io/cocoapods/v/BNRCoreDataStack.svg)](http://cocoapods.org)
+[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/BNRCoreDataStack.svg)](http://cocoapods.org)
 [![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](./LICENSE)
 [![Build Status](https://travis-ci.org/bignerdranch/CoreDataStack.svg)](https://travis-ci.org/bignerdranch/CoreDataStack)
 
