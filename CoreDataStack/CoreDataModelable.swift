@@ -37,10 +37,19 @@ extension CoreDataModelable where Self: NSManagedObject {
     - returns: `Self`: The newly created entity.
     */
     public init(managedObjectContext context: NSManagedObjectContext) {
-        self.init(entity: Self.entityInContext(context), insertIntoManagedObjectContext: context)
+        self.init(entity: Self.entityDescriptionInContext(context), insertIntoManagedObjectContext: context)
     }
 
-    static func entityInContext(context: NSManagedObjectContext) -> NSEntityDescription! {
+    // MARK: - Finding Objects
+
+    /**
+    Creates an `NSEntityDescription` of the `CoreDataModelable` entity using the `entityName`
+
+    - parameter context: `NSManagedObjectContext` to create the object within.
+
+    - returns: `NSEntityDescription`: The entity description.
+    */
+    static public func entityDescriptionInContext(context: NSManagedObjectContext) -> NSEntityDescription! {
         guard let entity = NSEntityDescription.entityForName(entityName, inManagedObjectContext: context) else {
             assertionFailure("Entity named \(entityName) doesn't exist. Fix the entity description or naming of \(Self.self).")
             return nil
@@ -48,7 +57,18 @@ extension CoreDataModelable where Self: NSManagedObject {
         return entity
     }
 
-    // MARK: - Finding Objects
+    /**
+     Creates a new fetch request for the `CoreDataModelable` entity.
+
+     - parameter context: `NSManagedObjectContext` to create the object within.
+
+     - returns: `NSFetchRequest`: The new fetch request.
+     */
+    static public func fetchRequestForEntity(inContext context: NSManagedObjectContext) -> NSFetchRequest {
+        let fetchRequest = NSFetchRequest()
+        fetchRequest.entity = entityDescriptionInContext(context)
+        return fetchRequest
+    }
 
     /**
     Fetches the first Entity that matches the optional predicate within the specified `NSManagedObjectContext`.
@@ -122,11 +142,5 @@ extension CoreDataModelable where Self: NSManagedObject {
         fetchRequest.includesPropertyValues = false
         fetchRequest.includesSubentities = false
         try context.executeFetchRequest(fetchRequest).lazy.map { $0 as! NSManagedObject }.forEach(context.deleteObject)
-    }
-
-    static private func fetchRequestForEntity(inContext context: NSManagedObjectContext) -> NSFetchRequest {
-        let fetchRequest = NSFetchRequest()
-        fetchRequest.entity = entityInContext(context)
-        return fetchRequest
     }
 }

@@ -107,7 +107,7 @@ public class EntityMonitor<T: NSManagedObject where T: CoreDataModelable> {
         self.context = context
         self.frequency = frequency
         self.filterPredicate = filterPredicate
-        self.entityPredicate = NSPredicate(format: "entity == %@", T.entityInContext(context))
+        self.entityPredicate = NSPredicate(format: "entity == %@", T.entityDescriptionInContext(context))
     }
 
     deinit {
