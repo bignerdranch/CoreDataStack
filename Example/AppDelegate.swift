@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.mainScreen().bounds)
         window?.rootViewController = loadingVC
 
-        CoreDataStack.constructSQLiteStack(withModelName: "TestModel") { result in
+        CoreDataStack.constructSQLiteStack(withModelName: "UniqueConstraintModel") { result in
             switch result {
             case .Success(let stack):
                 self.coreDataStack = stack
@@ -62,8 +62,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let moc = stack.newBackgroundWorkerMOC()
         do {
             try moc.performAndWaitOrThrow {
-                let existingBooks = try Book.allInContext(moc)
-                guard existingBooks.isEmpty else { return }
                 let books = StubbedBookData.books
                 for bookTitle in books {
                     let book = Book(managedObjectContext: moc)

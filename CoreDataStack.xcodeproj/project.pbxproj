@@ -68,6 +68,7 @@
 		E4B99C701B740321005B7E1A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4B99C6F1B740321005B7E1A /* Assets.xcassets */; };
 		E4B99C731B740321005B7E1A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4B99C711B740321005B7E1A /* LaunchScreen.storyboard */; };
 		E4B99C781B74032B005B7E1A /* CoreDataStack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C9BC2D1AEA848600A6BD1B /* CoreDataStack.framework */; };
+		E4BF286F1C7F67B6005FC05F /* UniqueConstraintModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4BF286D1C7F67B6005FC05F /* UniqueConstraintModel.xcdatamodeld */; };
 		E4C6F39C1AFD05E1004E3F1D /* NSPersistentStoreCoordinator+SQLiteHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C6F39B1AFD05E1004E3F1D /* NSPersistentStoreCoordinator+SQLiteHelpers.swift */; };
 		E4C6F3A01AFD4825004E3F1D /* TestModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4C9BC531AEA857E00A6BD1B /* TestModel.xcdatamodeld */; };
 		E4C9BC391AEA848600A6BD1B /* CoreDataStack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C9BC2D1AEA848600A6BD1B /* CoreDataStack.framework */; };
@@ -169,6 +170,7 @@
 		E4B99C6F1B740321005B7E1A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E4B99C721B740321005B7E1A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E4B99C741B740321005B7E1A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E4BF286E1C7F67B6005FC05F /* UniqueConstraintModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UniqueConstraintModel.xcdatamodel; sourceTree = "<group>"; };
 		E4C6F39B1AFD05E1004E3F1D /* NSPersistentStoreCoordinator+SQLiteHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSPersistentStoreCoordinator+SQLiteHelpers.swift"; sourceTree = "<group>"; };
 		E4C9BC2D1AEA848600A6BD1B /* CoreDataStack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreDataStack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4C9BC311AEA848600A6BD1B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -305,6 +307,7 @@
 				E4B99C6C1B740321005B7E1A /* Main.storyboard */,
 				E4B99C711B740321005B7E1A /* LaunchScreen.storyboard */,
 				E4DB61491BFFBD4E00BD3E6B /* Supporting Files */,
+				E4BF286D1C7F67B6005FC05F /* UniqueConstraintModel.xcdatamodeld */,
 			);
 			path = Example;
 			sourceTree = "<group>";
@@ -642,6 +645,7 @@
 				E4DB61481BFFBBD200BD3E6B /* MyCoreDataConnectedViewController.swift in Sources */,
 				E4598B3A1B7CF80200F7DAD9 /* TestModel.xcdatamodeld in Sources */,
 				E47A83E01C038871001A047E /* BooksTableViewController.swift in Sources */,
+				E4BF286F1C7F67B6005FC05F /* UniqueConstraintModel.xcdatamodeld in Sources */,
 				E4598B3B1B7CF80800F7DAD9 /* Author.swift in Sources */,
 				E4598B3C1B7CF80800F7DAD9 /* Book.swift in Sources */,
 				E47A83ED1C03AE6A001A047E /* BooksTestData.swift in Sources */,
@@ -1041,6 +1045,7 @@
 				E48714631C6119EC00365E48 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E4B99C751B740321005B7E1A /* Build configuration list for PBXNativeTarget "Example" */ = {
 			isa = XCConfigurationList;
@@ -1081,6 +1086,16 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
+		E4BF286D1C7F67B6005FC05F /* UniqueConstraintModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				E4BF286E1C7F67B6005FC05F /* UniqueConstraintModel.xcdatamodel */,
+			);
+			currentVersion = E4BF286E1C7F67B6005FC05F /* UniqueConstraintModel.xcdatamodel */;
+			path = UniqueConstraintModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
 		E4C9BC531AEA857E00A6BD1B /* TestModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
