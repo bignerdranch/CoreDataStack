@@ -4,3 +4,4 @@ Carthage
 build
 docs
 .DS_Store
+.build

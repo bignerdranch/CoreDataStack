@@ -57,7 +57,7 @@ class EntityMonitorTests: TempDirectoryTestCase {
 
         weak var setupEx = expectationWithDescription("Setup")
 
-        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
+        CoreDataStack.constructSQLiteStack(withModelName: "Sample", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
             switch result {
             case .Success(let stack):
                 self.stack = stack

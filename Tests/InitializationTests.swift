@@ -20,7 +20,7 @@ class InitializationTests: TempDirectoryTestCase {
     func testInitialization() {
         weak var ex1 = expectationWithDescription("SQLite Callback")
 
-        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
+        CoreDataStack.constructSQLiteStack(withModelName: "Sample", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
             switch result {
             case .Success(let stack):
                 self.sqlStack = stack
@@ -32,7 +32,7 @@ class InitializationTests: TempDirectoryTestCase {
         }
 
         do {
-            try memoryStack = CoreDataStack.constructInMemoryStack(withModelName: "TestModel", inBundle: unitTestBundle)
+            try memoryStack = CoreDataStack.constructInMemoryStack(withModelName: "Sample", inBundle: unitTestBundle)
         } catch {
             XCTFail("\(error)")
         }
@@ -50,7 +50,7 @@ class InitializationTests: TempDirectoryTestCase {
         weak var ex1 = expectationWithDescription("SQLite Callback")
         let storeURL = NSURL(fileURLWithPath: "/store.sqlite")
         
-        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: unitTestBundle, withStoreURL: storeURL) { result in
+        CoreDataStack.constructSQLiteStack(withModelName: "Sample", inBundle: unitTestBundle, withStoreURL: storeURL) { result in
             switch result {
             case .Success(_):
                 XCTFail()

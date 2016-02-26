@@ -8,6 +8,8 @@
 
 import CoreData
 
+#if os(iOS) || os(watchOS) || os(tvOS)
+
 // NOTE: T should have a bound of `: NSManagedObject`, but that causes the Swift 2.1 compiler
 // to fail with no useful error output upon switching on the enum. 
 // :-( This is not a deal-breaker, because
@@ -318,3 +320,5 @@ private final class ForwardingFetchedResultsControllerDelegate<Delegate: Fetched
         delegate?.fetchedResultsControllerDidPerformFetch(owner)
     }
 }
+
+#endif

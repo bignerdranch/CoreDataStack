@@ -87,7 +87,7 @@ class SaveTests : TempDirectoryTestCase {
     
     private func createStack() {
         weak var setupExpectation = expectationWithDescription("stack setup")
-        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: unitTestBundle, withStoreURL: self.tempStoreURL) { (setupResult) -> Void in
+        CoreDataStack.constructSQLiteStack(withModelName: "Sample", inBundle: unitTestBundle, withStoreURL: self.tempStoreURL) { (setupResult) -> Void in
             switch setupResult {
             case .Success(let stack):
                 self.coreDataStack = stack

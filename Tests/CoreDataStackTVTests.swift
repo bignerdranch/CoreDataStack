@@ -18,7 +18,7 @@ class CoreDataStackTVTests: TempDirectoryTestCase {
     override func setUp() {
         super.setUp()
 
-        let modelName = "TestModel"
+        let modelName = "Sample"
 
         do {
             inMemoryStack = try CoreDataStack.constructInMemoryStack(withModelName: modelName, inBundle: unitTestBundle)
