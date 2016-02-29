@@ -29,7 +29,7 @@ class BatchOperationContextTests: TempDirectoryTestCase {
         weak var ex1 = expectationWithDescription("StackSetup")
         weak var ex2 = expectationWithDescription("MocSetup")
 
-        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
+        CoreDataStack.constructSQLiteStack(withModelName: "Sample", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
             switch result {
             case .Success(let stack):
                 self.sqlStack = stack

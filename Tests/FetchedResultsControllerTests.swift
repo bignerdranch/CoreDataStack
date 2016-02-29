@@ -57,7 +57,7 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
         weak var setupEx = expectationWithDescription("Setup")
 
         // Setup Stack
-        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
+        CoreDataStack.constructSQLiteStack(withModelName: "Sample", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
             switch result {
             case .Success(let stack):
                 self.coreDataStack = stack

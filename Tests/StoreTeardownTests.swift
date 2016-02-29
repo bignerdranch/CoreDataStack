@@ -21,7 +21,7 @@ class StoreTeardownTests: TempDirectoryTestCase {
         super.setUp()
 
         weak var expectation = expectationWithDescription("callback")
-        CoreDataStack.constructSQLiteStack(withModelName: "TestModel", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
+        CoreDataStack.constructSQLiteStack(withModelName: "Sample", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
             switch result {
             case .Success(let stack):
                 self.sqlStack = stack
@@ -31,7 +31,7 @@ class StoreTeardownTests: TempDirectoryTestCase {
             expectation?.fulfill()
         }
 
-        memoryStack = try! CoreDataStack.constructInMemoryStack(withModelName: "TestModel", inBundle: unitTestBundle)
+        memoryStack = try! CoreDataStack.constructInMemoryStack(withModelName: "Sample", inBundle: unitTestBundle)
 
         waitForExpectationsWithTimeout(10, handler: nil)
     }
