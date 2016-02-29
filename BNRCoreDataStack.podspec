@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "BNRCoreDataStack"
-  s.version      = "1.1.4"
+  s.version      = "1.1.5"
   s.summary      = "The Big Nerd Ranch Core Data stack."
 
   s.description  = <<-DESC
@@ -49,7 +49,7 @@ DESC
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "CoreDataStack"
+  s.source_files  = "Sources"
 
   s.frameworks = "CoreData"
 
