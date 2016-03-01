@@ -159,6 +159,8 @@ public class FetchedResultsController<T: NSManagedObject where T: CoreDataModela
         }
         return sections.lazy.map(FetchedResultsSectionInfo<T>.init)
     }
+    /// The name of the file used to cache section information.
+    public var cacheName: String? { return internalController.cacheName }
     /// Subscript access to the sections
     public subscript(indexPath: NSIndexPath) -> T { return internalController.objectAtIndexPath(indexPath) as! T }
     /// The `NSIndexPath` for a specific object in the fetchedObjects
