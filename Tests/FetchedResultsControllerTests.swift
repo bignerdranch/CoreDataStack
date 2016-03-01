@@ -50,6 +50,7 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
     var coreDataStack: CoreDataStack!
     var fetchedResultsController: FetchedResultsController<Book>!
     var delegate = SampleFetchedResultsControllerDelegate()
+    static let cacheName = "Cache"
 
     override func setUp() {
         super.setUp()
@@ -82,7 +83,7 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
         // Setup fetched results controller
         let fr = NSFetchRequest(entityName: Book.entityName)
         fr.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-        fetchedResultsController = FetchedResultsController<Book>(fetchRequest: fr, managedObjectContext: moc, sectionNameKeyPath: "firstInitial")
+        fetchedResultsController = FetchedResultsController<Book>(fetchRequest: fr, managedObjectContext: moc, sectionNameKeyPath: "firstInitial", cacheName: FetchedResultsControllerTests.cacheName)
         fetchedResultsController.setDelegate(self.delegate)
 
         do {
@@ -299,5 +300,9 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
         case .Insert:
             XCTFail("Incorrect section update type")
         }
+    }
+
+    func testCacheName() {
+        XCTAssertEqual(fetchedResultsController.cacheName, FetchedResultsControllerTests.cacheName)
     }
 }
