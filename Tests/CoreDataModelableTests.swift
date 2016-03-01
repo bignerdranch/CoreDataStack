@@ -75,6 +75,35 @@ class CoreDataModelableTests: TempDirectoryTestCase {
         }
     }
 
+    func testAllInContextWithPredicateAndSortDescriptor() {
+        let iOSBook = Book(managedObjectContext: stack.mainQueueContext)
+        iOSBook.title = "iOS Programming: The Big Nerd Ranch Guide"
+
+        let swiftBook = Book(managedObjectContext: stack.mainQueueContext)
+        swiftBook.title = "Swift Programming: The Big Nerd Ranch Guide"
+
+        let warAndPeace = Book(managedObjectContext: stack.mainQueueContext)
+        warAndPeace.title = "War and Peace"
+
+        do {
+            try stack.mainQueueContext.save()
+        } catch {
+            XCTFail("Failed to save with error: \(error)")
+        }
+
+        let sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", "Big Nerd Ranch")
+
+        do {
+            let matchingBooks = try Book.allInContext(stack.mainQueueContext, predicate: predicate, sortDescriptors: sortDescriptors)
+            XCTAssertEqual(matchingBooks.count, 2)
+            XCTAssertEqual(matchingBooks.first, swiftBook)
+            XCTAssertEqual(matchingBooks.last, iOSBook)
+        } catch {
+            XCTFail("Failed to fetch with error: \(error)")
+        }
+    }
+
     func testRemoveAllExcept() {
         let totalBooks = 5
         var exceptionBooks = [Book]()
