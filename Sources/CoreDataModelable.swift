@@ -94,14 +94,16 @@ extension CoreDataModelable where Self: NSManagedObject {
 
      - parameter context: `NSManagedObjectContext` to find the entities within.
      - parameter sortDescriptors: Optional array of `NSSortDescriptors` to apply to the fetch
+     - parameter predicate: An optional `NSPredicate` for filtering
 
      - throws: Any error produced from `executeFetchRequest`
 
      - returns: `[Self]`: The array of matching entities.
      */
-    static public func allInContext(context: NSManagedObjectContext, sortDescriptors: [NSSortDescriptor]? = nil) throws -> [Self] {
+    static public func allInContext(context: NSManagedObjectContext, predicate: NSPredicate? = nil, sortDescriptors: [NSSortDescriptor]? = nil) throws -> [Self] {
         let fetchRequest = fetchRequestForEntity(inContext: context)
         fetchRequest.sortDescriptors = sortDescriptors
+        fetchRequest.predicate = predicate
         return try context.executeFetchRequest(fetchRequest) as! [Self]
     }
 
