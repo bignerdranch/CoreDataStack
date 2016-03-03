@@ -1,6 +1,6 @@
 # Contributing to the BNR Core Data Stack
 
-We gladly welcome contributions from the community in the form of issues, suggestions, feature requests, and pull request.
+We gladly welcome contributions from the community in the form of issues, suggestions, feature requests, and pull requests.
 
 ## Issues
 
@@ -10,7 +10,7 @@ When opening a new issue please do the following:
 
 Search [closed issues](https://github.com/bignerdranch/coredatastack/issues?q=is%3Aissue+is%3Aclosed) to make sure your problem has not already been addressed.
 
-Also look in [open issue](https://github.com/bignerdranch/coredatastack/issues) to avoid duplicates.
+Also look in [open issues](https://github.com/bignerdranch/coredatastack/issues) to avoid duplicates.
 
 ### New Issue
 
