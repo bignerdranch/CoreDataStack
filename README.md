@@ -193,6 +193,10 @@ See [BooksTableViewController.swift](./Example/BooksTableViewController.swift) f
 
 See [EntityMonitorTests.swift](./CoreDataStackTests/EntityMonitorTests.swift) for an example.
 
+## Contributing
+
+Please see our [guide to contributing to the CoreDataStack](https://github.com/bignerdranch/CoreDataStack/tree/master/.github/CONTRIBUTING.md)
+
 ## Debugging Tips
 
 To validate that you are honoring all of the threading rules it's common to add the following to a project scheme under `Run > Arguments > Arguments Passed On Launch`.
