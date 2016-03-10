@@ -13,6 +13,8 @@ For complete source documentation see: [Documentation](http://bignerdranch.githu
 
 ## Minimum Requirements
 
+- OS X 10.10
+- tvOS 9.0
 - iOS 8.0
 - Xcode 7.0
 - Swift 2.0
