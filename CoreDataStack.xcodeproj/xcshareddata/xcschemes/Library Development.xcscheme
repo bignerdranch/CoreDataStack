@@ -20,6 +20,20 @@
                ReferencedContainer = "container:CoreDataStack.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E43713DB1C8646AC009C3B39"
+               BuildableName = "CoreDataStackOSXTests.xctest"
+               BlueprintName = "CoreDataStackOSXTests"
+               ReferencedContainer = "container:CoreDataStack.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -46,6 +60,16 @@
                BlueprintIdentifier = "E4C9BC371AEA848600A6BD1B"
                BuildableName = "CoreDataStackTests.xctest"
                BlueprintName = "CoreDataStackTests"
+               ReferencedContainer = "container:CoreDataStack.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E43713DB1C8646AC009C3B39"
+               BuildableName = "CoreDataStackOSXTests.xctest"
+               BlueprintName = "CoreDataStackOSXTests"
                ReferencedContainer = "container:CoreDataStack.xcodeproj">
             </BuildableReference>
          </TestableReference>
