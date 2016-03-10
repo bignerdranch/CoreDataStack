@@ -1,7 +1,15 @@
+# Xcode 
 **/xcuserdata
 *.xccheckout
+
+# Carthage 
 Carthage
-build
+
+# Jazzy Docs
 docs
+
+# OS X
 .DS_Store
+
+# Swift Package Manager
 .build
