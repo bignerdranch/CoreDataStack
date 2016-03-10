@@ -1,0 +1,36 @@
+# Opt out of sending usage stats
+opt_out_usage
+
+#######################################################################
+# Project specific variables
+#######################################################################
+
+PROJECT_FILE = "CoreDataStack.xcodeproj"
+
+SCHEMES = ["CoreDataStack", "CoreDataStackOSX", "CoreDataStackTV"]
+
+#######################################################################
+# Lifecycle Hooks
+#######################################################################
+  
+before_all do
+    # add anything you want run before all lanes run
+end
+
+after_all do |lane|
+    # This block is called, only if the executed lane was successful
+end
+
+error do |lane, exception|
+end
+
+#######################################################################
+# Test Lanes
+#######################################################################
+
+desc "Runs all the tests"
+lane :test do
+    SCHEMES.each { |scheme| 
+        scan(scheme: scheme, project: PROJECT_FILE) 
+    }
+end

@@ -13,3 +13,8 @@ docs
 
 # Swift Package Manager
 .build
+
+# Fastlane
+fastlane/test_output
+fastlane/build_output
+report.xml
