@@ -188,7 +188,10 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
 
         XCTAssertEqual(delegate.didChangeContentCount, 1)
         XCTAssertEqual(delegate.willChangeContentCount, 1)
-        XCTAssertEqual(delegate.didChangeObjectCalls.count, 1)
+
+        // iOS 8 will report an .Update and .Move where as iOS 9 reports only the .Move
+        XCTAssertLessThanOrEqual(delegate.didChangeObjectCalls.count, 2)
+
         guard let change = delegate.didChangeObjectCalls.first else {
             XCTFail("Missing change object")
             return
@@ -202,9 +205,11 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
             XCTAssertEqual(book, lastBook)
             XCTAssertEqual(fromIndexPath, expectedFromPath)
             XCTAssertEqual(toIndexPath, expectedToPath)
-            return
-        case .Update, .Insert, .Delete:
-            XCTFail("Incorrect change type")
+        case let .Update(object: book, indexPath: indexPath): // iOS 8 Reports and Update and Move
+            XCTAssertEqual(book, lastBook)
+            XCTAssertEqual(indexPath, expectedFromPath)
+        case .Insert, .Delete:
+            XCTFail("Incorrect change type: \(change)")
         }
     }
 

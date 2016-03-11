@@ -1,9 +1,11 @@
 language: objective-c
-xcode_sdk: iphonesimulator
 osx_image: xcode7.2
+cache: bundler
+rvm: 2.2.2
 
 before_script:
-    - brew install carthage
+    - brew update
+    - brew outdated carthage || brew upgrade carthage
     - gem install jazzy --no-rdoc --no-ri --no-document
 
 after_success:
@@ -18,6 +20,5 @@ env:
 
 script:
     - ./Resources/scripts/validate_carthage.sh
-    - pod spec lint BNRCoreDataStack.podspec
-    - xctool build test -parallelize -scheme CoreDataStackTV -project CoreDataStack.xcodeproj -sdk iphonesimulator
-    - xctool build test -parallelize -scheme CoreDataStack   -project CoreDataStack.xcodeproj -sdk iphonesimulator
+    - ./Resources/scripts/validate_cocoapods.sh
+    - bundle exec fastlane test

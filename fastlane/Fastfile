@@ -1,0 +1,46 @@
+# Opt out of sending usage stats
+opt_out_usage
+
+#######################################################################
+# Project specific variables
+#######################################################################
+
+PROJECT_FILE = "CoreDataStack.xcodeproj"
+
+SCHEMES = ["CoreDataStackOSX", "CoreDataStackTV"]
+IOS_SCHEME = "CoreDataStack"
+SCHEMES.push IOS_SCHEME
+
+# We always want to run on the latest version of iOS installed 
+# so we're grabbing the highest device by name i.e. iPhone 6s > iPhone 4
+LATEST_IPHONE_DEVICE = FastlaneCore::Simulator.all.map { |d| d.name }.select { |s| s[/(iPhone \d.*)/] }.sort.last
+
+#######################################################################
+# Lifecycle Hooks
+#######################################################################
+  
+before_all do
+    # add anything you want run before all lanes run
+end
+
+after_all do |lane|
+    # This block is called, only if the executed lane was successful
+end
+
+error do |lane, exception|
+end
+
+#######################################################################
+# Test Lanes
+#######################################################################
+
+desc "Runs all the tests"
+lane :test do
+    SCHEMES.each { |scheme|
+        if scheme == IOS_SCHEME 
+            scan(scheme: scheme, project: PROJECT_FILE, device: LATEST_IPHONE_DEVICE)
+        else
+            scan(scheme: scheme, project: PROJECT_FILE)
+        end
+    }
+end

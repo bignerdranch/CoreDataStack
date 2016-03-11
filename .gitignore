@@ -1,7 +1,20 @@
+# Xcode 
 **/xcuserdata
 *.xccheckout
+
+# Carthage 
 Carthage
-build
+
+# Jazzy Docs
 docs
+
+# OS X
 .DS_Store
+
+# Swift Package Manager
 .build
+
+# Fastlane
+fastlane/test_output
+fastlane/build_output
+report.xml
