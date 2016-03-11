@@ -7,7 +7,10 @@ opt_out_usage
 
 PROJECT_FILE = "CoreDataStack.xcodeproj"
 
-SCHEMES = ["CoreDataStack", "CoreDataStackOSX", "CoreDataStackTV"]
+SCHEMES = ["CoreDataStackOSX", "CoreDataStackTV"]
+IOS_SCHEME = "CoreDataStack"
+SCHEMES.push IOS_SCHEME
+IPHONESDK = "iphonesimulator9.2"
 
 #######################################################################
 # Lifecycle Hooks
@@ -30,7 +33,11 @@ end
 
 desc "Runs all the tests"
 lane :test do
-    SCHEMES.each { |scheme| 
-        scan(scheme: scheme, project: PROJECT_FILE) 
+    SCHEMES.each { |scheme|
+        if scheme == IOS_SCHEME 
+            scan(scheme: scheme, project: PROJECT_FILE, sdk: IPHONESDK)
+        else
+            scan(scheme: scheme, project: PROJECT_FILE)
+        end
     }
 end
