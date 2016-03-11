@@ -30,11 +30,11 @@ public final class CoreDataStack {
     /// CoreDataStack specific ErrorTypes
     public enum Error: ErrorType {
         /// Case when an `NSPersistentStore` is not found for the supplied store URL
-        case StoreNotFoundAtURL(url: NSURL)
+        case storeNotFoundAt(url: NSURL)
         /// Case when an In-Memory store is not found
         case InMemoryStoreMissing
         /// Case when the store URL supplied to contruct function cannot be used
-        case UnableToCreateStoreInDirectory(url: NSURL)
+        case UnableToCreateStoreAt(url: NSURL)
     }
     
     /**
@@ -105,7 +105,7 @@ public final class CoreDataStack {
             do {
                 try createDirectoryIfNeccessary(storeFileURL)
             } catch {
-                callback(.Failure(Error.UnableToCreateStoreInDirectory(url: storeFileURL)))
+                callback(.Failure(Error.UnableToCreateStoreAt(url: storeFileURL)))
             }
             NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(model, storeFileURL: storeFileURL) { coordinatorResult in
                 switch coordinatorResult {
@@ -121,7 +121,7 @@ public final class CoreDataStack {
     private static func createDirectoryIfNeccessary(url: NSURL) throws {
         let fileManager = NSFileManager.defaultManager()
         guard let directory = url.URLByDeletingLastPathComponent else {
-            throw Error.UnableToCreateStoreInDirectory(url: url)
+            throw Error.UnableToCreateStoreAt(url: url)
         }
         try fileManager.createDirectoryAtURL(directory, withIntermediateDirectories: true, attributes: nil)
     }
@@ -255,7 +255,7 @@ public extension CoreDataStack {
                 let mom = self.managedObjectModel
 
                 guard let store = coordinator.persistentStoreForURL(storeURL) else {
-                    let error = Error.StoreNotFoundAtURL(url: storeURL)
+                    let error = Error.storeNotFoundAt(url: storeURL)
                     resetCallback(.Failure(error))
                     break
                 }
