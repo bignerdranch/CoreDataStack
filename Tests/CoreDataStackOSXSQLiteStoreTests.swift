@@ -1,5 +1,5 @@
 //
-//  CoreDataStackOSXTests.swift
+//  CoreDataStackOSXSQLiteStoreTests.swift
 //  CoreDataStack
 //
 //  Created by Robert Edwards on 3/1/16.
@@ -12,8 +12,7 @@ import XCTest
 
 class CoreDataStackOSXTests: XCTestCase {
 
-    var memoryStack: CoreDataStack!
-    var sqlLiteStack: CoreDataStack!
+    var stack: CoreDataStack!
 
     lazy var sqlLiteStoreDirectory: NSURL = {
         let fm = NSFileManager.defaultManager()
@@ -28,42 +27,28 @@ class CoreDataStackOSXTests: XCTestCase {
         return self.sqlLiteStoreDirectory.URLByAppendingPathComponent("Sample").URLByAppendingPathExtension("sqlite")
     }
 
-    override func setUp() {
-        super.setUp()
-
+    override func tearDown() {
         do {
-            memoryStack = try CoreDataStack.constructInMemoryStack(withModelName: "Sample", inBundle: unitTestBundle)
+            try NSFileManager.defaultManager().removeItemAtURL(sqlLiteStoreDirectory)
         } catch {
-            XCTFail("Unepected error in test: \(error)")
+            failingOn(error)
         }
+    }
 
+    func testSQLiteStackInitializationCreatedStackAndStoreFile() {
         let setupExpectation = expectationWithDescription("Setup")
         CoreDataStack.constructSQLiteStack(withModelName: "Sample", inBundle: unitTestBundle, withStoreURL: storeURL) { result in
             switch result {
             case .Success(let stack):
-                self.sqlLiteStack = stack
+                self.stack = stack
             case .Failure(let error):
                 XCTFail("Failed to setup sqlite stack with error: \(error)")
             }
             setupExpectation.fulfill()
         }
         waitForExpectationsWithTimeout(10, handler: nil)
-    }
 
-    override func tearDown() {
-        do {
-            try NSFileManager.defaultManager().removeItemAtURL(sqlLiteStoreDirectory)
-        } catch {
-            XCTFail("\(error)")
-        }
-    }
-
-    func testInMemoryInitialization() {
-        XCTAssertNotNil(memoryStack)
-    }
-
-    func testSQLiteInitialization() {
-        XCTAssertNotNil(sqlLiteStack)
+        XCTAssertNotNil(stack)
         guard let expectedPath = storeURL.path else {
             XCTFail("Expected path is not a valid RFC1808 file path")
             return

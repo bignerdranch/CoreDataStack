@@ -23,7 +23,7 @@ class CoreDataStackTVTests: TempDirectoryTestCase {
         do {
             inMemoryStack = try CoreDataStack.constructInMemoryStack(withModelName: modelName, inBundle: unitTestBundle)
         } catch {
-            XCTFail("\(error)")
+            failingOn(error)
         }
 
         guard let tempStoreURL = tempStoreURL else {
@@ -37,7 +37,7 @@ class CoreDataStackTVTests: TempDirectoryTestCase {
             case .Success(let stack):
                 self.sqlStack = stack
             case .Failure(let error):
-                XCTFail("\(error)")
+                self.failingOn(error)
             }
             ex1?.fulfill()
         }

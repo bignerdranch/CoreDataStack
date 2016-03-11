@@ -25,8 +25,7 @@ class InitializationTests: TempDirectoryTestCase {
             case .Success(let stack):
                 self.sqlStack = stack
             case .Failure(let error):
-                print(error)
-                XCTFail()
+                self.failingOn(error)
             }
             ex1?.fulfill()
         }
@@ -34,7 +33,7 @@ class InitializationTests: TempDirectoryTestCase {
         do {
             try memoryStack = CoreDataStack.constructInMemoryStack(withModelName: "Sample", inBundle: unitTestBundle)
         } catch {
-            XCTFail("\(error)")
+            failingOn(error)
         }
 
         waitForExpectationsWithTimeout(10, handler: nil)
@@ -53,9 +52,9 @@ class InitializationTests: TempDirectoryTestCase {
         CoreDataStack.constructSQLiteStack(withModelName: "Sample", inBundle: unitTestBundle, withStoreURL: storeURL) { result in
             switch result {
             case .Success(_):
-                XCTFail()
-            case .Failure(let error):
-                print(error)
+                XCTFail("Constructing with an invalid url should fail")
+            case .Failure(_):
+                break
             }
             ex1?.fulfill()
         }
