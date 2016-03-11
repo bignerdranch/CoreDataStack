@@ -1,7 +1,7 @@
 language: objective-c
 osx_image: xcode7.2
 cache: bundler
-rvm: 2.3.0
+rvm: 2.2.2
 
 before_script:
     - brew install carthage
