@@ -238,7 +238,8 @@ private extension FetchedResultsObjectChange {
         case let (.Delete, indexPath?, nil):
             self = .Delete(object: object, indexPath: indexPath)
 
-        case let (.Update, indexPath?, nil):
+        case let (.Update, indexPath?, _):
+            // in pre iOS 9 runtimes a newIndexPath value is also passed in
             self = .Update(object: object, indexPath: indexPath)
 
         case let (.Move, fromIndexPath?, toIndexPath?):
