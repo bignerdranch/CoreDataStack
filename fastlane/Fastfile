@@ -11,6 +11,8 @@ SCHEMES = ["CoreDataStackOSX", "CoreDataStackTV"]
 IOS_SCHEME = "CoreDataStack"
 SCHEMES.push IOS_SCHEME
 
+# We always want to run on the latest version of iOS installed 
+# so we're grabbing the highest device by name i.e. iPhone 6s > iPhone 4
 LATEST_IPHONE_DEVICE = FastlaneCore::Simulator.all.map { |d| d.name }.select { |s| s[/(iPhone \d.*)/] }.sort.last
 
 #######################################################################
