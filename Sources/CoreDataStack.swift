@@ -103,7 +103,7 @@ public final class CoreDataStack {
             let model = bundle.managedObjectModel(modelName: modelName)
             let storeFileURL = desiredStoreURL ?? NSURL(string: "\(modelName).sqlite", relativeToURL: documentsDirectory)!
             do {
-                try createDirectoryIfNeccessary(storeFileURL)
+                try createDirectoryIfNecessary(storeFileURL)
             } catch {
                 callback(.Failure(Error.UnableToCreateStoreAt(url: storeFileURL)))
             }
@@ -118,7 +118,7 @@ public final class CoreDataStack {
             }
     }
 
-    private static func createDirectoryIfNeccessary(url: NSURL) throws {
+    private static func createDirectoryIfNecessary(url: NSURL) throws {
         let fileManager = NSFileManager.defaultManager()
         guard let directory = url.URLByDeletingLastPathComponent else {
             throw Error.UnableToCreateStoreAt(url: url)
