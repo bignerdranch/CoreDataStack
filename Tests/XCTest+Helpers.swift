@@ -13,4 +13,8 @@ extension XCTest {
     var unitTestBundle: NSBundle {
         return NSBundle(forClass: self.dynamicType)
     }
+
+    func failingOn(error: ErrorType) {
+        XCTFail("Failing with error: \(error) in: \(self)")
+    }
 }
