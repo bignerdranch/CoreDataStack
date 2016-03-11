@@ -4,6 +4,7 @@ cache: bundler
 rvm: 2.2.2
 
 before_script:
+    - brew update
     - brew install carthage
     - gem install jazzy --no-rdoc --no-ri --no-document
 
