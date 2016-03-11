@@ -106,6 +106,7 @@ public final class CoreDataStack {
                 try createDirectoryIfNecessary(storeFileURL)
             } catch {
                 callback(.Failure(Error.UnableToCreateStoreAt(url: storeFileURL)))
+                return
             }
             NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(model, storeFileURL: storeFileURL) { coordinatorResult in
                 switch coordinatorResult {
