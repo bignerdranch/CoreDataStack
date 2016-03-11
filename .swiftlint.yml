@@ -1,5 +1,10 @@
 disabled_rules:
+
 included:
+
 excluded:
   - Carthage
   - Pods
+
+# Make line length violations more lenient
+line_length: 135
