@@ -63,8 +63,7 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
             case .Success(let stack):
                 self.coreDataStack = stack
             case .Failure(let error):
-                print(error)
-                XCTFail()
+                self.failingOn(error)
             }
             setupEx?.fulfill()
         }
@@ -89,7 +88,7 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
         do {
             try fetchedResultsController.performFetch()
         } catch {
-            XCTFail("\(error)")
+            failingOn(error)
         }
     }
 

@@ -56,7 +56,7 @@ class CoreDataModelableTests: TempDirectoryTestCase {
                 XCTFail("Failed to find first with matching title."); return
             }
         } catch {
-            XCTFail("\(error)")
+            failingOn(error)
         }
     }
 
@@ -71,7 +71,7 @@ class CoreDataModelableTests: TempDirectoryTestCase {
             let allBooks = try Book.allInContext(stack.mainQueueContext)
             XCTAssertEqual(allBooks.count, totalBooks)
         } catch {
-            XCTFail("\(error)")
+            failingOn(error)
         }
     }
 
@@ -124,7 +124,7 @@ class CoreDataModelableTests: TempDirectoryTestCase {
             allBooks = try Book.allInContext(stack.mainQueueContext)
             XCTAssertEqual(allBooks.count, exceptionBooks.count)
         } catch {
-            XCTFail("\(error)")
+            failingOn(error)
         }
     }
 
@@ -143,7 +143,7 @@ class CoreDataModelableTests: TempDirectoryTestCase {
             allBooks = try Book.allInContext(stack.mainQueueContext)
             XCTAssertEqual(allBooks.count, 0)
         } catch {
-            XCTFail("\(error)")
+            failingOn(error)
         }
     }
 }

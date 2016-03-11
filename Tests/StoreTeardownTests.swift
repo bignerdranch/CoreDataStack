@@ -66,8 +66,7 @@ class StoreTeardownTests: TempDirectoryTestCase {
                 break
 
             case .Failure(let error):
-                print(error)
-                XCTFail()
+                self.failingOn(error)
             }
             expectation?.fulfill()
         }
@@ -101,8 +100,7 @@ class StoreTeardownTests: TempDirectoryTestCase {
                 try! worker.saveContextAndWait()
                 break
             case .Failure(let error):
-                print(error)
-                XCTFail()
+                self.failingOn(error)
             }
             expectation?.fulfill()
         }

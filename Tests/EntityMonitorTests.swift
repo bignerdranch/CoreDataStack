@@ -62,8 +62,7 @@ class EntityMonitorTests: TempDirectoryTestCase {
             case .Success(let stack):
                 self.stack = stack
             case .Failure(let error):
-                print(error)
-                XCTFail()
+                self.failingOn(error)
             }
             setupEx?.fulfill()
         }
