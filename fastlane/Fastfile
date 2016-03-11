@@ -10,7 +10,8 @@ PROJECT_FILE = "CoreDataStack.xcodeproj"
 SCHEMES = ["CoreDataStackOSX", "CoreDataStackTV"]
 IOS_SCHEME = "CoreDataStack"
 SCHEMES.push IOS_SCHEME
-IPHONESDK = "iphonesimulator9.2"
+
+LATEST_IPHONE_DEVICE = FastlaneCore::Simulator.all.map { |d| d.name }.select { |s| s[/(iPhone \d.*)/] }.sort.last
 
 #######################################################################
 # Lifecycle Hooks
@@ -35,7 +36,7 @@ desc "Runs all the tests"
 lane :test do
     SCHEMES.each { |scheme|
         if scheme == IOS_SCHEME 
-            scan(scheme: scheme, project: PROJECT_FILE, sdk: IPHONESDK)
+            scan(scheme: scheme, project: PROJECT_FILE, device: LATEST_IPHONE_DEVICE)
         else
             scan(scheme: scheme, project: PROJECT_FILE)
         end
