@@ -15,13 +15,10 @@ class CoreDataStackOSXTests: XCTestCase {
     var memoryStack: CoreDataStack!
     var sqlLiteStack: CoreDataStack!
 
-    lazy var testBundle: NSBundle = {
-        return NSBundle(forClass: self.dynamicType)
-    }()
     lazy var sqlLiteStoreDirectory: NSURL = {
         let fm = NSFileManager.defaultManager()
         let urls = fm.URLsForDirectory(.ApplicationSupportDirectory, inDomains: .UserDomainMask)
-        guard let identifier = self.testBundle.bundleIdentifier,
+        guard let identifier = self.unitTestBundle.bundleIdentifier,
             let storeURL = urls.first?.URLByAppendingPathComponent(identifier, isDirectory: true) else {
                 fatalError("Failed to create store directory URL")
         }
@@ -35,13 +32,13 @@ class CoreDataStackOSXTests: XCTestCase {
         super.setUp()
 
         do {
-            memoryStack = try CoreDataStack.constructInMemoryStack(withModelName: "Sample", inBundle: testBundle)
+            memoryStack = try CoreDataStack.constructInMemoryStack(withModelName: "Sample", inBundle: unitTestBundle)
         } catch {
             XCTFail("Unepected error in test: \(error)")
         }
 
         let setupExpectation = expectationWithDescription("Setup")
-        CoreDataStack.constructSQLiteStack(withModelName: "Sample", inBundle: testBundle, withStoreURL: storeURL) { result in
+        CoreDataStack.constructSQLiteStack(withModelName: "Sample", inBundle: unitTestBundle, withStoreURL: storeURL) { result in
             switch result {
             case .Success(let stack):
                 self.sqlLiteStack = stack

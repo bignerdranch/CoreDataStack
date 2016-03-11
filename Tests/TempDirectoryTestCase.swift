@@ -13,7 +13,6 @@ class TempDirectoryTestCase: XCTestCase {
     lazy var tempStoreURL: NSURL? = {
         return self.tempStoreDirectory?.URLByAppendingPathComponent("testmodel.sqlite")
     }()
-    var unitTestBundle: NSBundle!
 
     private lazy var tempStoreDirectory: NSURL? = {
         let baseURL = NSURL.fileURLWithPath(NSTemporaryDirectory(), isDirectory: true)
@@ -37,10 +36,6 @@ class TempDirectoryTestCase: XCTestCase {
                 assertionFailure("\(error)")
             }
         }
-    }
-
-    override func setUp() {
-        unitTestBundle = NSBundle(forClass: self.dynamicType)
     }
     
     override func tearDown() {
