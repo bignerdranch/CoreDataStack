@@ -14,23 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E48714611C6119EC00365E48"
-               BuildableName = "LibraryDevelopment"
-               BlueprintName = "LibraryDevelopment"
-               ReferencedContainer = "container:CoreDataStack.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E43713DB1C8646AC009C3B39"
-               BuildableName = "CoreDataStackOSXTests.xctest"
-               BlueprintName = "CoreDataStackOSXTests"
+               BlueprintIdentifier = "E43713D21C8646AC009C3B39"
+               BuildableName = "CoreDataStack.framework"
+               BlueprintName = "CoreDataStackOSX"
                ReferencedContainer = "container:CoreDataStack.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -40,29 +26,8 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      codeCoverageEnabled = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E45013311C23572400ADC83B"
-               BuildableName = "CoreDataStackTVTests.xctest"
-               BlueprintName = "CoreDataStackTVTests"
-               ReferencedContainer = "container:CoreDataStack.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E4C9BC371AEA848600A6BD1B"
-               BuildableName = "CoreDataStackTests.xctest"
-               BlueprintName = "CoreDataStackTests"
-               ReferencedContainer = "container:CoreDataStack.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
          <TestableReference
             skipped = "NO">
             <BuildableReference
@@ -77,9 +42,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E48714611C6119EC00365E48"
-            BuildableName = "LibraryDevelopment"
-            BlueprintName = "LibraryDevelopment"
+            BlueprintIdentifier = "E43713D21C8646AC009C3B39"
+            BuildableName = "CoreDataStack.framework"
+            BlueprintName = "CoreDataStackOSX"
             ReferencedContainer = "container:CoreDataStack.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -99,9 +64,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E48714611C6119EC00365E48"
-            BuildableName = "LibraryDevelopment"
-            BlueprintName = "LibraryDevelopment"
+            BlueprintIdentifier = "E43713D21C8646AC009C3B39"
+            BuildableName = "CoreDataStack.framework"
+            BlueprintName = "CoreDataStackOSX"
             ReferencedContainer = "container:CoreDataStack.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -117,9 +82,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E48714611C6119EC00365E48"
-            BuildableName = "LibraryDevelopment"
-            BlueprintName = "LibraryDevelopment"
+            BlueprintIdentifier = "E43713D21C8646AC009C3B39"
+            BuildableName = "CoreDataStack.framework"
+            BlueprintName = "CoreDataStackOSX"
             ReferencedContainer = "container:CoreDataStack.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

@@ -16,14 +16,6 @@ public typealias CoreDataStackBatchMOCCallback = CoreDataStack.BatchContextResul
 
 // MARK: - Error Handling
 
-/// CoreDataStack specific ErrorTypes
-public enum CoreDataStackError: ErrorType {
-    /// Case when an `NSPersistentStore` is not found for the supplied store URL
-    case StoreNotFoundAtURL(url: NSURL)
-    /// Case when an In-Memory store is not found
-    case InMemoryStoreMissing
-}
-
 /**
 Three layer Core Data stack comprised of:
 
@@ -34,6 +26,16 @@ Three layer Core Data stack comprised of:
 Calling `save()` on any `NSMangedObjectContext` belonging to the stack will automatically bubble the changes all the way to the `NSPersistentStore`
 */
 public final class CoreDataStack {
+
+    /// CoreDataStack specific ErrorTypes
+    public enum Error: ErrorType {
+        /// Case when an `NSPersistentStore` is not found for the supplied store URL
+        case StoreNotFoundAtURL(url: NSURL)
+        /// Case when an In-Memory store is not found
+        case InMemoryStoreMissing
+        /// Case when the store URL supplied to contruct function cannot be used
+        case UnableToCreateStoreInDirectory(url: NSURL)
+    }
     
     /**
     Primary persisting background managed object context. This is the top level context that possess an
@@ -100,6 +102,11 @@ public final class CoreDataStack {
         callback: CoreDataStackSetupCallback) {
             let model = bundle.managedObjectModel(modelName: modelName)
             let storeFileURL = desiredStoreURL ?? NSURL(string: "\(modelName).sqlite", relativeToURL: documentsDirectory)!
+            do {
+                try createDirectoryIfNeccessary(storeFileURL)
+            } catch {
+                callback(.Failure(Error.UnableToCreateStoreInDirectory(url: storeFileURL)))
+            }
             NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(model, storeFileURL: storeFileURL) { coordinatorResult in
                 switch coordinatorResult {
                 case .Success(let coordinator):
@@ -109,6 +116,14 @@ public final class CoreDataStack {
                     callback(.Failure(error))
                 }
             }
+    }
+
+    private static func createDirectoryIfNeccessary(url: NSURL) throws {
+        let fileManager = NSFileManager.defaultManager()
+        guard let directory = url.URLByDeletingLastPathComponent else {
+            throw Error.UnableToCreateStoreInDirectory(url: url)
+        }
+        try fileManager.createDirectoryAtURL(directory, withIntermediateDirectories: true, attributes: nil)
     }
 
     /**
@@ -222,7 +237,7 @@ public extension CoreDataStack {
             case .InMemory:
                 do {
                     guard let store = self.persistentStoreCoordinator.persistentStores.first else {
-                        resetCallback(.Failure(CoreDataStackError.InMemoryStoreMissing))
+                        resetCallback(.Failure(Error.InMemoryStoreMissing))
                         break
                     }
                     try self.persistentStoreCoordinator.performAndWaitOrThrow {
@@ -240,7 +255,7 @@ public extension CoreDataStack {
                 let mom = self.managedObjectModel
 
                 guard let store = coordinator.persistentStoreForURL(storeURL) else {
-                    let error = CoreDataStackError.StoreNotFoundAtURL(url: storeURL)
+                    let error = Error.StoreNotFoundAtURL(url: storeURL)
                     resetCallback(.Failure(error))
                     break
                 }
