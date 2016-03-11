@@ -30,7 +30,7 @@ public final class CoreDataStack {
     /// CoreDataStack specific ErrorTypes
     public enum Error: ErrorType {
         /// Case when an `NSPersistentStore` is not found for the supplied store URL
-        case storeNotFoundAt(url: NSURL)
+        case StoreNotFoundAt(url: NSURL)
         /// Case when an In-Memory store is not found
         case InMemoryStoreMissing
         /// Case when the store URL supplied to contruct function cannot be used
@@ -256,7 +256,7 @@ public extension CoreDataStack {
                 let mom = self.managedObjectModel
 
                 guard let store = coordinator.persistentStoreForURL(storeURL) else {
-                    let error = Error.storeNotFoundAt(url: storeURL)
+                    let error = Error.StoreNotFoundAt(url: storeURL)
                     resetCallback(.Failure(error))
                     break
                 }
