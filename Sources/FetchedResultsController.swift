@@ -77,7 +77,7 @@ public enum FetchedResultsSectionChange<T: NSManagedObject> {
  */
 public protocol FetchedResultsControllerDelegate: class { // : class for weak capture
     /// Type of object being monitored. Must inherit from `NSManagedObject` and implement `CoreDataModelable`
-    typealias T: NSManagedObject, CoreDataModelable
+    associatedtype T: NSManagedObject, CoreDataModelable
 
     /**
      Callback including all processed changes to objects

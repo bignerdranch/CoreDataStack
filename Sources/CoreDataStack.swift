@@ -71,7 +71,7 @@ public final class CoreDataStack {
             managedObjectContext.parentContext = self.privateQueueContext
             
             NSNotificationCenter.defaultCenter().addObserver(self,
-                selector: "stackMemberContextDidSaveNotification:",
+                selector: #selector(CoreDataStack.stackMemberContextDidSaveNotification(_:)),
                 name: NSManagedObjectContextDidSaveNotification,
                 object: managedObjectContext)
         }
@@ -311,7 +311,7 @@ public extension CoreDataStack {
         moc.name = "Background Worker Context"
 
         NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: "stackMemberContextDidSaveNotification:",
+            selector: #selector(stackMemberContextDidSaveNotification(_:)),
             name: NSManagedObjectContextDidSaveNotification,
             object: moc)
 
