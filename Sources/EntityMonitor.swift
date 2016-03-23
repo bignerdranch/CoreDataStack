@@ -22,7 +22,7 @@ public enum FireFrequency {
  */
 public protocol EntityMonitorDelegate: class { // : class for weak capture
     /// Type of object being monitored. Must inheirt from `NSManagedObject` and implement `CoreDataModelable`
-    typealias T: NSManagedObject, CoreDataModelable
+    associatedtype T: NSManagedObject, CoreDataModelable
 
     /**
      Callback for when objects matching the predicate have been inserted
@@ -115,9 +115,9 @@ public class EntityMonitor<T: NSManagedObject where T: CoreDataModelable> {
     }
 }
 
-private let ChangeObserverSelectorName: Selector = "evaluateChangeNotification:"
-
 private class BaseEntityMonitorDelegate<T: NSManagedObject where T: CoreDataModelable>: NSObject {
+
+    private let ChangeObserverSelectorName = #selector(BaseEntityMonitorDelegate<T>.evaluateChangeNotification(_:))
 
     typealias Owner = EntityMonitor<T>
     typealias EntitySet = Owner.EntitySet

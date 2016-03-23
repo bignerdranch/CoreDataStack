@@ -31,15 +31,15 @@ class SampleFetchedResultsControllerDelegate: FetchedResultsControllerDelegate {
     }
 
     func fetchedResultsControllerWillChangeContent(controller: FetchedResultsController<Book>) {
-        ++willChangeContentCount
+        willChangeContentCount += 1
     }
 
     func fetchedResultsControllerDidChangeContent(controller: FetchedResultsController<Book>) {
-        ++didChangeContentCount
+        didChangeContentCount += 1
     }
 
     func fetchedResultsControllerDidPerformFetch(controller: FetchedResultsController<Book>) {
-        ++didPerformFetchCount
+        didPerformFetchCount += 1
     }
 }
 
