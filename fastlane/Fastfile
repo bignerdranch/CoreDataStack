@@ -38,9 +38,14 @@ desc "Runs all the tests"
 lane :test do
     SCHEMES.each { |scheme|
         if scheme == IOS_SCHEME 
-            scan(scheme: scheme, project: PROJECT_FILE, device: LATEST_IPHONE_DEVICE)
+            scan(scheme: scheme, 
+                project: PROJECT_FILE, 
+                device: LATEST_IPHONE_DEVICE, 
+                clean: true)
         else
-            scan(scheme: scheme, project: PROJECT_FILE)
+            scan(scheme: scheme, 
+                project: PROJECT_FILE, 
+                clean: true)
         end
     }
 end
