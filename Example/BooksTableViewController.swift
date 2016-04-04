@@ -51,7 +51,7 @@ class BooksTableViewController: UITableViewController {
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done,
             target: self,
-            action: "dismiss")
+            action: #selector(dismiss))
     }
 
     // MARK: - Actions
