@@ -49,7 +49,7 @@ extension CoreDataModelable where Self: NSManagedObject {
      returns: `[Self]`: The array of updated entities.
      */
     static public func createInContext(context: NSManagedObjectContext, @noescape configure: Self -> ()) -> Self {
-        let entity = self.init(entity: Self.entityDescriptionInContext(context), insertIntoManagedObjectContext: context)
+        let entity = self.init(managedObjectContext: context)
         configure(entity)
         return entity
     }
