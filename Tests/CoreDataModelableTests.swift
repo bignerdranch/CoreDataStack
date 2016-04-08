@@ -63,7 +63,7 @@ class CoreDataModelableTests: TempDirectoryTestCase {
             
             XCTAssertEqual(updatedBooks.count, 2)
             
-            let updatedBooksTitles = updatedBooks.flatMap({ $0.title })
+            let updatedBooksTitles = updatedBooks.flatMap { $0.title }
             let updatedBooksTitlesExpectation = [
                 "iOS Programming: The Big Nerd Ranch Guide - UPDATED",
                 "Swift Programming: The Big Nerd Ranch Guide - UPDATED"
