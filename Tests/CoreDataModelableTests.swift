@@ -103,6 +103,47 @@ class CoreDataModelableTests: TempDirectoryTestCase {
             XCTFail("Failed to fetch with error: \(error)")
         }
     }
+    
+    func testCountInContext() {
+        let totalBooks = 5
+        for _ in 0..<totalBooks {
+            let _ = Book(managedObjectContext: stack.mainQueueContext)
+            try! stack.mainQueueContext.saveContextAndWait()
+        }
+        
+        do {
+            let booksCount = try Book.countInContext(stack.mainQueueContext)
+            XCTAssertEqual(booksCount, totalBooks)
+        } catch {
+            failingOn(error)
+        }
+    }
+    
+    func testCountInContextWithPredicate() {
+        let iOSBook = Book(managedObjectContext: stack.mainQueueContext)
+        iOSBook.title = "iOS Programming: The Big Nerd Ranch Guide"
+        
+        let swiftBook = Book(managedObjectContext: stack.mainQueueContext)
+        swiftBook.title = "Swift Programming: The Big Nerd Ranch Guide"
+        
+        let warAndPeace = Book(managedObjectContext: stack.mainQueueContext)
+        warAndPeace.title = "War and Peace"
+        
+        do {
+            try stack.mainQueueContext.save()
+        } catch {
+            XCTFail("Failed to save with error: \(error)")
+        }
+        
+        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", "Big Nerd Ranch")
+        
+        do {
+            let matchingBooksCount = try Book.countInContext(stack.mainQueueContext, predicate: predicate)
+            XCTAssertEqual(matchingBooksCount, 2)
+        } catch {
+            XCTFail("Failed to fetch with error: \(error)")
+        }
+    }
 
     func testRemoveAllExcept() {
         let totalBooks = 5

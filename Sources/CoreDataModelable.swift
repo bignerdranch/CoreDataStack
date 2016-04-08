@@ -106,6 +106,29 @@ extension CoreDataModelable where Self: NSManagedObject {
         fetchRequest.predicate = predicate
         return try context.executeFetchRequest(fetchRequest) as! [Self]
     }
+    
+    // MARK: - Counting Objects
+    
+    /**
+     Returns count of Entities that matches the optional predicate within the specified `NSManagedObjectContext`.
+     
+     - parameter context: `NSManagedObjectContext` to count the entities within.
+     - parameter predicate: An optional `NSPredicate` for filtering
+     
+     - throws: Any error produced from `countForFetchRequest`
+     
+     - returns: `Int`: Count of entities that matches the optional predicate.
+     */
+    static public func countInContext(context: NSManagedObjectContext, predicate: NSPredicate? = nil) throws -> Int {
+        let fetchReqeust = fetchRequestForEntity(inContext: context)
+        fetchReqeust.includesSubentities = false
+        fetchReqeust.predicate = predicate
+        var error: NSError? = nil
+        let count = context.countForFetchRequest(fetchReqeust, error: &error)
+        if let error = error { throw error }
+        guard count != NSNotFound else { return 0 }
+        return count
+    }
 
     // MARK: - Removing Objects
 
