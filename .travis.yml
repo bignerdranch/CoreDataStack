@@ -6,8 +6,7 @@ rvm: 2.2.2
 before_script:
     - brew update
     - brew outdated carthage || brew upgrade carthage
-    - gem install jazzy --no-rdoc --no-ri --no-document
-
+    
 after_success:
     - ./Resources/scripts/publish_docs.sh
 
