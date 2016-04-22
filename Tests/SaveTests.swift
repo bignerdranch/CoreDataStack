@@ -35,7 +35,7 @@ class SaveTests : TempDirectoryTestCase {
         try! frc.performFetch()
         XCTAssertEqual(frc.fetchedObjects?.count, 0)
         // now insert some authors on a background MOC and save it
-        let bgMoc = coreDataStack.newBackgroundWorkerMOC()
+        let bgMoc = coreDataStack.newChildContext()
         expectationForNotification(NSManagedObjectContextDidSaveNotification, object: coreDataStack.privateQueueContext, handler: nil)
         bgMoc.performBlockAndWait { () -> Void in
             for i in 1...5 {
@@ -72,7 +72,7 @@ class SaveTests : TempDirectoryTestCase {
     func testBackgroundSaveAsync() {
         expectationForNotification(NSManagedObjectContextDidSaveNotification, object: coreDataStack.mainQueueContext, handler: nil)
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0)) { () -> Void in
-            let bgMoc = self.coreDataStack.newBackgroundWorkerMOC()
+            let bgMoc = self.coreDataStack.newChildContext()
             bgMoc.performBlockAndWait { () -> Void in
                 for i in 1...5 {
                     let author = Author(managedObjectContext: bgMoc)
