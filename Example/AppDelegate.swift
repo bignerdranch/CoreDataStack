@@ -70,7 +70,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 try moc.saveContextAndWait()
             }
         } catch {
-            print("Error creating inital data: \(error)")
+            print("Error creating initial data: \(error)")
         }
     }
 }
