@@ -19,7 +19,7 @@ custom_categories:
   - name: Extensions
     children:
     - NSPersistentStoreCoordinator
-    - NSPersistentStoreCoordinator
+    - NSManagedObjectContext
   - name: Supporting Structs and Enums
     children:
     - FetchedResultsObjectChange
@@ -33,7 +33,7 @@ head: |
   <meta property="og:image" content="//www.bignerdranch.com/img/bnr-logo-square.png">
   <link rel="shortcut icon" type="image/x-icon" href="//www.bignerdranch.com/favicon.png">
 hide_documentation_coverage: false
-skip_undocumented: true
+skip_undocumented: false
 module: CoreDataStack
 podspec: BNRCoreDataStack.podspec
 root_url: "http://bignerdranch.github.io/CoreDataStack/"
