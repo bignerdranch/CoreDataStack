@@ -297,6 +297,21 @@ public extension CoreDataStack {
 }
 
 public extension CoreDataStack {
+    
+    private func newMOC(concurrencyType concurrencyType: NSManagedObjectContextConcurrencyType, name: String)  -> NSManagedObjectContext {
+        let moc = NSManagedObjectContext(concurrencyType: concurrencyType)
+        moc.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
+        moc.parentContext = self.mainQueueContext
+        moc.name = name
+        
+        NSNotificationCenter.defaultCenter().addObserver(self,
+                                                         selector: #selector(stackMemberContextDidSaveNotification(_:)),
+                                                         name: NSManagedObjectContextDidSaveNotification,
+                                                         object: moc)
+        
+        return moc
+    }
+    
     /**
     Returns a new background worker `NSManagedObjectContext` as a child of the main queue context.
 
@@ -305,16 +320,19 @@ public extension CoreDataStack {
     - returns: `NSManagedObjectContext` The new worker context.
     */
     public func newBackgroundWorkerMOC() -> NSManagedObjectContext {
-        let moc = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-        moc.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
-        moc.parentContext = self.mainQueueContext
-        moc.name = "Background Worker Context"
-
-        NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: #selector(stackMemberContextDidSaveNotification(_:)),
-            name: NSManagedObjectContextDidSaveNotification,
-            object: moc)
-
+        let moc = newMOC(concurrencyType: .PrivateQueueConcurrencyType, name: "Background Worker Context")
+        return moc
+    }
+    
+    /**
+     Returns a new main queue `NSManagedObjectContext` as a child of the main queue context.
+     
+     Calling `save()` on this managed object context will automatically trigger a save on its parent context via `NSNotification` observing.
+     
+     - returns: `NSManagedObjectContext` The new main child context.
+     */
+    public func newMainQueueChildMOC() -> NSManagedObjectContext {
+        let moc = newMOC(concurrencyType: .MainQueueConcurrencyType, name: "Main Queue Child Context")
         return moc
     }
 
