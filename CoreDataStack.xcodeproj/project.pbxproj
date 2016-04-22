@@ -61,6 +61,7 @@
 		E440FF0E1C80B127003DE8FF /* ModelMigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440FF021C80B124003DE8FF /* ModelMigrationTests.swift */; };
 		E440FF0F1C80B127003DE8FF /* SaveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440FF031C80B124003DE8FF /* SaveTests.swift */; };
 		E440FF101C80B127003DE8FF /* StoreTeardownTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440FF041C80B124003DE8FF /* StoreTeardownTests.swift */; };
+		E4472C561CC92BD7003374CC /* StackCallbackQueueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4472C551CC92BD7003374CC /* StackCallbackQueueTests.swift */; };
 		E45013371C23572400ADC83B /* CoreDataStack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45013091C23393500ADC83B /* CoreDataStack.framework */; };
 		E47A83E01C038871001A047E /* BooksTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47A83DE1C038871001A047E /* BooksTableViewController.swift */; };
 		E47A83E91C03A4CD001A047E /* BooksTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E47A83E81C03A4CD001A047E /* BooksTableViewController.xib */; };
@@ -142,6 +143,7 @@
 		E440FF021C80B124003DE8FF /* ModelMigrationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ModelMigrationTests.swift; path = Tests/ModelMigrationTests.swift; sourceTree = SOURCE_ROOT; };
 		E440FF031C80B124003DE8FF /* SaveTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SaveTests.swift; path = Tests/SaveTests.swift; sourceTree = SOURCE_ROOT; };
 		E440FF041C80B124003DE8FF /* StoreTeardownTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StoreTeardownTests.swift; path = Tests/StoreTeardownTests.swift; sourceTree = SOURCE_ROOT; };
+		E4472C551CC92BD7003374CC /* StackCallbackQueueTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StackCallbackQueueTests.swift; path = Tests/StackCallbackQueueTests.swift; sourceTree = SOURCE_ROOT; };
 		E45013091C23393500ADC83B /* CoreDataStack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreDataStack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E45013321C23572400ADC83B /* CoreDataStackTVTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreDataStackTVTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E47A83DE1C038871001A047E /* BooksTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooksTableViewController.swift; sourceTree = "<group>"; };
@@ -258,6 +260,7 @@
 				E440FF021C80B124003DE8FF /* ModelMigrationTests.swift */,
 				E440FF031C80B124003DE8FF /* SaveTests.swift */,
 				E440FF041C80B124003DE8FF /* StoreTeardownTests.swift */,
+				E4472C551CC92BD7003374CC /* StackCallbackQueueTests.swift */,
 			);
 			name = "Stack Tests";
 			sourceTree = "<group>";
@@ -775,6 +778,7 @@
 				E440FF0E1C80B127003DE8FF /* ModelMigrationTests.swift in Sources */,
 				E40CFCEF1C80C50600CBDFF2 /* Sample.xcdatamodeld in Sources */,
 				E4BF51D61C935078007E19DF /* XCTest+Helpers.swift in Sources */,
+				E4472C561CC92BD7003374CC /* StackCallbackQueueTests.swift in Sources */,
 				E440FF0B1C80B127003DE8FF /* BatchOperationContextTests.swift in Sources */,
 				E440FF0D1C80B127003DE8FF /* InitializationTests.swift in Sources */,
 				E440FEF51C80B0DD003DE8FF /* FetchedResultsControllerTests.swift in Sources */,
