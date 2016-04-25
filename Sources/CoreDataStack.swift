@@ -353,20 +353,17 @@ public extension CoreDataStack {
 
      Calling `save()` on this managed object context will automatically trigger a save on its parent context via `NSNotification` observing.
 
-     - parameter concurrencyType: The NSManagedObjectContextConcurrencyType of the new context. 
-        **Note** this function will trap on a preconditionFailure if you attempt to create a MainQueueConcurrencyType context from a background thread.
-        Default value is .PrivateQueueConcurrencyType
+     - parameter concurrencyType: The NSManagedObjectContextConcurrencyType of the new context.
+     **Note** this function will trap on a preconditionFailure if you attempt to create a MainQueueConcurrencyType context from a background thread.
+     Default value is .PrivateQueueConcurrencyType
      - parameter name: A name for the new context for debugging purposes. Defaults to *Main Queue Context Child*
 
      - returns: `NSManagedObjectContext` The new worker context.
      */
     public func newChildContext(concurrencyType concurrencyType: NSManagedObjectContextConcurrencyType = .PrivateQueueConcurrencyType,
-                                name: String? = "Main Queue Context Child") -> NSManagedObjectContext {
-        switch concurrencyType {
-        case .MainQueueConcurrencyType where !NSThread.isMainThread():
+                                                name: String? = "Main Queue Context Child") -> NSManagedObjectContext {
+        if concurrencyType == .MainQueueConcurrencyType && !NSThread.isMainThread() {
             preconditionFailure("Main thread MOCs must be created on the main thread")
-        default:
-            break
         }
 
         let moc = NSManagedObjectContext(concurrencyType: concurrencyType)
