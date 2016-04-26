@@ -39,7 +39,7 @@ class StoreTeardownTests: TempDirectoryTestCase {
 
     func testPersistentStoreReset() {
         // Insert some fresh objects
-        let worker = sqlStack.newBackgroundWorkerMOC()
+        let worker = sqlStack.newChildContext()
         worker.performBlockAndWait() {
             for _ in 0..<100 {
                 NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: worker)
@@ -56,7 +56,7 @@ class StoreTeardownTests: TempDirectoryTestCase {
             switch result {
             case .Success:
                 // Insert some objects after a reset
-                let worker = self.sqlStack.newBackgroundWorkerMOC()
+                let worker = self.sqlStack.newChildContext()
                 worker.performBlockAndWait() {
                     for _ in 0..<100 {
                         NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: worker)
@@ -75,7 +75,7 @@ class StoreTeardownTests: TempDirectoryTestCase {
 
     func testInMemoryReset() {
         // Insert some fresh objects
-        let worker = memoryStack.newBackgroundWorkerMOC()
+        let worker = memoryStack.newChildContext()
         worker.performBlockAndWait() {
             for _ in 0..<100 {
                 NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: worker)
@@ -91,7 +91,7 @@ class StoreTeardownTests: TempDirectoryTestCase {
             switch result {
             case .Success:
                 // Insert some objects after a reset
-                let worker = self.sqlStack.newBackgroundWorkerMOC()
+                let worker = self.sqlStack.newChildContext()
                 worker.performBlockAndWait() {
                     for _ in 0..<100 {
                         NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: worker)
