@@ -10,20 +10,16 @@ import CoreData
 
 #if os(iOS) || os(watchOS) || os(tvOS)
 
-// NOTE: T should have a bound of `: NSManagedObject`, but that causes the Swift 2.1 compiler
-// to fail with no useful error output upon switching on the enum. 
-// :-( This is not a deal-breaker, because
-// this enum in particular doesn't rely on T being an NSManagedObject.
 /**
 Enum representing the four types of object changes
 a `FetchedResultsController` will notify you about.
 */
-public enum FetchedResultsObjectChange<T> {
     /**
      Change type when an object is inserted.
      - parameter object: The inserted object of type `<T>`
      - parameter indexPath: The `NSIndexPath` of the new object
      */
+    public enum FetchedResultsObjectChange<T: NSManagedObject> {
     case Insert(object: T, indexPath: NSIndexPath)
 
     /**

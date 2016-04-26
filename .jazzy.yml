@@ -1,0 +1,41 @@
+# jazzy --config .jazzy.yml
+author: "Big Nerd Ranch"
+author_url: "http://bignerdranch.github.io"
+copyright: "© 2014-2016 [Big Nerd Ranch](//www.bignerdranch.com) under [MIT license](https://raw.githubusercontent.com/bignerdranch/CoreDataStack/master/LICENSE)."
+custom_categories:
+  - name: Stack
+    children:
+    - CoreDataStack
+    - Error
+  - name: Type Safe Monitors
+    children:
+    - EntityMonitor
+    - EntityMonitorDelegate
+    - FetchedResultsController
+    - FetchedResultsControllerDelegate
+  - name: NSManagedObject Shorthands
+    children:
+    - CoreDataModelable
+  - name: Extensions
+    children:
+    - NSPersistentStoreCoordinator
+    - NSManagedObjectContext
+  - name: Supporting Structs and Enums
+    children:
+    - FetchedResultsObjectChange
+    - FetchedResultsSectionChange
+    - FetchedResultsSectionInfo
+    - FireFrequency
+github_url: "https://github.com/bignerdranch/CoreDataStack"
+head: |
+  <meta property="og:site_name" content="Core Data Stack Programming Guide">
+  <meta property="og:description" content="The BNR Core Data Stack is a small framework, written in Swift, that makes it easy to quickly set up a multi-threading ready Core Data stack.">
+  <meta property="og:image" content="//www.bignerdranch.com/img/bnr-logo-square.png">
+  <link rel="shortcut icon" type="image/x-icon" href="//www.bignerdranch.com/favicon.png">
+hide_documentation_coverage: false
+skip_undocumented: false
+module: CoreDataStack
+podspec: BNRCoreDataStack.podspec
+root_url: "http://bignerdranch.github.io/CoreDataStack/"
+swift_version: 2.2
+theme: fullwidth
