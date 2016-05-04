@@ -59,7 +59,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return
         }
 
-        let moc = stack.newBackgroundWorkerMOC()
+        let moc = stack.newChildContext()
         do {
             try moc.performAndWaitOrThrow {
                 let books = StubbedBookData.books
