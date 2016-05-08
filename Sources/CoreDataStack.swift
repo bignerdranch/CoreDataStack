@@ -35,6 +35,8 @@ public final class CoreDataStack {
         case InMemoryStoreMissing
         /// Case when the store URL supplied to contruct function cannot be used
         case UnableToCreateStoreAt(url: NSURL)
+        /// Case when the store URL supplied can not be defined as excluded from backup
+        case UnableToSetSkipBackupAttributeAt(url: NSURL)
     }
 
     /**
@@ -101,6 +103,7 @@ public final class CoreDataStack {
         modelName: String,
         inBundle bundle: NSBundle = NSBundle.mainBundle(),
                  withStoreURL desiredStoreURL: NSURL? = nil,
+                              excludeFromBackup: Bool = false,
                               callbackQueue: dispatch_queue_t? = nil,
                               callback: CoreDataStackSetupCallback) {
 
@@ -111,6 +114,15 @@ public final class CoreDataStack {
         } catch {
             callback(.Failure(Error.UnableToCreateStoreAt(url: storeFileURL)))
             return
+        }
+
+        if excludeFromBackup {
+            do {
+                try addSkipBackupAttributeTo(storeFileURL)
+            } catch {
+                callback(.Failure(Error.UnableToSetSkipBackupAttributeAt(url: storeFileURL)))
+                return
+            }
         }
 
         let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
@@ -141,6 +153,10 @@ public final class CoreDataStack {
             throw Error.UnableToCreateStoreAt(url: url)
         }
         try fileManager.createDirectoryAtURL(directory, withIntermediateDirectories: true, attributes: nil)
+    }
+
+    private static func addSkipBackupAttributeTo(url: NSURL) throws {
+        try url.setResourceValue(true, forKey: NSURLIsExcludedFromBackupKey)
     }
 
     /**
