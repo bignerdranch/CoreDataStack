@@ -118,10 +118,10 @@ myCoreDataStack.mainQueueContext
 
 #### <a id="worker_moc"></a> Creating a Worker Context
 
-Calling `newBackgroundWorkerMOC()` will vend us a `PrivateQueueConcurrencyType` child context of the [main queue context](#main_moc). Useful for any longer running task, such as inserting or updating data from a web service. Calling save() on this managed object context will automatically trigger a save on its parent context via `NSNotification`.
+Calling `newChildContext()` will vend us a `PrivateQueueConcurrencyType` child context of the [main queue context](#main_moc). Useful for any longer running task, such as inserting or updating data from a web service. Calling save() on this managed object context will automatically trigger a save on its parent context via `NSNotification`.
 
 ```swift
-let workerContext = myCoreDataStack.newBackgroundWorkerMOC()
+let workerContext = myCoreDataStack.newChildContext()
 workerContext.performBlock() {
     // fetch data from web-service
     // update local data
