@@ -207,6 +207,34 @@ To validate that you are honoring all of the threading rules it's common to add 
 
 This will throw an exception if you happen to break a threading rule. For more on setting up Launch Arguments check out this [article by NSHipster](http://nshipster.com/launch-arguments-and-environment-variables/).
 
+## iCloud and iTunes Backup Considerations
+
+By default the CoreData store URL can be included in the backup of a device to both iCloud and local disk backups via iTunes. For sensitive information such as health records or other personally identifiable information, you should supply an `NSURL` to the constructor that has been flagged as excluded from backup.
+
+Example:
+
+```swift
+// Setup your URL
+let documentsDirectory = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
+let storeFileURL = NSURL(string: "MyModel.sqlite", relativeToURL: documentsDirectory)!
+do {
+	try storeFileURL.setResourceValue(true, forKey: NSURLIsExcludedFromBackupKey)
+} catch {
+	//handle error ...
+}
+
+// Create your stack
+CoreDataStack.constructSQLiteStack(withModelName: "MyModel", withStoreURL: storeFileURL) { result in
+	switch result {
+    case .Success(let stack):
+		// Use your new stack
+    case .Failure(let error):
+        //handle error ...
+    }
+}
+
+```
+
 ## About
 
 [![Big Nerd Ranch](https://raw.githubusercontent.com/bignerdranch/CoreDataStack/master/Resources/logo.png)](http://bignerdranch.com)
