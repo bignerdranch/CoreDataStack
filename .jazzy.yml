@@ -36,6 +36,7 @@ hide_documentation_coverage: false
 skip_undocumented: false
 module: CoreDataStack
 podspec: BNRCoreDataStack.podspec
+module_version: "2.0.0-rc.1"
 root_url: "http://bignerdranch.github.io/CoreDataStack/"
 swift_version: 2.2
 theme: fullwidth
