@@ -15,9 +15,8 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; th
     git init
 
     echo -e "Generating Jazzy output \n"
-    bundle exec jazzy --clean --config .jazzy.yml
-    #bundle exec jazzy --source-directory ../ --output ./ --podspec ../BNRCoreDataStack.podspec -m "CoreDataStack" -a "Big Nerd Ranch" -u "https://github.com/bignerdranch" "http://bignerdranch.github.io/CoreDataStack/"
-
+    bundle exec jazzy --podspec ../BNRCoreDataStack.podspec -m "CoreDataStack" --config .jazzy.yml
+    
     echo -e "Adding new docs \n"
     git add -A
     git commit -m "Refresh docs from successful travis build $TRAVIS_BUILD_NUMBER"
