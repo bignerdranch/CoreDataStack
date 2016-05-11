@@ -239,7 +239,24 @@ private extension FetchedResultsObjectChange {
             self = .Update(object: object, indexPath: indexPath)
 
         case let (.Move, fromIndexPath?, toIndexPath?):
-            self = .Move(object: object, fromIndexPath: fromIndexPath, toIndexPath: toIndexPath)
+            // There are at least two different .Move-related bugs running on Xcode 7.3.1:
+            //
+            // * iOS 8.4 sometimes reports both an .Update and a .Move (with identical index paths)
+            //   for the same object.
+            // * iOS 9.3 sometimes reports _just_ a .Move (with identical index paths) and no
+            //   .Update for an object.
+            //
+            // According to https://developer.apple.com/library/ios/releasenotes/iPhone/NSFetchedResultsChangeMoveReportedAsNSFetchedResultsChangeUpdate/
+            // we shouldn't get moves with identical index paths, but we have to work around
+            // this somehow. For now, we'll convert identical-indexPath-.Moves into .Updates
+            // (just like that document claims NSFetchedResultsController does). This means we'll
+            // get correct behavior on iOS 9.3. iOS 8.4 will get "double updates" sometimes, but
+            // _hopefully_ that's ok.
+            if fromIndexPath == toIndexPath {
+                self = .Update(object: object, indexPath: fromIndexPath)
+            } else {
+                self = .Move(object: object, fromIndexPath: fromIndexPath, toIndexPath: toIndexPath)
+            }
 
         default:
             preconditionFailure("Invalid change. Missing a required index path for corresponding change type.")
