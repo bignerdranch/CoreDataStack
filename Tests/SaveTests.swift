@@ -25,7 +25,48 @@ class SaveTests : TempDirectoryTestCase {
         coreDataStack = nil
         super.tearDown()
     }
-    
+
+    func testSaveAndPersistToStore() {
+        let privateQueueContext = coreDataStack.privateQueueContext
+        let mainQueueContext = coreDataStack.mainQueueContext
+        let worker = coreDataStack.newChildContext()
+
+        worker.performBlockAndWait() {
+            XCTAssertFalse(worker.hasChanges)
+            XCTAssertEqual(try! Author.allInContext(worker).count, 0)
+        }
+        privateQueueContext.performBlockAndWait() {
+            XCTAssertFalse(privateQueueContext.hasChanges)
+            XCTAssertEqual(try! Author.allInContext(privateQueueContext).count, 0)
+        }
+        XCTAssertFalse(mainQueueContext.hasChanges)
+        XCTAssertEqual(try! Author.allInContext(mainQueueContext).count, 0)
+
+        worker.performBlockAndWait { () -> Void in
+            for i in 1...5 {
+                let author = Author(managedObjectContext: worker)
+                author.firstName = "Jim \(i)"
+                author.lastName = "Jones \(i)"
+            }
+        }
+
+        do {
+            try worker.saveContextAndPersistToStore()
+            worker.performBlockAndWait() {
+                XCTAssertFalse(worker.hasChanges)
+                XCTAssertEqual(try! Author.allInContext(worker).count, 5)
+            }
+            privateQueueContext.performBlockAndWait() {
+                XCTAssertFalse(privateQueueContext.hasChanges)
+                XCTAssertEqual(try! Author.allInContext(privateQueueContext).count, 5)
+            }
+            XCTAssertFalse(mainQueueContext.hasChanges)
+            XCTAssertEqual(try! Author.allInContext(mainQueueContext).count, 5)
+        } catch {
+            failingOn(error)
+        }
+    }
+
     func testBackgroundInsertAndSavePropagatesChanges() {
         // create a NSFRC looking for Authors
         let frc = authorsFetchedResultsController()

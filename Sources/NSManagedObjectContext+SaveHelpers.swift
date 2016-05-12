@@ -57,6 +57,30 @@ public extension NSManagedObjectContext {
         }
     }
 
+    /**
+     Convenience method to synchronously save the `NSManagedObjectContext` if changes are present.
+     If any parent contexts are found, they too will be saved synchronously.
+     Method also ensures that the save is executed on the correct queue when using Main/Private queue concurrency types.
+
+     - throws: Errors produced by the `save()` function on the `NSManagedObjectContext`
+     */
+    public func saveContextAndPersistToStore() throws {
+        func saveFlow() throws {
+            try sharedSaveFlow()
+            if let parent = parentContext {
+                try parent.saveContextAndPersistToStore()
+            }
+        }
+
+        switch concurrencyType {
+        case .ConfinementConcurrencyType:
+            try saveFlow()
+        case .MainQueueConcurrencyType,
+             .PrivateQueueConcurrencyType:
+            try performAndWaitOrThrow(saveFlow)
+        }
+    }
+
     private func sharedSaveFlow() throws {
         guard hasChanges else {
             return
