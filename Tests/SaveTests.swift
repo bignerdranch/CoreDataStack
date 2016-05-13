@@ -26,11 +26,12 @@ class SaveTests : TempDirectoryTestCase {
         super.tearDown()
     }
 
-    func testSaveAndPersistToStore() {
+    func testSaveContextToStoreAndWait() {
         let privateQueueContext = coreDataStack.privateQueueContext
         let mainQueueContext = coreDataStack.mainQueueContext
         let worker = coreDataStack.newChildContext()
 
+        // Initial State Assertions
         worker.performBlockAndWait() {
             XCTAssertFalse(worker.hasChanges)
             XCTAssertEqual(try! Author.allInContext(worker).count, 0)
@@ -42,6 +43,7 @@ class SaveTests : TempDirectoryTestCase {
         XCTAssertFalse(mainQueueContext.hasChanges)
         XCTAssertEqual(try! Author.allInContext(mainQueueContext).count, 0)
 
+        // Insert Records
         worker.performBlockAndWait { () -> Void in
             for i in 1...5 {
                 let author = Author(managedObjectContext: worker)
@@ -50,21 +52,24 @@ class SaveTests : TempDirectoryTestCase {
             }
         }
 
+        // Perform Save
         do {
-            try worker.saveContextAndPersistToStore()
-            worker.performBlockAndWait() {
-                XCTAssertFalse(worker.hasChanges)
-                XCTAssertEqual(try! Author.allInContext(worker).count, 5)
-            }
-            privateQueueContext.performBlockAndWait() {
-                XCTAssertFalse(privateQueueContext.hasChanges)
-                XCTAssertEqual(try! Author.allInContext(privateQueueContext).count, 5)
-            }
-            XCTAssertFalse(mainQueueContext.hasChanges)
-            XCTAssertEqual(try! Author.allInContext(mainQueueContext).count, 5)
+            try worker.saveContextToStoreAndWait()
         } catch {
             failingOn(error)
         }
+
+        // Final State Assertions
+        worker.performBlockAndWait() {
+            XCTAssertFalse(worker.hasChanges)
+            XCTAssertEqual(try! Author.allInContext(worker).count, 5)
+        }
+        privateQueueContext.performBlockAndWait() {
+            XCTAssertFalse(privateQueueContext.hasChanges)
+            XCTAssertEqual(try! Author.allInContext(privateQueueContext).count, 5)
+        }
+        XCTAssertFalse(mainQueueContext.hasChanges)
+        XCTAssertEqual(try! Author.allInContext(mainQueueContext).count, 5)
     }
 
     func testBackgroundInsertAndSavePropagatesChanges() {

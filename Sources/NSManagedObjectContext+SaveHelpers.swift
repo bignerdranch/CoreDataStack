@@ -64,11 +64,11 @@ public extension NSManagedObjectContext {
 
      - throws: Errors produced by the `save()` function on the `NSManagedObjectContext`
      */
-    public func saveContextAndPersistToStore() throws {
+    public func saveContextToStoreAndWait() throws {
         func saveFlow() throws {
             try sharedSaveFlow()
-            if let parent = parentContext {
-                try parent.saveContextAndPersistToStore()
+            if let parentContext = parentContext {
+                try parentContext.saveContextToStoreAndWait()
             }
         }
 
