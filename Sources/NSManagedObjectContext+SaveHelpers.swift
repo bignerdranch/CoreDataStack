@@ -81,6 +81,37 @@ public extension NSManagedObjectContext {
         }
     }
 
+    /**
+     Convenience method to asynchronously save the `NSManagedObjectContext` if changes are present.
+     If any parent contexts are found, they too will be saved asynchronously.
+     Method also ensures that the save is executed on the correct queue when using Main/Private queue concurrency types.
+
+    - parameter completion: Completion closure with a `SaveResult` to be executed 
+        either upon the completion of the top most context's save operation or the first encountered save error.
+     */
+    public func saveContextToStore(completion: CoreDataStackSaveCompletion? = nil) {
+        func saveFlow() {
+            do {
+                try sharedSaveFlow()
+                if let parentContext = parentContext {
+                    parentContext.saveContextToStore(completion)
+                } else {
+                    completion?(.Success)
+                }
+            } catch let saveError {
+                completion?(.Failure(saveError))
+            }
+        }
+
+        switch concurrencyType {
+        case .ConfinementConcurrencyType:
+            saveFlow()
+        case .PrivateQueueConcurrencyType,
+             .MainQueueConcurrencyType:
+            performBlock(saveFlow)
+        }
+    }
+
     private func sharedSaveFlow() throws {
         guard hasChanges else {
             return
