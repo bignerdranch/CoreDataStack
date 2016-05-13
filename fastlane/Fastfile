@@ -20,7 +20,7 @@ LATEST_IPHONE_DEVICE = FastlaneCore::Simulator.all.map { |d| d.name }.select { |
 #######################################################################
   
 before_all do
-    # add anything you want run before all lanes run
+    reset_simulators
 end
 
 after_all do |lane|
