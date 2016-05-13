@@ -18,3 +18,4 @@ docs
 fastlane/test_output
 fastlane/build_output
 report.xml
+build

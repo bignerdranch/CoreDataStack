@@ -25,7 +25,105 @@ class SaveTests : TempDirectoryTestCase {
         coreDataStack = nil
         super.tearDown()
     }
-    
+
+    func testSaveContextToStore() {
+        let privateQueueContext = coreDataStack.privateQueueContext
+        let mainQueueContext = coreDataStack.mainQueueContext
+        let worker = coreDataStack.newChildContext()
+        let saveExpectation = expectationWithDescription("Async save callback")
+
+        // Initial State Assertions
+        worker.performBlockAndWait() {
+            XCTAssertFalse(worker.hasChanges)
+            XCTAssertEqual(try! Author.allInContext(worker).count, 0)
+        }
+        privateQueueContext.performBlockAndWait() {
+            XCTAssertFalse(privateQueueContext.hasChanges)
+            XCTAssertEqual(try! Author.allInContext(privateQueueContext).count, 0)
+        }
+        XCTAssertFalse(mainQueueContext.hasChanges)
+        XCTAssertEqual(try! Author.allInContext(mainQueueContext).count, 0)
+
+        // Insert Records
+        worker.performBlockAndWait { () -> Void in
+            for i in 1...5 {
+                let author = Author(managedObjectContext: worker)
+                author.firstName = "Jim \(i)"
+                author.lastName = "Jones \(i)"
+            }
+        }
+
+        // Perform Save
+        worker.saveContextToStore() { result in
+            switch result {
+            case .Success:
+                break
+            case .Failure(let error):
+                self.failingOn(error)
+            }
+            saveExpectation.fulfill()
+        }
+        waitForExpectationsWithTimeout(10, handler: nil)
+
+        // Final State Assertions
+        worker.performBlockAndWait() {
+            XCTAssertFalse(worker.hasChanges)
+            XCTAssertEqual(try! Author.allInContext(worker).count, 5)
+        }
+        privateQueueContext.performBlockAndWait() {
+            XCTAssertFalse(privateQueueContext.hasChanges)
+            XCTAssertEqual(try! Author.allInContext(privateQueueContext).count, 5)
+        }
+        XCTAssertFalse(mainQueueContext.hasChanges)
+        XCTAssertEqual(try! Author.allInContext(mainQueueContext).count, 5)
+    }
+
+    func testSaveContextToStoreAndWait() {
+        let privateQueueContext = coreDataStack.privateQueueContext
+        let mainQueueContext = coreDataStack.mainQueueContext
+        let worker = coreDataStack.newChildContext()
+
+        // Initial State Assertions
+        worker.performBlockAndWait() {
+            XCTAssertFalse(worker.hasChanges)
+            XCTAssertEqual(try! Author.allInContext(worker).count, 0)
+        }
+        privateQueueContext.performBlockAndWait() {
+            XCTAssertFalse(privateQueueContext.hasChanges)
+            XCTAssertEqual(try! Author.allInContext(privateQueueContext).count, 0)
+        }
+        XCTAssertFalse(mainQueueContext.hasChanges)
+        XCTAssertEqual(try! Author.allInContext(mainQueueContext).count, 0)
+
+        // Insert Records
+        worker.performBlockAndWait { () -> Void in
+            for i in 1...5 {
+                let author = Author(managedObjectContext: worker)
+                author.firstName = "Jim \(i)"
+                author.lastName = "Jones \(i)"
+            }
+        }
+
+        // Perform Save
+        do {
+            try worker.saveContextToStoreAndWait()
+        } catch {
+            failingOn(error)
+        }
+
+        // Final State Assertions
+        worker.performBlockAndWait() {
+            XCTAssertFalse(worker.hasChanges)
+            XCTAssertEqual(try! Author.allInContext(worker).count, 5)
+        }
+        privateQueueContext.performBlockAndWait() {
+            XCTAssertFalse(privateQueueContext.hasChanges)
+            XCTAssertEqual(try! Author.allInContext(privateQueueContext).count, 5)
+        }
+        XCTAssertFalse(mainQueueContext.hasChanges)
+        XCTAssertEqual(try! Author.allInContext(mainQueueContext).count, 5)
+    }
+
     func testBackgroundInsertAndSavePropagatesChanges() {
         // create a NSFRC looking for Authors
         let frc = authorsFetchedResultsController()
