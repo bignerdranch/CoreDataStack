@@ -15,7 +15,7 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; th
     git init
 
     echo -e "Generating Jazzy output \n"
-    bundle exec jazzy --output $TRAVIS_BUILD_DIR/gh-pages --clean --podspec $TRAVIS_BUILD_DIR/BNRCoreDataStack.podspec --module "CoreDataStack" --config $TRAVIS_BUILD_DIR/.jazzy.yml
+    jazzy --output $TRAVIS_BUILD_DIR/gh-pages --clean --podspec $TRAVIS_BUILD_DIR/BNRCoreDataStack.podspec --module "CoreDataStack" --config $TRAVIS_BUILD_DIR/.jazzy.yml
     
     echo -e "Adding new docs \n"
     git add -A
