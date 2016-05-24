@@ -4,33 +4,55 @@
 # thanks to abbeycode/UnzipKit for example 
 #
 
-if [ -z ${TRAVIS+x} ]; then
-    TRAVIS_BUILD_DIR="/Users/redwards/workspace/CoreDataStack"
-    TRAVIS_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-fi
+EXIT_CODE=0
 
-echo "=================Creating Cartfile================="
-echo "git \"$TRAVIS_BUILD_DIR\" \"$TRAVIS_BRANCH\"" > ./Cartfile
+clone_project() {
+  local BRANCH_NAME BUILD_DIR
+  if [[ $CIRCLECI ]]; then
+    BRANCH_NAME=$CIRCLE_BRANCH
+    BUILD_DIR=$(pwd)
+  elif [[ $TRAVIS ]]; then
+    BRANCH_NAME=$TRAVIS_BRANCH
+    BUILD_DIR=$TRAVIS_BUILD_DIR
+  else
+    BUILD_DIR="$HOME/workspace/CoreDataStack"
+    BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+    echo "=================Not Running in CI================="
+  fi
 
-echo "=================Bootstrapping Carthage================="
-carthage bootstrap --configuration Debug
-EXIT_CODE=$?
+  echo "=================Creating Cartfile================="
+  echo "git \"$BUILD_DIR\" \"$BRANCH_NAME\"" > ./Cartfile
+}
 
-echo "=================Checking for build products================="
+bootstrap() {
+  echo "=================Bootstrapping Carthage================="
+  carthage bootstrap --configuration Debug
+  EXIT_CODE=$?
+}
 
-if [ ! -d "Carthage/Build/iOS/CoreDataStack.framework" ]; then
+validate() {
+  echo "=================Checking for build products================="
+
+  if [ ! -d "Carthage/Build/iOS/CoreDataStack.framework" ]; then
     echo "=================iOS Library failed to build with Carthage================="
     EXIT_CODE=1
-fi
+  fi
 
-if [ ! -d "Carthage/Build/tvOS/CoreDataStack.framework" ]; then
+  if [ ! -d "Carthage/Build/tvOS/CoreDataStack.framework" ]; then
     echo "=================iOS Library failed to build with Carthage================="
     EXIT_CODE=1
-fi
+  fi
+}
 
-echo "=================Cleaning Up================="
-rm ./Cartfile
-rm ./Cartfile.resolved
-rm -rf ./Carthage
+clean_up() {
+  echo "=================Cleaning Up================="
+  rm ./Cartfile
+  rm ./Cartfile.resolved
+  rm -rf ./Carthage
+}
 
+clone_project
+bootstrap
+validate
+clean_up
 exit $EXIT_CODE
