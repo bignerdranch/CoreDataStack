@@ -94,6 +94,7 @@ public final class CoreDataStack {
      - parameter modelName: Base name of the `XCDataModel` file.
      - parameter inBundle: NSBundle that contains the `XCDataModel`. Default value is mainBundle()
      - parameter withStoreURL: Optional URL to use for storing the `SQLite` file. Defaults to "(modelName).sqlite" in the Documents directory.
+     - parameter queue: Optional GCD queue on which to perform the store creation. Defaults to a global background queue.
      - parameter callbackQueue: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
      - parameter callback: The `SQLite` persistent store coordinator will be setup asynchronously. This callback will be passed either an initialized `CoreDataStack` object or an `ErrorType` value.
      */
@@ -101,6 +102,7 @@ public final class CoreDataStack {
         modelName: String,
         inBundle bundle: NSBundle = NSBundle.mainBundle(),
                  withStoreURL desiredStoreURL: NSURL? = nil,
+                              queue: dispatch_queue_t = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0),
                               callbackQueue: dispatch_queue_t? = nil,
                               callback: CoreDataStackSetupCallback) {
 
@@ -113,11 +115,11 @@ public final class CoreDataStack {
             return
         }
 
-        let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
-        let callbackQueue: dispatch_queue_t = callbackQueue ?? backgroundQueue
+        let callbackQueue: dispatch_queue_t = callbackQueue ?? queue
         NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(
             model,
-            storeFileURL: storeFileURL) { coordinatorResult in
+            storeFileURL: storeFileURL,
+            queue: queue) { coordinatorResult in
                 switch coordinatorResult {
                 case .Success(let coordinator):
                     let stack = CoreDataStack(modelName : modelName,
@@ -201,6 +203,9 @@ public final class CoreDataStack {
     }
 
     private let saveBubbleDispatchGroup = dispatch_group_create()
+    private let backgroundQueue = dispatch_queue_create(
+        "com.bigNerdRanch.coreDataStack.backgroundQueue",
+        dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_UTILITY, 0))
 }
 
 public extension CoreDataStack {
@@ -249,7 +254,6 @@ public extension CoreDataStack {
      - parameter resetCallback: A callback with a `Success` or an `ErrorType` value with the error
      */
     public func resetStore(callbackQueue: dispatch_queue_t? = nil, resetCallback: CoreDataStackStoreResetCallback) {
-        let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
         let callbackQueue: dispatch_queue_t = callbackQueue ?? backgroundQueue
         dispatch_group_notify(self.saveBubbleDispatchGroup, backgroundQueue) {
             switch self.storeType {
@@ -306,19 +310,22 @@ public extension CoreDataStack {
                 }
 
                 // Setup a new stack
-                NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(mom, storeFileURL: storeURL) { result in
-                    switch result {
-                    case .Success (let coordinator):
-                        self.persistentStoreCoordinator = coordinator
-                        dispatch_async(callbackQueue) {
-                            resetCallback(.Success)
-                        }
+                NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(
+                    mom,
+                    storeFileURL: storeURL,
+                    queue: self.backgroundQueue) { result in
+                        switch result {
+                        case .Success (let coordinator):
+                            self.persistentStoreCoordinator = coordinator
+                            dispatch_async(callbackQueue) {
+                                resetCallback(.Success)
+                            }
 
-                    case .Failure (let error):
-                        dispatch_async(callbackQueue) {
-                            resetCallback(.Failure(error))
+                        case .Failure (let error):
+                            dispatch_async(callbackQueue) {
+                                resetCallback(.Failure(error))
+                            }
                         }
-                    }
                 }
             }
         }
@@ -401,20 +408,23 @@ public extension CoreDataStack {
                 setupCallback(.Failure(error))
             }
         case .SQLite(let storeURL):
-            let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
             let callbackQueue: dispatch_queue_t = callbackQueue ?? backgroundQueue
-            NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(managedObjectModel, storeFileURL: storeURL) { result in
-                switch result {
-                case .Success(let coordinator):
-                    moc.persistentStoreCoordinator = coordinator
-                    dispatch_async(callbackQueue) {
-                        setupCallback(.Success(moc))
+            NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(
+                managedObjectModel,
+                storeFileURL:
+                storeURL,
+                queue: self.backgroundQueue) { result in
+                    switch result {
+                    case .Success(let coordinator):
+                        moc.persistentStoreCoordinator = coordinator
+                        dispatch_async(callbackQueue) {
+                            setupCallback(.Success(moc))
+                        }
+                    case .Failure(let error):
+                        dispatch_async(callbackQueue) {
+                            setupCallback(.Failure(error))
+                        }
                     }
-                case .Failure(let error):
-                    dispatch_async(callbackQueue) {
-                        setupCallback(.Failure(error))
-                    }
-                }
             }
         }
     }
