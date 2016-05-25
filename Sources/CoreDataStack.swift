@@ -250,12 +250,16 @@ public extension CoreDataStack {
      This function resets the `NSPersistentStore` connected to the `NSPersistentStoreCoordinator`.
      For `SQLite` based stacks, this function will also remove the `SQLite` store from disk.
 
+     - parameter queue: Optional GCD queue that will be used to reset the store. Defaults to the stack's private serial queue.
      - parameter callbackQueue: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
      - parameter resetCallback: A callback with a `Success` or an `ErrorType` value with the error
      */
-    public func resetStore(callbackQueue: dispatch_queue_t? = nil, resetCallback: CoreDataStackStoreResetCallback) {
-        let callbackQueue: dispatch_queue_t = callbackQueue ?? backgroundQueue
-        dispatch_group_notify(self.saveBubbleDispatchGroup, backgroundQueue) {
+    public func resetStore(queue: dispatch_queue_t? = nil,
+                           callbackQueue: dispatch_queue_t? = nil,
+                           resetCallback: CoreDataStackStoreResetCallback) {
+        let queue: dispatch_queue_t = queue ?? backgroundQueue
+        let callbackQueue: dispatch_queue_t = callbackQueue ?? queue
+        dispatch_group_notify(self.saveBubbleDispatchGroup, queue) {
             switch self.storeType {
             case .InMemory:
                 do {
@@ -313,7 +317,7 @@ public extension CoreDataStack {
                 NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(
                     mom,
                     storeFileURL: storeURL,
-                    queue: self.backgroundQueue) { result in
+                    queue: queue) { result in
                         switch result {
                         case .Success (let coordinator):
                             self.persistentStoreCoordinator = coordinator
@@ -389,10 +393,13 @@ public extension CoreDataStack {
      Creates a new background `NSManagedObjectContext` connected to
      a discrete `NSPersistentStoreCoordinator` created with the same store used by the stack in construction.
 
+     - parameter queue: Optional GCD queue that will be used to reset the store. Defaults to the stack's private serial queue.
      - parameter callbackQueue: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
      - parameter setupCallback: A callback with either the new `NSManagedObjectContext` or an `ErrorType` value with the error
      */
-    public func newBatchOperationContext(callbackQueue: dispatch_queue_t? = nil, setupCallback: CoreDataStackBatchMOCCallback) {
+    public func newBatchOperationContext(queue: dispatch_queue_t? = nil,
+                                         callbackQueue: dispatch_queue_t? = nil,
+                                         setupCallback: CoreDataStackBatchMOCCallback) {
         let moc = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
         moc.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyObjectTrumpMergePolicyType)
         moc.name = "Batch Operation Context"
@@ -408,12 +415,13 @@ public extension CoreDataStack {
                 setupCallback(.Failure(error))
             }
         case .SQLite(let storeURL):
-            let callbackQueue: dispatch_queue_t = callbackQueue ?? backgroundQueue
+            let queue: dispatch_queue_t = queue ?? backgroundQueue
+            let callbackQueue: dispatch_queue_t = callbackQueue ?? queue
             NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(
                 managedObjectModel,
                 storeFileURL:
                 storeURL,
-                queue: self.backgroundQueue) { result in
+                queue: queue) { result in
                     switch result {
                     case .Success(let coordinator):
                         moc.persistentStoreCoordinator = coordinator
