@@ -6,5 +6,11 @@ excluded:
   - Carthage
   - Pods
 
-# Make line length violations more lenient
-line_length: 135
+# Overrides
+
+line_length: 175
+
+type_name:
+  min_length: 4
+  max_length: 50
+function_parameter_count: 10
