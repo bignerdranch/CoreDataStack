@@ -12,7 +12,7 @@ import CoreData
  Protocol to be conformed to by `NSManagedObject` subclasses that allow for convenience
     methods that make fetching, inserting, deleting, and change management easier.
  */
-public protocol CoreDataModelable {
+@objc public protocol CoreDataModelable {
     /**
      The name of your `NSManagedObject`'s entity within the `XCDataModel`.
 
