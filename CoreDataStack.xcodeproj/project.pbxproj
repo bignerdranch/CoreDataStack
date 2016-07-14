@@ -21,6 +21,20 @@
 		E40CFCEF1C80C50600CBDFF2 /* Sample.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E40CFCDC1C80C4E700CBDFF2 /* Sample.xcdatamodeld */; };
 		E40CFCF01C80C50700CBDFF2 /* Sample.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E40CFCDC1C80C4E700CBDFF2 /* Sample.xcdatamodeld */; };
 		E40CFCF11C80C50B00CBDFF2 /* TestModel.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = E40CFCD71C80C4DE00CBDFF2 /* TestModel.sqlite */; };
+		E42BEE561D37FC4700DD0632 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4B99C6F1B740321005B7E1A /* Assets.xcassets */; };
+		E42BEE571D37FC4E00DD0632 /* bnr-logo-square.png in Resources */ = {isa = PBXBuildFile; fileRef = E4DB61451BFFBB4400BD3E6B /* bnr-logo-square.png */; };
+		E42BEE5A1D37FCA800DD0632 /* CoreDataStack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C9BC2D1AEA848600A6BD1B /* CoreDataStack.framework */; };
+		E42BEE5C1D37FCAE00DD0632 /* CoreDataStack.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4C9BC2D1AEA848600A6BD1B /* CoreDataStack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E436D63F1D37F36900224B36 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E436D63E1D37F36900224B36 /* AppDelegate.swift */; };
+		E436D6561D37F3D700224B36 /* BooksTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E436D6511D37F3D700224B36 /* BooksTableViewController.swift */; };
+		E436D6591D37F3D700224B36 /* BooksTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E436D6541D37F3D700224B36 /* BooksTableViewController.xib */; };
+		E436D65B1D37F4F000224B36 /* UniqueConstraintModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4BF286D1C7F67B6005FC05F /* UniqueConstraintModel.xcdatamodeld */; };
+		E436D6611D37F7D000224B36 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E436D65D1D37F7D000224B36 /* LaunchScreen.storyboard */; };
+		E436D6621D37F7D000224B36 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E436D65F1D37F7D000224B36 /* Main.storyboard */; };
+		E436D6641D37F83200224B36 /* MyCoreDataConnectedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E436D6631D37F83200224B36 /* MyCoreDataConnectedViewController.swift */; };
+		E436D6651D37FB1000224B36 /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40CFCD91C80C4E700CBDFF2 /* Author.swift */; };
+		E436D6661D37FB1000224B36 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40CFCDA1C80C4E700CBDFF2 /* Book.swift */; };
+		E436D6671D37FB1000224B36 /* BooksTestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40CFCDB1C80C4E700CBDFF2 /* BooksTestData.swift */; };
 		E43713DD1C8646AC009C3B39 /* CoreDataStack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E43713D31C8646AC009C3B39 /* CoreDataStack.framework */; };
 		E43713EA1C86470D009C3B39 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440FED71C80B04A003DE8FF /* CoreDataStack.swift */; };
 		E43713EB1C86470D009C3B39 /* CoreDataModelable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440FED61C80B04A003DE8FF /* CoreDataModelable.swift */; };
@@ -83,6 +97,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		E42BEE581D37FCA300DD0632 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4C9BC241AEA848600A6BD1B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4C9BC2C1AEA848600A6BD1B;
+			remoteInfo = CoreDataStack;
+		};
 		E43713DE1C8646AC009C3B39 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E4C9BC241AEA848600A6BD1B /* Project object */;
@@ -113,6 +134,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		E42BEE5D1D37FCAE00DD0632 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				E42BEE5C1D37FCAE00DD0632 /* CoreDataStack.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		E40CFCCD1C80BEB200CBDFF2 /* CoreDataStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoreDataStack.h; path = Sources/CoreDataStack.h; sourceTree = SOURCE_ROOT; };
 		E40CFCD71C80C4DE00CBDFF2 /* TestModel.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; name = TestModel.sqlite; path = "Sample Model/TestModel.sqlite"; sourceTree = SOURCE_ROOT; };
@@ -121,6 +156,14 @@
 		E40CFCDB1C80C4E700CBDFF2 /* BooksTestData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BooksTestData.swift; path = "Sample Model/BooksTestData.swift"; sourceTree = "<group>"; };
 		E40CFCDD1C80C4E700CBDFF2 /* TestModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "TestModel 2.xcdatamodel"; sourceTree = "<group>"; };
 		E40CFCDE1C80C4E700CBDFF2 /* TestModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TestModel.xcdatamodel; sourceTree = "<group>"; };
+		E436D63C1D37F36900224B36 /* Container Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Container Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E436D63E1D37F36900224B36 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		E436D64D1D37F36900224B36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E436D6511D37F3D700224B36 /* BooksTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooksTableViewController.swift; sourceTree = "<group>"; };
+		E436D6541D37F3D700224B36 /* BooksTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BooksTableViewController.xib; sourceTree = "<group>"; };
+		E436D65E1D37F7D000224B36 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		E436D6601D37F7D000224B36 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		E436D6631D37F83200224B36 /* MyCoreDataConnectedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCoreDataConnectedViewController.swift; sourceTree = "<group>"; };
 		E43713D31C8646AC009C3B39 /* CoreDataStack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreDataStack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E43713DC1C8646AC009C3B39 /* CoreDataStackOSXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreDataStackOSXTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E43713F41C86479B009C3B39 /* CoreDataStackOSXSQLiteStoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataStackOSXSQLiteStoreTests.swift; path = Tests/CoreDataStackOSXSQLiteStoreTests.swift; sourceTree = SOURCE_ROOT; };
@@ -166,6 +209,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		E436D6391D37F36900224B36 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E42BEE5A1D37FCA800DD0632 /* CoreDataStack.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E43713CF1C8646AC009C3B39 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -222,6 +273,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E436D63D1D37F36900224B36 /* Container Example */ = {
+			isa = PBXGroup;
+			children = (
+				E436D63E1D37F36900224B36 /* AppDelegate.swift */,
+				E436D6631D37F83200224B36 /* MyCoreDataConnectedViewController.swift */,
+				E436D6511D37F3D700224B36 /* BooksTableViewController.swift */,
+				E436D6541D37F3D700224B36 /* BooksTableViewController.xib */,
+				E436D65F1D37F7D000224B36 /* Main.storyboard */,
+				E436D65D1D37F7D000224B36 /* LaunchScreen.storyboard */,
+				E436D65C1D37F57400224B36 /* Supporting Files */,
+			);
+			path = "Container Example";
+			sourceTree = "<group>";
+		};
+		E436D65C1D37F57400224B36 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E436D64D1D37F36900224B36 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		E43713F31C86474F009C3B39 /* OSX Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -326,6 +399,7 @@
 				E4C9BC3C1AEA848600A6BD1B /* Tests */,
 				E4B99C671B740321005B7E1A /* Example */,
 				E4396EDA1C80B46D004BC954 /* Sample Model */,
+				E436D63D1D37F36900224B36 /* Container Example */,
 				E4C9BC2E1AEA848600A6BD1B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -340,6 +414,7 @@
 				E45013321C23572400ADC83B /* CoreDataStackTVTests.xctest */,
 				E43713D31C8646AC009C3B39 /* CoreDataStack.framework */,
 				E43713DC1C8646AC009C3B39 /* CoreDataStackOSXTests.xctest */,
+				E436D63C1D37F36900224B36 /* Container Example.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -438,6 +513,25 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		E436D63B1D37F36900224B36 /* Container Example */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E436D6501D37F36900224B36 /* Build configuration list for PBXNativeTarget "Container Example" */;
+			buildPhases = (
+				E436D6381D37F36900224B36 /* Sources */,
+				E436D6391D37F36900224B36 /* Frameworks */,
+				E436D63A1D37F36900224B36 /* Resources */,
+				E42BEE5D1D37FCAE00DD0632 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E42BEE591D37FCA300DD0632 /* PBXTargetDependency */,
+			);
+			name = "Container Example";
+			productName = "Container Example";
+			productReference = E436D63C1D37F36900224B36 /* Container Example.app */;
+			productType = "com.apple.product-type.application";
+		};
 		E43713D21C8646AC009C3B39 /* CoreDataStackOSX */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E43713E81C8646AC009C3B39 /* Build configuration list for PBXNativeTarget "CoreDataStackOSX" */;
@@ -570,10 +664,16 @@
 		E4C9BC241AEA848600A6BD1B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0720;
+				LastSwiftUpdateCheck = 0800;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Big Nerd Ranch";
 				TargetAttributes = {
+					E436D63B1D37F36900224B36 = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 439592V3LM;
+						DevelopmentTeamName = "Big Nerd Ranch, Inc";
+						ProvisioningStyle = Automatic;
+					};
 					E43713D21C8646AC009C3B39 = {
 						CreatedOnToolsVersion = 7.2.1;
 					};
@@ -591,6 +691,8 @@
 					};
 					E4C9BC2C1AEA848600A6BD1B = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = 439592V3LM;
+						DevelopmentTeamName = "Big Nerd Ranch, Inc";
 						LastSwiftMigration = 0800;
 					};
 					E4C9BC371AEA848600A6BD1B = {
@@ -619,11 +721,24 @@
 				E45013311C23572400ADC83B /* CoreDataStackTVTests */,
 				E43713DB1C8646AC009C3B39 /* CoreDataStackOSXTests */,
 				E4B99C651B740321005B7E1A /* Example */,
+				E436D63B1D37F36900224B36 /* Container Example */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		E436D63A1D37F36900224B36 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E436D6591D37F3D700224B36 /* BooksTableViewController.xib in Resources */,
+				E42BEE571D37FC4E00DD0632 /* bnr-logo-square.png in Resources */,
+				E436D6621D37F7D000224B36 /* Main.storyboard in Resources */,
+				E436D6611D37F7D000224B36 /* LaunchScreen.storyboard in Resources */,
+				E42BEE561D37FC4700DD0632 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E43713D11C8646AC009C3B39 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -683,6 +798,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		E436D6381D37F36900224B36 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E436D6561D37F3D700224B36 /* BooksTableViewController.swift in Sources */,
+				E436D6671D37FB1000224B36 /* BooksTestData.swift in Sources */,
+				E436D6641D37F83200224B36 /* MyCoreDataConnectedViewController.swift in Sources */,
+				E436D6661D37FB1000224B36 /* Book.swift in Sources */,
+				E436D63F1D37F36900224B36 /* AppDelegate.swift in Sources */,
+				E436D65B1D37F4F000224B36 /* UniqueConstraintModel.xcdatamodeld in Sources */,
+				E436D6651D37FB1000224B36 /* Author.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E43713CE1C8646AC009C3B39 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -794,6 +923,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		E42BEE591D37FCA300DD0632 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4C9BC2C1AEA848600A6BD1B /* CoreDataStack */;
+			targetProxy = E42BEE581D37FCA300DD0632 /* PBXContainerItemProxy */;
+		};
 		E43713DF1C8646AC009C3B39 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E43713D21C8646AC009C3B39 /* CoreDataStackOSX */;
@@ -817,6 +951,22 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		E436D65D1D37F7D000224B36 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E436D65E1D37F7D000224B36 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		E436D65F1D37F7D000224B36 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E436D6601D37F7D000224B36 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
 		E4B99C6C1B740321005B7E1A /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -836,6 +986,38 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		E436D64E1D37F36900224B36 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				INFOPLIST_FILE = "Container Example/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bignerdranch.Container-Example";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+			};
+			name = Debug;
+		};
+		E436D64F1D37F36900224B36 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				INFOPLIST_FILE = "Container Example/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bignerdranch.Container-Example";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		E43713E41C8646AC009C3B39 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1174,6 +1356,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		E436D6501D37F36900224B36 /* Build configuration list for PBXNativeTarget "Container Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E436D64E1D37F36900224B36 /* Debug */,
+				E436D64F1D37F36900224B36 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E43713E81C8646AC009C3B39 /* Build configuration list for PBXNativeTarget "CoreDataStackOSX" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
