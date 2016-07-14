@@ -16,7 +16,7 @@ class TempDirectoryTestCase: XCTestCase {
 
     private lazy var tempStoreDirectory: NSURL? = {
         let baseURL = NSURL.fileURLWithPath(NSTemporaryDirectory(), isDirectory: true)
-        guard let tempDir = baseURL.URLByAppendingPathComponent(NSUUID().UUIDString) else {
+        guard let tempDir = baseURL.URLByAppendingPathComponent("XXXXXX") else {
             assertionFailure("Unable to create temp directory URL")
             return nil
         }

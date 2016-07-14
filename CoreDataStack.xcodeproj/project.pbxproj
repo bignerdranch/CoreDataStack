@@ -799,8 +799,6 @@
 					};
 					E4C9BC2C1AEA848600A6BD1B = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = 439592V3LM;
-						DevelopmentTeamName = "Big Nerd Ranch, Inc";
 						LastSwiftMigration = 0800;
 					};
 					E4C9BC371AEA848600A6BD1B = {
