@@ -33,7 +33,6 @@ public extension NSPersistentStoreCoordinator {
                                 following the `NSPersistentStore` being added to the `NSPersistentStoreCoordinator`.
      */
     @available(iOS, introduced=8.0, deprecated=10.0, message="Use NSPersistentContainer")
-    @available(tvOS, introduced=9.0, deprecated=10.0, message="Use NSPersistentStoreDescription")
     @available(OSX, introduced=10.10, deprecated=10.12, message="Use NSPersistentContainer")
     public class func setupSQLiteBackedCoordinator(managedObjectModel: NSManagedObjectModel,
                                                    storeFileURL: NSURL,
