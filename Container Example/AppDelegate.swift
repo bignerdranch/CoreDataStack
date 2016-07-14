@@ -13,14 +13,14 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    let persistentContainer = NSPersistentContainer(name: "Container_Example")
+    let persistentContainer = NSPersistentContainer(name: "UniqueConstraintModel")
     private let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
     private lazy var loadingVC: UIViewController = {
         return self.mainStoryboard.instantiateViewControllerWithIdentifier("LoadingVC")
     }()
     private lazy var myCoreDataVC: MyCoreDataConnectedViewController = {
         return self.mainStoryboard.instantiateViewControllerWithIdentifier("CoreDataVC")
-            as! MyCoreDataConnectedViewController // swiftlint:disable:this force_cast
+            as! MyCoreDataConnectedViewController
     }()
 
     func applicationDidFinishLaunching(application: UIApplication) {
@@ -42,24 +42,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func seedInitialData() {
         let moc = persistentContainer.newBackgroundContext()
         moc.performBlockAndWait() {
-            do {
-                let bookCount = try Book.countInContext(moc)
-                if bookCount == 0 {
-                    let books = StubbedBookData.books
-                    for bookTitle in books {
-                        let book = Book(context: moc)
-                        book.title = bookTitle
-                    }
-
-                    do {
-                        try moc.save()
-                    } catch {
-                        fatalError("Saving records should not fail. Error: \(error)")
-                    }
+            if try! Book.countInContext(moc) == 0 {
+                let books = StubbedBookData.books
+                for bookTitle in books {
+                    let book = Book(managedObjectContext: moc)
+                    book.title = bookTitle
                 }
-            } catch {
-                fatalError("Failed to fetch book count: \(error)")
+
+                do {
+                    try moc.save()
+                } catch {
+                    fatalError("Saving records should not fail. Error: \(error)")
+                }
             }
         }
     }
 }
+

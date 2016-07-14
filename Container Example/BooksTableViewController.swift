@@ -17,8 +17,7 @@ class BooksTableViewController: UITableViewController {
 
     private var persistentContainer: NSPersistentContainer!
     private lazy var fetchedResultsController: FetchedResultsController<Book> = {
-        let fetchRequest = NSFetchRequest()
-        fetchRequest.entity = Book.entity()
+        let fetchRequest = NSFetchRequest(entityName: Book.entityName)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         let frc = FetchedResultsController<Book>(fetchRequest: fetchRequest,
             managedObjectContext: self.persistentContainer.viewContext,
