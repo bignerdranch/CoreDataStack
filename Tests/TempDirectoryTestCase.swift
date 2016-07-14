@@ -16,7 +16,10 @@ class TempDirectoryTestCase: XCTestCase {
 
     private lazy var tempStoreDirectory: NSURL? = {
         let baseURL = NSURL.fileURLWithPath(NSTemporaryDirectory(), isDirectory: true)
-        let tempDir = baseURL.URLByAppendingPathComponent("XXXXXX")
+        guard let tempDir = baseURL.URLByAppendingPathComponent("XXXXXX") else {
+            assertionFailure("Unable to create temp directory URL")
+            return nil
+        }
         do {
             try NSFileManager.defaultManager().createDirectoryAtURL(tempDir,
                 withIntermediateDirectories: true,
