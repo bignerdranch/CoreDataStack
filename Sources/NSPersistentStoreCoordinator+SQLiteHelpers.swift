@@ -13,6 +13,8 @@ public extension NSPersistentStoreCoordinator {
     /**
      Default persistent store options used for the `SQLite` backed `NSPersistentStoreCoordinator`
      */
+    @available(iOS, introduced=8.0, deprecated=10.0, message="Use NSPersistentStoreDescription")
+    @available(OSX, introduced=10.10, deprecated=10.12, message="Use NSPersistentStoreDescription")
     public static var stockSQLiteStoreOptions: [NSObject: AnyObject] {
         return [
             NSMigratePersistentStoresAutomaticallyOption: true,
