@@ -23,8 +23,8 @@ class CoreDataStackOSXTests: XCTestCase {
         }
         return storeURL
     }()
-    var storeURL: NSURL {
-        return self.sqlLiteStoreDirectory.URLByAppendingPathComponent("Sample").URLByAppendingPathExtension("sqlite")
+    var storeURL: NSURL? {
+        return self.sqlLiteStoreDirectory.URLByAppendingPathComponent("Sample")?.URLByAppendingPathExtension("sqlite")
     }
 
     override func tearDown() {
@@ -37,6 +37,11 @@ class CoreDataStackOSXTests: XCTestCase {
 
     func testSQLiteStackInitializationCreatedStackAndStoreFile() {
         let setupExpectation = expectationWithDescription("Setup")
+        guard let storeURL = storeURL else {
+            XCTFail("Failed to create store URL")
+            return
+        }
+
         CoreDataStack.constructSQLiteStack(withModelName: "Sample", inBundle: unitTestBundle, withStoreURL: storeURL) { result in
             switch result {
             case .Success(let stack):
