@@ -7,9 +7,9 @@ opt_out_usage
 
 PROJECT_FILE = "CoreDataStack.xcodeproj"
 
-SCHEMES = ["CoreDataStackOSX", "CoreDataStackTV"]
+TVOS_SCHEME = "CoreDataStackTV"
+MACOS_SCHEME = "CoreDataStackOSX"
 IOS_SCHEME = "CoreDataStack"
-SCHEMES.push IOS_SCHEME
 
 # We always want to run on the latest version of iOS installed 
 # so we're grabbing the highest device by name i.e. iPhone 6s > iPhone 4
@@ -36,17 +36,15 @@ end
 
 desc "Runs all the tests"
 lane :test do
-    SCHEMES.each { |scheme|
-        if scheme == IOS_SCHEME 
-            scan(scheme: scheme, 
-                project: PROJECT_FILE, 
-                device: LATEST_IPHONE_DEVICE, 
-                clean: true)
-        else
-            scan(scheme: scheme, 
-                project: PROJECT_FILE, 
-                clean: true,
-                destination: "platform=macOS,arch=x86_64")
-        end
-    }
+    scan(scheme: IOS_SCHEME, 
+        project: PROJECT_FILE, 
+        device: LATEST_IPHONE_DEVICE, 
+        clean: true)
+    scan(scheme: MACOS_SCHEME, 
+        project: PROJECT_FILE, 
+        clean: true,
+        destination: "platform=macOS,arch=x86_64")
+    scan(scheme: TVOS_SCHEME, 
+        project: PROJECT_FILE, 
+        clean: true)
 end
