@@ -46,7 +46,7 @@ lane :test do
             scan(scheme: scheme, 
                 project: PROJECT_FILE, 
                 clean: true,
-                destination: "platform:macOS, arch:x86_64")
+                destination: "platform=macOS,arch=x86_64")
         end
     }
 end
