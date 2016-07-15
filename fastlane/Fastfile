@@ -36,15 +36,21 @@ end
 
 desc "Runs all the tests"
 lane :test do
+    # iOS
     scan(scheme: IOS_SCHEME, 
-        project: PROJECT_FILE, 
-        device: LATEST_IPHONE_DEVICE, 
+        project: PROJECT_FILE,
+        destination: "platform=iOS Simulator,OS=10.0,name=iPhone 6s Plus", 
         clean: true)
+
+    # macOS
     scan(scheme: MACOS_SCHEME, 
         project: PROJECT_FILE, 
         clean: true,
         destination: "platform=macOS,arch=x86_64")
+
+    # tvOS
     scan(scheme: TVOS_SCHEME, 
-        project: PROJECT_FILE, 
+        project: PROJECT_FILE,
+        destination: "platform=tvOS Simulator,OS=10.0,name=Apple TV 1080p",
         clean: true)
 end
