@@ -17,59 +17,59 @@ class BatchOperationContextTests: TempDirectoryTestCase {
     var sqlStack: CoreDataStack!
     var operationContext: NSManagedObjectContext!
 
-    var bookFetchRequest: NSFetchRequest {
+    var bookFetchRequest: NSFetchRequest<NSFetchRequestResult> {
         get {
-            return NSFetchRequest(entityName: "Book")
+            return NSFetchRequest<NSFetchRequestResult>(entityName: "Book")
         }
     }
 
     override func setUp() {
         super.setUp()
 
-        weak var ex1 = expectationWithDescription("StackSetup")
-        weak var ex2 = expectationWithDescription("MocSetup")
+        weak var ex1 = expectation(description: "StackSetup")
+        weak var ex2 = expectation(description: "MocSetup")
 
-        CoreDataStack.constructSQLiteStack(withModelName: "Sample", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
+        CoreDataStack.constructSQLiteStack(modelName: "Sample", in: unitTestBundle, at: tempStoreURL) { result in
             switch result {
-            case .Success(let stack):
+            case .success(let stack):
                 self.sqlStack = stack
                 stack.newBatchOperationContext() { (result) in
                     switch result {
-                    case .Success(let context):
+                    case .success(let context):
                         self.operationContext = context
-                    case .Failure(let error):
+                    case .failure(let error):
                         XCTFail("Error creating batch operation context: \(error)")
                     }
                     ex2?.fulfill()
                 }
-            case .Failure(let error):
+            case .failure(let error):
                 XCTFail("Error constructing stack: \(error)")
             }
             ex1?.fulfill()
         }
 
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
     }
 
     func testBatchOperation() {
         let operationMOC = self.operationContext
-        operationMOC.performBlockAndWait() {
+        operationMOC?.performAndWait() {
             for index in 1...10000 {
-                if let newBook = NSEntityDescription.insertNewObjectForEntityForName("Book", inManagedObjectContext: operationMOC) as? Book {
+                if let newBook = NSEntityDescription.insertNewObject(forEntityName: "Book", into: operationMOC!) as? Book {
                     newBook.title = "New Book: \(index)"
                 } else {
                     XCTFail("Failed to create a new Book object in the context")
                 }
             }
 
-            XCTAssertTrue(operationMOC.hasChanges)
-            try! operationMOC.save()
+            XCTAssertTrue((operationMOC?.hasChanges)!)
+            try! operationMOC?.save()
         }
 
         let mainMOC = sqlStack.mainQueueContext
 
         do {
-            if let books = try mainMOC.executeFetchRequest(bookFetchRequest) as? [Book] {
+            if let books = try mainMOC.fetch(bookFetchRequest) as? [Book] {
                 XCTAssertEqual(books.count, 10000)
             } else {
                 XCTFail("Unable to fetch inserted books from main moc")

@@ -18,8 +18,8 @@ class Book: NSManagedObject, CoreDataModelable {
     @NSManaged var publisher: NSManagedObject
 
     var firstInitial: String? {
-        willAccessValueForKey("title")
-        defer { didAccessValueForKey("title") }
+        willAccessValue(forKey: "title")
+        defer { didAccessValue(forKey: "title") }
         guard let title = title,
             let first = title.characters.first else {
                 return nil

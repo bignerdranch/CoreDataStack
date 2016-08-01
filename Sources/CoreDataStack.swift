@@ -10,9 +10,9 @@ import Foundation
 import CoreData
 
 // MARK: - Action callbacks
-public typealias CoreDataStackSetupCallback = CoreDataStack.SetupResult -> Void
-public typealias CoreDataStackStoreResetCallback = CoreDataStack.ResetResult -> Void
-public typealias CoreDataStackBatchMOCCallback = CoreDataStack.BatchContextResult -> Void
+public typealias SetupCallback = (CoreDataStack.SetupResult) -> Void
+public typealias StoreResetCallback = (CoreDataStack.ResetResult) -> Void
+public typealias BatchContextCallback = (CoreDataStack.BatchContextResult) -> Void
 
 // MARK: - Error Handling
 
@@ -25,18 +25,18 @@ public typealias CoreDataStackBatchMOCCallback = CoreDataStack.BatchContextResul
 
  Calling `save()` on any `NSMangedObjectContext` belonging to the stack will automatically bubble the changes all the way to the `NSPersistentStore`
  */
-@available(iOS, introduced=8.0, deprecated=10.0, message="Use NSPersistentContainer")
-@available(OSX, introduced=10.10, deprecated=10.12, message="Use NSPersistentContainer")
+@available(iOS, introduced: 8.0, deprecated: 10.0, message: "Use NSPersistentContainer")
+@available(OSX, introduced: 10.10, deprecated: 10.12, message: "Use NSPersistentContainer")
 public final class CoreDataStack {
 
     /// CoreDataStack specific ErrorTypes
-    public enum Error: ErrorType {
+    public enum Error: Swift.Error {
         /// Case when an `NSPersistentStore` is not found for the supplied store URL
-        case StoreNotFoundAt(url: NSURL)
+        case storeNotFound(at: URL)
         /// Case when an In-Memory store is not found
-        case InMemoryStoreMissing
+        case inMemoryStoreMissing
         /// Case when the store URL supplied to contruct function cannot be used
-        case UnableToCreateStoreAt(url: NSURL)
+        case unableToCreateStore(at: URL)
     }
 
     /**
@@ -51,8 +51,8 @@ public final class CoreDataStack {
         return self.constructPersistingContext()
     }()
     private func constructPersistingContext() -> NSManagedObjectContext {
-        let managedObjectContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-        managedObjectContext.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
+        let managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        managedObjectContext.mergePolicy = NSMergePolicy(merge: .mergeByPropertyStoreTrumpMergePolicyType)
         managedObjectContext.name = "Primary Private Queue Context (Persisting Context)"
         return managedObjectContext
     }
@@ -68,18 +68,18 @@ public final class CoreDataStack {
     private func constructMainQueueContext() -> NSManagedObjectContext {
         var managedObjectContext: NSManagedObjectContext!
         let setup: () -> Void = {
-            managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
-            managedObjectContext.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
-            managedObjectContext.parentContext = self.privateQueueContext
+            managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+            managedObjectContext.mergePolicy = NSMergePolicy(merge: .mergeByPropertyStoreTrumpMergePolicyType)
+            managedObjectContext.parent = self.privateQueueContext
 
-            NSNotificationCenter.defaultCenter().addObserver(self,
-                                                             selector: #selector(CoreDataStack.stackMemberContextDidSaveNotification(_:)),
-                                                             name: NSManagedObjectContextDidSaveNotification,
-                                                             object: managedObjectContext)
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(CoreDataStack.stackMemberContextDidSaveNotification(_:)),
+                                                   name: NSNotification.Name.NSManagedObjectContextDidSave,
+                                                   object: managedObjectContext)
         }
         // Always create the main-queue ManagedObjectContext on the main queue.
-        if !NSThread.isMainThread() {
-            dispatch_sync(dispatch_get_main_queue()) {
+        if !Thread.isMainThread {
+            DispatchQueue.main.sync {
                 setup()
             }
         } else {
@@ -94,55 +94,52 @@ public final class CoreDataStack {
      Creates a `SQLite` backed Core Data stack for a given model in the supplied `NSBundle`.
 
      - parameter modelName: Base name of the `XCDataModel` file.
-     - parameter inBundle: NSBundle that contains the `XCDataModel`. Default value is mainBundle()
-     - parameter withStoreURL: Optional URL to use for storing the `SQLite` file. Defaults to "(modelName).sqlite" in the Documents directory.
-     - parameter callbackQueue: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
+     - parameter in: NSBundle that contains the `XCDataModel`. Default value is mainBundle()
+     - parameter at: Optional URL to use for storing the `SQLite` file. Defaults to "(modelName).sqlite" in the Documents directory.
+     - parameter on: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
      - parameter callback: The `SQLite` persistent store coordinator will be setup asynchronously. This callback will be passed either an initialized `CoreDataStack` object or an `ErrorType` value.
      */
-    public static func constructSQLiteStack(withModelName
-        modelName: String,
-        inBundle bundle: NSBundle = NSBundle.mainBundle(),
-                 withStoreURL desiredStoreURL: NSURL? = nil,
-                              callbackQueue: dispatch_queue_t? = nil,
-                              callback: CoreDataStackSetupCallback) {
+    public static func constructSQLiteStack(modelName: String,
+                                            in bundle: Bundle = Bundle.main,
+                                            at desiredStoreURL: URL? = nil,
+                                            on callbackQueue: DispatchQueue? = nil,
+                                            callback: SetupCallback) {
 
         let model = bundle.managedObjectModel(modelName: modelName)
-        let storeFileURL = desiredStoreURL ?? NSURL(string: "\(modelName).sqlite", relativeToURL: documentsDirectory)!
+        let storeFileURL = desiredStoreURL ?? URL(string: "\(modelName).sqlite", relativeTo: documentsDirectory!)!
         do {
             try createDirectoryIfNecessary(storeFileURL)
         } catch {
-            callback(.Failure(Error.UnableToCreateStoreAt(url: storeFileURL)))
+            callback(.failure(Error.unableToCreateStore(at: storeFileURL)))
             return
         }
 
-        let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
-        let callbackQueue: dispatch_queue_t = callbackQueue ?? backgroundQueue
+        let backgroundQueue = DispatchQueue.global(qos: .background)
+        let callbackQueue: DispatchQueue = callbackQueue ?? backgroundQueue
         NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(
             model,
             storeFileURL: storeFileURL) { coordinatorResult in
                 switch coordinatorResult {
-                case .Success(let coordinator):
+                case .success(let coordinator):
                     let stack = CoreDataStack(modelName : modelName,
                                               bundle: bundle,
                                               persistentStoreCoordinator: coordinator,
-                                              storeType: .SQLite(storeURL: storeFileURL))
-                    dispatch_async(callbackQueue) {
-                        callback(.Success(stack))
+                                              storeType: .sqLite(storeURL: storeFileURL))
+                    callbackQueue.async {
+                        callback(.success(stack))
                     }
-                case .Failure(let error):
-                    dispatch_async(callbackQueue) {
-                        callback(.Failure(error))
+                case .failure(let error):
+                    callbackQueue.async {
+                        callback(.failure(error))
                     }
                 }
         }
     }
 
-    private static func createDirectoryIfNecessary(url: NSURL) throws {
-        let fileManager = NSFileManager.defaultManager()
-        guard let directory = url.URLByDeletingLastPathComponent else {
-            throw Error.UnableToCreateStoreAt(url: url)
-        }
-        try fileManager.createDirectoryAtURL(directory, withIntermediateDirectories: true, attributes: nil)
+    private static func createDirectoryIfNecessary(_ url: URL) throws {
+        let fileManager = FileManager.default
+        let directory = url.deletingLastPathComponent()
+        try fileManager.createDirectory(at: directory, withIntermediateDirectories: true, attributes: nil)
     }
 
     /**
@@ -151,31 +148,31 @@ public final class CoreDataStack {
      This stack is configured with the same concurrency and persistence model as the `SQLite` stack, but everything is in-memory.
 
      - parameter modelName: Base name of the `XCDataModel` file.
-     - parameter inBundle: `NSBundle` that contains the `XCDataModel`. Default value is `mainBundle()`
+     - parameter in: `NSBundle` that contains the `XCDataModel`. Default value is `mainBundle()`
 
      - throws: Any error produced from `NSPersistentStoreCoordinator`'s `addPersistentStoreWithType`
 
      - returns: CoreDataStack: Newly created In-Memory `CoreDataStack`
      */
-    public static func constructInMemoryStack(withModelName modelName: String,
-                                                            inBundle bundle: NSBundle = NSBundle.mainBundle()) throws -> CoreDataStack {
+    public static func constructInMemoryStack(modelName: String,
+                                              in bundle: Bundle = Bundle.main) throws -> CoreDataStack {
         let model = bundle.managedObjectModel(modelName: modelName)
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
-        try coordinator.addPersistentStoreWithType(NSInMemoryStoreType, configuration: nil, URL: nil, options: nil)
-        let stack = CoreDataStack(modelName: modelName, bundle: bundle, persistentStoreCoordinator: coordinator, storeType: .InMemory)
+        try coordinator.addPersistentStore(ofType: NSInMemoryStoreType, configurationName: nil, at: nil, options: nil)
+        let stack = CoreDataStack(modelName: modelName, bundle: bundle, persistentStoreCoordinator: coordinator, storeType: .inMemory)
         return stack
     }
 
     // MARK: - Private Implementation
 
     private enum StoreType {
-        case InMemory
-        case SQLite(storeURL: NSURL)
+        case inMemory
+        case sqLite(storeURL: URL)
     }
 
     private let managedObjectModelName: String
     private let storeType: StoreType
-    private let bundle: NSBundle
+    private let bundle: Bundle
     private var persistentStoreCoordinator: NSPersistentStoreCoordinator {
         didSet {
             privateQueueContext = constructPersistingContext()
@@ -189,7 +186,7 @@ public final class CoreDataStack {
         }
     }
 
-    private init(modelName: String, bundle: NSBundle, persistentStoreCoordinator: NSPersistentStoreCoordinator, storeType: StoreType) {
+    private init(modelName: String, bundle: Bundle, persistentStoreCoordinator: NSPersistentStoreCoordinator, storeType: StoreType) {
         self.bundle = bundle
         self.storeType = storeType
         managedObjectModelName = modelName
@@ -199,10 +196,10 @@ public final class CoreDataStack {
     }
 
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
 
-    private let saveBubbleDispatchGroup = dispatch_group_create()
+    private let saveBubbleDispatchGroup = DispatchGroup()
 }
 
 public extension CoreDataStack {
@@ -213,30 +210,30 @@ public extension CoreDataStack {
     /// Result containing either an instance of `NSPersistentStoreCoordinator` or `ErrorType`
     public enum CoordinatorResult {
         /// A success case with associated `NSPersistentStoreCoordinator` instance
-        case Success(NSPersistentStoreCoordinator)
+        case success(NSPersistentStoreCoordinator)
         /// A failure case with associated `ErrorType` instance
-        case Failure(ErrorType)
+        case failure(Swift.Error)
     }
     /// Result containing either an instance of `NSManagedObjectContext` or `ErrorType`
     public enum BatchContextResult {
         /// A success case with associated `NSManagedObjectContext` instance
-        case Success(NSManagedObjectContext)
+        case success(NSManagedObjectContext)
         /// A failure case with associated `ErrorType` instance
-        case Failure(ErrorType)
+        case failure(Swift.Error)
     }
     /// Result containing either an instance of `CoreDataStack` or `ErrorType`
     public enum SetupResult {
         /// A success case with associated `CoreDataStack` instance
-        case Success(CoreDataStack)
+        case success(CoreDataStack)
         /// A failure case with associated `ErrorType` instance
-        case Failure(ErrorType)
+        case failure(Swift.Error)
     }
-    /// Result of void representing `Success` or an instance of `ErrorType`
+    /// Result of void representing `success` or an instance of `ErrorType`
     public enum SuccessResult {
         /// A success case
-        case Success
+        case success
         /// A failure case with associated ErrorType instance
-        case Failure(ErrorType)
+        case failure(Swift.Error)
     }
     public typealias SaveResult = SuccessResult
     public typealias ResetResult = SuccessResult
@@ -247,66 +244,62 @@ public extension CoreDataStack {
      This function resets the `NSPersistentStore` connected to the `NSPersistentStoreCoordinator`.
      For `SQLite` based stacks, this function will also remove the `SQLite` store from disk.
 
-     - parameter callbackQueue: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
-     - parameter resetCallback: A callback with a `Success` or an `ErrorType` value with the error
+     - parameter on: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
+     - parameter callback: A callback with a `success` or an `ErrorType` value with the error
      */
-    public func resetStore(callbackQueue: dispatch_queue_t? = nil, resetCallback: CoreDataStackStoreResetCallback) {
-        let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
-        let callbackQueue: dispatch_queue_t = callbackQueue ?? backgroundQueue
-        dispatch_group_notify(self.saveBubbleDispatchGroup, backgroundQueue) {
+    public func resetStore(on callbackQueue: DispatchQueue? = nil, callback: StoreResetCallback) {
+        let backgroundQueue = DispatchQueue.global(qos: .background)
+        let callbackQueue: DispatchQueue = callbackQueue ?? backgroundQueue
+        self.saveBubbleDispatchGroup.notify(queue: backgroundQueue) {
             switch self.storeType {
-            case .InMemory:
+            case .inMemory:
                 do {
                     guard let store = self.persistentStoreCoordinator.persistentStores.first else {
-                        resetCallback(.Failure(Error.InMemoryStoreMissing))
+                        callback(.failure(Error.inMemoryStoreMissing))
                         break
                     }
                     try self.persistentStoreCoordinator.performAndWaitOrThrow {
-                        try self.persistentStoreCoordinator.removePersistentStore(store)
-                        try self.persistentStoreCoordinator.addPersistentStoreWithType(NSInMemoryStoreType, configuration: nil, URL: nil, options: nil)
+                        try self.persistentStoreCoordinator.remove(store)
+                        try self.persistentStoreCoordinator.addPersistentStore(ofType: NSInMemoryStoreType, configurationName: nil, at: nil, options: nil)
                     }
-                    dispatch_async(callbackQueue) {
-                        resetCallback(.Success)
+                    callbackQueue.async {
+                        callback(.success)
                     }
                 } catch {
-                    dispatch_async(callbackQueue) {
-                        resetCallback(.Failure(error))
+                    callbackQueue.async {
+                        callback(.failure(error))
                     }
                 }
                 break
 
-            case .SQLite(let storeURL):
+            case .sqLite(let storeURL):
                 let coordinator = self.persistentStoreCoordinator
                 let mom = self.managedObjectModel
 
-                guard let store = coordinator.persistentStoreForURL(storeURL) else {
-                    let error = Error.StoreNotFoundAt(url: storeURL)
-                    resetCallback(.Failure(error))
+                guard let store = coordinator.persistentStore(for: storeURL) else {
+                    let error = Error.storeNotFound(at: storeURL)
+                    callback(.failure(error))
                     break
                 }
 
                 do {
                     if #available(iOS 9, OSX 10.11, *) {
-                        try coordinator.destroyPersistentStoreAtURL(storeURL, withType: NSSQLiteStoreType, options: nil)
+                        try coordinator.destroyPersistentStore(at: storeURL, ofType: NSSQLiteStoreType, options: nil)
                     } else {
-                        let fm = NSFileManager()
+                        let fm = FileManager()
                         try coordinator.performAndWaitOrThrow {
-                            try coordinator.removePersistentStore(store)
-                            try fm.removeItemAtURL(storeURL)
+                            try coordinator.remove(store)
+                            try fm.removeItem(at: storeURL)
 
                             // Remove journal files if present
                             // Eat the error because different versions of SQLite might have different journal files
-                            if let indexURL = storeURL.URLByAppendingPathComponent("-shm") {
-                                let _ = try? fm.removeItemAtURL(indexURL)
-                            }
-                            if let walFile = storeURL.URLByAppendingPathComponent("-wal") {
-                                let _ = try? fm.removeItemAtURL(walFile)
-                            }
+                            let _ = try? fm.removeItem(at: storeURL.appendingPathComponent("-shm"))
+                            let _ = try? fm.removeItem(at: storeURL.appendingPathComponent("-wal"))
                         }
                     }
                 } catch let resetError {
-                    dispatch_async(callbackQueue) {
-                        resetCallback(.Failure(resetError))
+                    callbackQueue.async {
+                        callback(.failure(resetError))
                     }
                     return
                 }
@@ -314,15 +307,15 @@ public extension CoreDataStack {
                 // Setup a new stack
                 NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(mom, storeFileURL: storeURL) { result in
                     switch result {
-                    case .Success (let coordinator):
+                    case .success (let coordinator):
                         self.persistentStoreCoordinator = coordinator
-                        dispatch_async(callbackQueue) {
-                            resetCallback(.Success)
+                        callbackQueue.async {
+                            callback(.success)
                         }
 
-                    case .Failure (let error):
-                        dispatch_async(callbackQueue) {
-                            resetCallback(.Failure(error))
+                    case .failure (let error):
+                        callbackQueue.async {
+                            callback(.failure(error))
                         }
                     }
                 }
@@ -333,54 +326,32 @@ public extension CoreDataStack {
 
 public extension CoreDataStack {
     /**
-     Returns a new background worker `NSManagedObjectContext` as a child of the main queue context.
-
-     Calling `save()` on this managed object context will automatically trigger a save on its parent context via `NSNotification` observing.
-
-     - returns: `NSManagedObjectContext` The new worker context.
-     */
-    @available(*, deprecated, message="Use 'newChildContext(concurrencyType:name:)'")
-    public func newBackgroundWorkerMOC() -> NSManagedObjectContext {
-        let moc = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-        moc.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
-        moc.parentContext = self.mainQueueContext
-        moc.name = "Background Worker Context"
-
-        NSNotificationCenter.defaultCenter().addObserver(self,
-                                                         selector: #selector(stackMemberContextDidSaveNotification(_:)),
-                                                         name: NSManagedObjectContextDidSaveNotification,
-                                                         object: moc)
-
-        return moc
-    }
-
-    /**
      Returns a new `NSManagedObjectContext` as a child of the main queue context.
 
      Calling `save()` on this managed object context will automatically trigger a save on its parent context via `NSNotification` observing.
 
-     - parameter concurrencyType: The NSManagedObjectContextConcurrencyType of the new context.
+     - parameter type: The NSManagedObjectContextConcurrencyType of the new context.
      **Note** this function will trap on a preconditionFailure if you attempt to create a MainQueueConcurrencyType context from a background thread.
      Default value is .PrivateQueueConcurrencyType
      - parameter name: A name for the new context for debugging purposes. Defaults to *Main Queue Context Child*
 
      - returns: `NSManagedObjectContext` The new worker context.
      */
-    public func newChildContext(concurrencyType concurrencyType: NSManagedObjectContextConcurrencyType = .PrivateQueueConcurrencyType,
-                                                name: String? = "Main Queue Context Child") -> NSManagedObjectContext {
-        if concurrencyType == .MainQueueConcurrencyType && !NSThread.isMainThread() {
+    public func newChildContext(type: NSManagedObjectContextConcurrencyType = .privateQueueConcurrencyType,
+                                name: String? = "Main Queue Context Child") -> NSManagedObjectContext {
+        if type == .mainQueueConcurrencyType && !Thread.isMainThread {
             preconditionFailure("Main thread MOCs must be created on the main thread")
         }
 
-        let moc = NSManagedObjectContext(concurrencyType: concurrencyType)
-        moc.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyStoreTrumpMergePolicyType)
-        moc.parentContext = mainQueueContext
+        let moc = NSManagedObjectContext(concurrencyType: type)
+        moc.mergePolicy = NSMergePolicy(merge: .mergeByPropertyStoreTrumpMergePolicyType)
+        moc.parent = mainQueueContext
         moc.name = name
 
-        NSNotificationCenter.defaultCenter().addObserver(self,
-                                                         selector: #selector(stackMemberContextDidSaveNotification(_:)),
-                                                         name: NSManagedObjectContextDidSaveNotification,
-                                                         object: moc)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(stackMemberContextDidSaveNotification(_:)),
+                                               name: NSNotification.Name.NSManagedObjectContextDidSave,
+                                               object: moc)
         return moc
     }
 
@@ -388,37 +359,37 @@ public extension CoreDataStack {
      Creates a new background `NSManagedObjectContext` connected to
      a discrete `NSPersistentStoreCoordinator` created with the same store used by the stack in construction.
 
-     - parameter callbackQueue: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
-     - parameter setupCallback: A callback with either the new `NSManagedObjectContext` or an `ErrorType` value with the error
+     - parameter on: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
+     - parameter callback: A callback with either the new `NSManagedObjectContext` or an `ErrorType` value with the error
      */
-    public func newBatchOperationContext(callbackQueue: dispatch_queue_t? = nil, setupCallback: CoreDataStackBatchMOCCallback) {
-        let moc = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-        moc.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyObjectTrumpMergePolicyType)
+    public func newBatchOperationContext(on callbackQueue: DispatchQueue? = nil, callback: BatchContextCallback) {
+        let moc = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        moc.mergePolicy = NSMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
         moc.name = "Batch Operation Context"
 
         switch storeType {
-        case .InMemory:
+        case .inMemory:
             let coordinator = NSPersistentStoreCoordinator(managedObjectModel: managedObjectModel)
             do {
-                try coordinator.addPersistentStoreWithType(NSInMemoryStoreType, configuration: nil, URL: nil, options: nil)
+                try coordinator.addPersistentStore(ofType: NSInMemoryStoreType, configurationName: nil, at: nil, options: nil)
                 moc.persistentStoreCoordinator = coordinator
-                setupCallback(.Success(moc))
+                callback(.success(moc))
             } catch {
-                setupCallback(.Failure(error))
+                callback(.failure(error))
             }
-        case .SQLite(let storeURL):
-            let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
-            let callbackQueue: dispatch_queue_t = callbackQueue ?? backgroundQueue
+        case .sqLite(let storeURL):
+            let backgroundQueue = DispatchQueue.global(qos: .background)
+            let callbackQueue: DispatchQueue = callbackQueue ?? backgroundQueue
             NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(managedObjectModel, storeFileURL: storeURL) { result in
                 switch result {
-                case .Success(let coordinator):
+                case .success(let coordinator):
                     moc.persistentStoreCoordinator = coordinator
-                    dispatch_async(callbackQueue) {
-                        setupCallback(.Success(moc))
+                    callbackQueue.async {
+                        callback(.success(moc))
                     }
-                case .Failure(let error):
-                    dispatch_async(callbackQueue) {
-                        setupCallback(.Failure(error))
+                case .failure(let error):
+                    callbackQueue.async {
+                        callback(.failure(error))
                     }
                 }
             }
@@ -427,36 +398,36 @@ public extension CoreDataStack {
 }
 
 private extension CoreDataStack {
-    @objc private func stackMemberContextDidSaveNotification(notification: NSNotification) {
+    @objc private func stackMemberContextDidSaveNotification(_ notification: Notification) {
         guard let notificationMOC = notification.object as? NSManagedObjectContext else {
             assertionFailure("Notification posted from an object other than an NSManagedObjectContext")
             return
         }
-        guard let parentContext = notificationMOC.parentContext else {
+        guard let parentContext = notificationMOC.parent else {
             return
         }
 
-        dispatch_group_enter(saveBubbleDispatchGroup)
+        saveBubbleDispatchGroup.enter()
         parentContext.saveContext() { _ in
-            dispatch_group_leave(self.saveBubbleDispatchGroup)
+            self.saveBubbleDispatchGroup.leave()
         }
     }
 }
 
 private extension CoreDataStack {
-    private static var documentsDirectory: NSURL? {
+    private static var documentsDirectory: URL? {
         get {
-            let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
+            let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
             return urls.first
         }
     }
 }
 
-private extension NSBundle {
+private extension Bundle {
     static private let modelExtension = "momd"
-    func managedObjectModel(modelName modelName: String) -> NSManagedObjectModel {
-        guard let URL = URLForResource(modelName, withExtension: NSBundle.modelExtension),
-            let model = NSManagedObjectModel(contentsOfURL: URL) else {
+    func managedObjectModel(modelName: String) -> NSManagedObjectModel {
+        guard let URL = url(forResource: modelName, withExtension: Bundle.modelExtension),
+            let model = NSManagedObjectModel(contentsOf: URL) else {
                 preconditionFailure("Model not found or corrupted with name: \(modelName) in bundle: \(self)")
         }
         return model

@@ -20,29 +20,29 @@ class StoreTeardownTests: TempDirectoryTestCase {
     override func setUp() {
         super.setUp()
 
-        weak var expectation = expectationWithDescription("callback")
-        CoreDataStack.constructSQLiteStack(withModelName: "Sample", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
+        weak var callbackExpectation = self.expectation(description: "callback")
+        CoreDataStack.constructSQLiteStack(modelName: "Sample", in: unitTestBundle, at: tempStoreURL) { result in
             switch result {
-            case .Success(let stack):
+            case .success(let stack):
                 self.sqlStack = stack
-            case .Failure(let error):
+            case .failure(let error):
                 XCTFail("Error constructing stack: \(error)")
             }
-            expectation?.fulfill()
+            callbackExpectation?.fulfill()
         }
 
-        memoryStack = try! CoreDataStack.constructInMemoryStack(withModelName: "Sample", inBundle: unitTestBundle)
+        memoryStack = try! CoreDataStack.constructInMemoryStack(modelName: "Sample", in: unitTestBundle)
 
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
     }
 
 
     func testPersistentStoreReset() {
         // Insert some fresh objects
         let worker = sqlStack.newChildContext()
-        worker.performBlockAndWait() {
+        worker.performAndWait() {
             for _ in 0..<100 {
-                NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: worker)
+                NSEntityDescription.insertNewObject(forEntityName: "Author", into: worker)
             }
         }
 
@@ -50,35 +50,36 @@ class StoreTeardownTests: TempDirectoryTestCase {
         try! worker.saveContextAndWait()
 
         // The reset function will wait for all changes to bubble up before removing the store file.
-        weak var expectation = expectationWithDescription("callback")
-        expectationForNotification(NSManagedObjectContextDidSaveNotification, object: sqlStack.privateQueueContext, handler: nil)
+        weak var callbackExpectation = expectation(description: "callback")
+        expectation(forNotification: Notification.Name.NSManagedObjectContextDidSave.rawValue,
+                    object: sqlStack.privateQueueContext, handler: nil)
+
         sqlStack.resetStore() { result in
             switch result {
-            case .Success:
+            case .success:
                 // Insert some objects after a reset
                 let worker = self.sqlStack.newChildContext()
-                worker.performBlockAndWait() {
+                worker.performAndWait() {
                     for _ in 0..<100 {
-                        NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: worker)
+                        NSEntityDescription.insertNewObject(forEntityName: "Author", into: worker)
                     }
                 }
                 try! worker.saveContextAndWait()
-                break
-
-            case .Failure(let error):
+                
+            case .failure(let error):
                 self.failingOn(error)
             }
-            expectation?.fulfill()
+            callbackExpectation?.fulfill()
         }
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
     }
 
     func testInMemoryReset() {
         // Insert some fresh objects
         let worker = memoryStack.newChildContext()
-        worker.performBlockAndWait() {
+        worker.performAndWait() {
             for _ in 0..<100 {
-                NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: worker)
+                NSEntityDescription.insertNewObject(forEntityName: "Author", into: worker)
             }
         }
 
@@ -86,24 +87,24 @@ class StoreTeardownTests: TempDirectoryTestCase {
         try! worker.saveContextAndWait()
 
         // The reset function will wait for all changes to bubble up before removing the store file.
-        weak var expectation = expectationWithDescription("callback")
+        weak var callbackExpectation = expectation(description: "callback")
         memoryStack.resetStore() { result in
             switch result {
-            case .Success:
+            case .success:
                 // Insert some objects after a reset
                 let worker = self.sqlStack.newChildContext()
-                worker.performBlockAndWait() {
+                worker.performAndWait() {
                     for _ in 0..<100 {
-                        NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: worker)
+                        NSEntityDescription.insertNewObject(forEntityName: "Author", into: worker)
                     }
                 }
                 try! worker.saveContextAndWait()
                 break
-            case .Failure(let error):
+            case .failure(let error):
                 self.failingOn(error)
             }
-            expectation?.fulfill()
+            callbackExpectation?.fulfill()
         }
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
     }
 }

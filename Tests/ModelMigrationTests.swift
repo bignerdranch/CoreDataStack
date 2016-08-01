@@ -15,17 +15,17 @@ import CoreData
 class ModelMigrationTests: TempDirectoryTestCase {
     
     func testVersionMigration() throws {
-        weak var ex1 = expectationWithDescription("Setup Expectation")
-        CoreDataStack.constructSQLiteStack(withModelName: "Sample", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
+        weak var ex1 = expectation(description: "Setup Expectation")
+        CoreDataStack.constructSQLiteStack(modelName: "Sample", in: unitTestBundle, at: tempStoreURL) { result in
             switch result {
-            case .Success(let stack):
+            case .success(let stack):
                 XCTAssertNotNil(stack.mainQueueContext)
-            case .Failure(let error):
+            case .failure(let error):
                 XCTFail("Error constructing stack: \(error)")
             }
             ex1?.fulfill()
         }
-        waitForExpectationsWithTimeout(20, handler: nil)
+        waitForExpectations(timeout: 20, handler: nil)
     }
 
 }
