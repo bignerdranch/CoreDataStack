@@ -34,9 +34,9 @@ class CoreDataStackTVTests: TempDirectoryTestCase {
         weak var ex1 = expectationWithDescription("SQLite Setup")
         CoreDataStack.constructSQLiteStack(withModelName: modelName, inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
             switch result {
-            case .Success(let stack):
+            case .success(let stack):
                 self.sqlStack = stack
-            case .Failure(let error):
+            case .failure(let error):
                 self.failingOn(error)
             }
             ex1?.fulfill()

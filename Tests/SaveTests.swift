@@ -32,14 +32,14 @@ class SaveTests: TempDirectoryTestCase {
         let privateQueueContext = coreDataStack.privateQueueContext
         let mainQueueContext = coreDataStack.mainQueueContext
         let worker = coreDataStack.newChildContext()
-        let saveExpectation = expectationWithDescription("Async save callback")
+        let saveExpectation = expectation(description: "Async save callback")
 
         // Initial State Assertions
-        worker.performBlockAndWait() {
+        worker.performAndWait() {
             XCTAssertFalse(worker.hasChanges)
             XCTAssertEqual(try! Author.allInContext(worker).count, 0)
         }
-        privateQueueContext.performBlockAndWait() {
+        privateQueueContext.performAndWait() {
             XCTAssertFalse(privateQueueContext.hasChanges)
             XCTAssertEqual(try! Author.allInContext(privateQueueContext).count, 0)
         }
@@ -47,7 +47,7 @@ class SaveTests: TempDirectoryTestCase {
         XCTAssertEqual(try! Author.allInContext(mainQueueContext).count, 0)
 
         // Insert Records
-        worker.performBlockAndWait { () -> Void in
+        worker.performAndWait { () -> Void in
             for i in 1...5 {
                 let author = Author(managedObjectContext: worker)
                 author.firstName = "Jim \(i)"
@@ -58,21 +58,21 @@ class SaveTests: TempDirectoryTestCase {
         // Perform Save
         worker.saveContextToStore() { result in
             switch result {
-            case .Success:
+            case .success:
                 break
-            case .Failure(let error):
+            case .failure(let error):
                 self.failingOn(error)
             }
             saveExpectation.fulfill()
         }
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
 
         // Final State Assertions
-        worker.performBlockAndWait() {
+        worker.performAndWait() {
             XCTAssertFalse(worker.hasChanges)
             XCTAssertEqual(try! Author.allInContext(worker).count, 5)
         }
-        privateQueueContext.performBlockAndWait() {
+        privateQueueContext.performAndWait() {
             XCTAssertFalse(privateQueueContext.hasChanges)
             XCTAssertEqual(try! Author.allInContext(privateQueueContext).count, 5)
         }
@@ -86,11 +86,11 @@ class SaveTests: TempDirectoryTestCase {
         let worker = coreDataStack.newChildContext()
 
         // Initial State Assertions
-        worker.performBlockAndWait() {
+        worker.performAndWait() {
             XCTAssertFalse(worker.hasChanges)
             XCTAssertEqual(try! Author.allInContext(worker).count, 0)
         }
-        privateQueueContext.performBlockAndWait() {
+        privateQueueContext.performAndWait() {
             XCTAssertFalse(privateQueueContext.hasChanges)
             XCTAssertEqual(try! Author.allInContext(privateQueueContext).count, 0)
         }
@@ -98,7 +98,7 @@ class SaveTests: TempDirectoryTestCase {
         XCTAssertEqual(try! Author.allInContext(mainQueueContext).count, 0)
 
         // Insert Records
-        worker.performBlockAndWait { () -> Void in
+        worker.performAndWait { () -> Void in
             for i in 1...5 {
                 let author = Author(managedObjectContext: worker)
                 author.firstName = "Jim \(i)"
@@ -114,11 +114,11 @@ class SaveTests: TempDirectoryTestCase {
         }
 
         // Final State Assertions
-        worker.performBlockAndWait() {
+        worker.performAndWait() {
             XCTAssertFalse(worker.hasChanges)
             XCTAssertEqual(try! Author.allInContext(worker).count, 5)
         }
-        privateQueueContext.performBlockAndWait() {
+        privateQueueContext.performAndWait() {
             XCTAssertFalse(privateQueueContext.hasChanges)
             XCTAssertEqual(try! Author.allInContext(privateQueueContext).count, 5)
         }
@@ -136,8 +136,8 @@ class SaveTests: TempDirectoryTestCase {
         XCTAssertEqual(frc.fetchedObjects?.count, 0)
         // now insert some authors on a background MOC and save it
         let bgMoc = coreDataStack.newChildContext()
-        expectationForNotification(NSManagedObjectContextDidSaveNotification, object: coreDataStack.privateQueueContext, handler: nil)
-        bgMoc.performBlockAndWait { () -> Void in
+        expectation(forNotification: Notification.Name.NSManagedObjectContextDidSave.rawValue, object: coreDataStack.privateQueueContext, handler: nil)
+        bgMoc.performAndWait { () -> Void in
             for i in 1...5 {
                 let author = Author(managedObjectContext: bgMoc)
                 author.firstName = "Jim \(i)"
@@ -152,7 +152,7 @@ class SaveTests: TempDirectoryTestCase {
         // assert we now have that many authors in the FRC
         XCTAssertEqual(frc.fetchedObjects?.count, 5)
         // wait for the persisting context to save async
-        waitForExpectationsWithTimeout(5, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
         // destroy and recreate the stack
         coreDataStack = nil
         createStack()
@@ -162,18 +162,18 @@ class SaveTests: TempDirectoryTestCase {
         // assert that we still have the same number of authors
         XCTAssertEqual(newFRC.fetchedObjects?.count, 5)
     }
-
-    private func authorsFetchedResultsController() -> NSFetchedResultsController {
-        let fetchRequest = NSFetchRequest(entityName: "Author")
+    
+    private func authorsFetchedResultsController() -> NSFetchedResultsController<Author> {
+        let fetchRequest = NSFetchRequest<Author>()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "lastName", ascending: true)]
         return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: coreDataStack.mainQueueContext, sectionNameKeyPath: nil, cacheName: nil)
     }
 
     func testBackgroundSaveAsync() {
-        expectationForNotification(NSManagedObjectContextDidSaveNotification, object: coreDataStack.mainQueueContext, handler: nil)
-        dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0)) { () -> Void in
+        expectation(forNotification: Notification.Name.NSManagedObjectContextDidSave.rawValue, object: coreDataStack.mainQueueContext, handler: nil)
+        DispatchQueue.global(qos: .background).async { () -> Void in
             let bgMoc = self.coreDataStack.newChildContext()
-            bgMoc.performBlockAndWait { () -> Void in
+            bgMoc.performAndWait { _ in
                 for i in 1...5 {
                     let author = Author(managedObjectContext: bgMoc)
                     author.firstName = "Jim \(i)"
@@ -182,34 +182,33 @@ class SaveTests: TempDirectoryTestCase {
             }
             bgMoc.saveContext()
         }
-        waitForExpectationsWithTimeout(2, handler: nil)
+        waitForExpectations(timeout: 2, handler: nil)
     }
 
     private func createStack() {
-        weak var setupExpectation = expectationWithDescription("stack setup")
-        CoreDataStack.constructSQLiteStack(withModelName: "Sample", inBundle: unitTestBundle, withStoreURL: self.tempStoreURL) { (setupResult) -> Void in
+        weak var setupExpectation = expectation(description: "stack setup")
+        CoreDataStack.constructSQLiteStack(modelName: "Sample", in: unitTestBundle, at: self.tempStoreURL) { (setupResult) -> Void in
             switch setupResult {
-            case .Success(let stack):
+            case .success(let stack):
                 self.coreDataStack = stack
             default: break
             }
             setupExpectation?.fulfill()
         }
-        waitForExpectationsWithTimeout(2, handler: nil)
+        waitForExpectations(timeout: 2, handler: nil)
     }
 }
 
-class EmptyFRCDelegate: NSObject, NSFetchedResultsControllerDelegate {
-    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+class EmptyFRCDelegate : NSObject, NSFetchedResultsControllerDelegate {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         // nothing
     }
-
-    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         // nothing
     }
-
-    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject,
-        atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: AnyObject, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         // nothing
     }
 }

@@ -44,9 +44,9 @@ class CoreDataStackOSXTests: XCTestCase {
 
         CoreDataStack.constructSQLiteStack(withModelName: "Sample", inBundle: unitTestBundle, withStoreURL: storeURL) { result in
             switch result {
-            case .Success(let stack):
+            case .success(let stack):
                 self.stack = stack
-            case .Failure(let error):
+            case .failure(let error):
                 XCTFail("Failed to setup sqlite stack with error: \(error)")
             }
             setupExpectation.fulfill()

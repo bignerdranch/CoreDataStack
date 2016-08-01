@@ -10,11 +10,11 @@ import Foundation
 import XCTest
 
 extension XCTest {
-    var unitTestBundle: NSBundle {
-        return NSBundle(forClass: self.dynamicType)
+    var unitTestBundle: Bundle {
+        return Bundle(for: self.dynamicType)
     }
 
-    func failingOn(error: ErrorType) {
+    func failingOn(_ error: Error) {
         XCTFail("Failing with error: \(error) in: \(self)")
     }
 }

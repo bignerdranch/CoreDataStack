@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         CoreDataStack.constructSQLiteStack(withModelName: "UniqueConstraintModel") { result in
             switch result {
-            case .Success(let stack):
+            case .success(let stack):
                 self.coreDataStack = stack
                 self.seedInitialData()
 
@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     self.myCoreDataVC.coreDataStack = stack
                     self.window?.rootViewController = self.myCoreDataVC
                 }
-            case .Failure(let error):
+            case .failure(let error):
                 assertionFailure("\(error)")
             }
         }
