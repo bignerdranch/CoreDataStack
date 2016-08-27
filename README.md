@@ -192,8 +192,7 @@ See [BooksTableViewController.swift](./Example/BooksTableViewController.swift) f
 `EntityMonitor<T>` is a class for monitoring inserts, deletes, and updates of a specific `NSManagedObject` subclass within an `NSManagedObjectContext`.
 
 ##### Example
-
-See [EntityMonitorTests.swift](./CoreDataStackTests/EntityMonitorTests.swift) for an example.
+See [EntityMonitorTests.swift](./Tests/EntityMonitorTests.swift) for an example.
 
 ## Contributing
 
