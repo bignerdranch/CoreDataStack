@@ -16,8 +16,8 @@ class CoreDataStackOSXInMemoryStoreTests: XCTestCase {
 
     func testInMemoryStackInitializationSucceeded() {
         do {
-            stack = try CoreDataStack.constructInMemoryStack(withModelName: "Sample",
-                inBundle: unitTestBundle)
+            stack = try CoreDataStack.constructInMemoryStack(modelName: "Sample",
+                                                             in: unitTestBundle)
         } catch {
             failingOn(error)
         }
