@@ -164,7 +164,7 @@ class SaveTests: TempDirectoryTestCase {
     }
     
     private func authorsFetchedResultsController() -> NSFetchedResultsController<Author> {
-        let fetchRequest = NSFetchRequest<Author>()
+        let fetchRequest = NSFetchRequest<Author>(entityName: "Author")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "lastName", ascending: true)]
         return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: coreDataStack.mainQueueContext, sectionNameKeyPath: nil, cacheName: nil)
     }
@@ -208,7 +208,7 @@ class EmptyFRCDelegate : NSObject, NSFetchedResultsControllerDelegate {
         // nothing
     }
     
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: AnyObject, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+    private func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: AnyObject, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         // nothing
     }
 }

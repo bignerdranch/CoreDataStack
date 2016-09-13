@@ -11,7 +11,7 @@ import XCTest
 
 extension XCTest {
     var unitTestBundle: Bundle {
-        return Bundle(for: self.dynamicType)
+        return Bundle(for: type(of: self))
     }
 
     func failingOn(_ error: Error) {

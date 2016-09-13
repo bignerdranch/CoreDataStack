@@ -103,7 +103,7 @@ public final class CoreDataStack {
                                             in bundle: Bundle = Bundle.main,
                                             at desiredStoreURL: URL? = nil,
                                             on callbackQueue: DispatchQueue? = nil,
-                                            callback: SetupCallback) {
+                                            callback: @escaping SetupCallback) {
 
         let model = bundle.managedObjectModel(modelName: modelName)
         let storeFileURL = desiredStoreURL ?? URL(string: "\(modelName).sqlite", relativeTo: documentsDirectory!)!
@@ -165,26 +165,28 @@ public final class CoreDataStack {
 
     // MARK: - Private Implementation
 
-    private enum StoreType {
+    private let managedObjectModelName: String
+    private let bundle: Bundle
+
+    fileprivate enum StoreType {
         case inMemory
         case sqLite(storeURL: URL)
     }
 
-    private let managedObjectModelName: String
-    private let storeType: StoreType
-    private let bundle: Bundle
-    private var persistentStoreCoordinator: NSPersistentStoreCoordinator {
+    fileprivate let storeType: StoreType
+    fileprivate var persistentStoreCoordinator: NSPersistentStoreCoordinator {
         didSet {
             privateQueueContext = constructPersistingContext()
             privateQueueContext.persistentStoreCoordinator = persistentStoreCoordinator
             mainQueueContext = constructMainQueueContext()
         }
     }
-    private var managedObjectModel: NSManagedObjectModel {
+    fileprivate var managedObjectModel: NSManagedObjectModel {
         get {
             return bundle.managedObjectModel(managedObjectModelName)
         }
     }
+    fileprivate let saveBubbleDispatchGroup = DispatchGroup()
 
     private init(modelName: String, bundle: Bundle, persistentStoreCoordinator: NSPersistentStoreCoordinator, storeType: StoreType) {
         self.bundle = bundle
@@ -198,8 +200,6 @@ public final class CoreDataStack {
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-
-    private let saveBubbleDispatchGroup = DispatchGroup()
 }
 
 public extension CoreDataStack {
@@ -247,7 +247,7 @@ public extension CoreDataStack {
      - parameter on: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
      - parameter callback: A callback with a `success` or an `ErrorType` value with the error
      */
-    public func resetStore(on callbackQueue: DispatchQueue? = nil, callback: StoreResetCallback) {
+    public func resetStore(on callbackQueue: DispatchQueue? = nil, callback: @escaping StoreResetCallback) {
         let backgroundQueue = DispatchQueue.global(qos: .background)
         let callbackQueue: DispatchQueue = callbackQueue ?? backgroundQueue
         self.saveBubbleDispatchGroup.notify(queue: backgroundQueue) {
@@ -362,7 +362,7 @@ public extension CoreDataStack {
      - parameter on: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
      - parameter callback: A callback with either the new `NSManagedObjectContext` or an `ErrorType` value with the error
      */
-    public func newBatchOperationContext(on callbackQueue: DispatchQueue? = nil, callback: BatchContextCallback) {
+    public func newBatchOperationContext(on callbackQueue: DispatchQueue? = nil, callback: @escaping BatchContextCallback) {
         let moc = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         moc.mergePolicy = NSMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
         moc.name = "Batch Operation Context"
@@ -397,8 +397,8 @@ public extension CoreDataStack {
     }
 }
 
-private extension CoreDataStack {
-    @objc private func stackMemberContextDidSaveNotification(_ notification: Notification) {
+fileprivate extension CoreDataStack {
+    @objc fileprivate func stackMemberContextDidSaveNotification(_ notification: Notification) {
         guard let notificationMOC = notification.object as? NSManagedObjectContext else {
             assertionFailure("Notification posted from an object other than an NSManagedObjectContext")
             return
@@ -414,8 +414,8 @@ private extension CoreDataStack {
     }
 }
 
-private extension CoreDataStack {
-    private static var documentsDirectory: URL? {
+fileprivate extension CoreDataStack {
+    fileprivate static var documentsDirectory: URL? {
         get {
             let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
             return urls.first
@@ -423,9 +423,9 @@ private extension CoreDataStack {
     }
 }
 
-private extension Bundle {
+fileprivate extension Bundle {
     static private let modelExtension = "momd"
-    func managedObjectModel(modelName: String) -> NSManagedObjectModel {
+    fileprivate func managedObjectModel(modelName: String) -> NSManagedObjectModel {
         guard let URL = url(forResource: modelName, withExtension: Bundle.modelExtension),
             let model = NSManagedObjectModel(contentsOf: URL) else {
                 preconditionFailure("Model not found or corrupted with name: \(modelName) in bundle: \(self)")
