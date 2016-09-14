@@ -20,7 +20,6 @@ LATEST_IPHONE_DEVICE = FastlaneCore::Simulator.all.map { |d| d.name }.select { |
 #######################################################################
   
 before_all do
-    reset_simulators
 end
 
 after_all do |lane|
@@ -38,7 +37,7 @@ desc "Runs all the tests"
 lane :test do
     # iOS
     xctest(scheme: IOS_SCHEME,
-        destination: "platform=iOS Simulator,name=iPhone 6,OS=10.0")
+        destination: "platform=iOS Simulator,name=#{LATEST_IPHONE_DEVICE},OS=10.0")
 
     # macOS
     xctest(scheme: MACOS_SCHEME,
