@@ -37,7 +37,7 @@ desc "Runs all the tests"
 lane :test do
     # iOS
     xctest(scheme: IOS_SCHEME,
-        destination: "platform=iOS Simulator,name=iPhone 6,OS=10.0")
+        destination: "platform=iOS Simulator,name=#{LATEST_IPHONE_DEVICE},OS=10.0")
 
     # macOS
     xctest(scheme: MACOS_SCHEME,
