@@ -16,19 +16,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let persistentContainer = NSPersistentContainer(name: "UniqueConstraintModel")
     private let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
     private lazy var loadingVC: UIViewController = {
-        return self.mainStoryboard.instantiateViewControllerWithIdentifier("LoadingVC")
+        return self.mainStoryboard.instantiateViewController(withIdentifier: "LoadingVC")
     }()
     private lazy var myCoreDataVC: MyCoreDataConnectedViewController = {
-        return self.mainStoryboard.instantiateViewControllerWithIdentifier("CoreDataVC")
+        return self.mainStoryboard.instantiateViewController(withIdentifier: "CoreDataVC")
             as! MyCoreDataConnectedViewController
     }()
 
-    func applicationDidFinishLaunching(application: UIApplication) {
-        window = UIWindow(frame: UIScreen.mainScreen().bounds)
+    func applicationDidFinishLaunching(_ application: UIApplication) {
+        window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = loadingVC
 
-        persistentContainer.loadPersistentStoresWithCompletionHandler() { storeDescription, error in
-            if let error = error {
+        persistentContainer.loadPersistentStores() { storeDescription, error in
+            if let error = error as? NSError {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
             self.seedInitialData()
@@ -41,7 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private func seedInitialData() {
         let moc = persistentContainer.newBackgroundContext()
-        moc.performBlockAndWait() {
+        moc.performAndWait() {
             if try! Book.countInContext(moc) == 0 {
                 let books = StubbedBookData.books
                 for bookTitle in books {
