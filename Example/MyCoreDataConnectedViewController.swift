@@ -19,9 +19,9 @@ class MyCoreDataConnectedViewController: UIViewController {
     }
 
     // MARK: - Actions
-    @IBAction func showFRC(sender: UIButton) {
+    @IBAction func showFRC(_ sender: UIButton) {
         let booksVC = BooksTableViewController(coreDataStack: coreDataStack)
         let navController = UINavigationController(rootViewController: booksVC)
-        presentViewController(navController, animated: true, completion: nil)
+        present(navController, animated: true, completion: nil)
     }
 }

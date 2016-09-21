@@ -53,7 +53,7 @@
 // Class for monitoring changes within a given `NSManagedObjectContext`
 //    to a specific Core Data Entity with optional filtering via an `NSPredicate`.
 // */
-//public class EntityMonitor<T: NSManagedObject where T: NSFetchRequestResult, T: Hashable> {
+//public class EntityMonitor<T: NSManagedObject> where T: NSFetchRequestResult, T: Hashable {
 //
 //    // MARK: - Public Properties
 //
@@ -62,7 +62,7 @@
 //
 //     - parameter U: Your delegate must implement the methods in `EntityMonitorDelegate` with the matching `NSFetchRequestResult` type being monitored.
 //     */
-//    public func setDelegate<U: EntityMonitorDelegate where U.T == T>(_ delegate: U) {
+//    public func setDelegate<U: EntityMonitorDelegate>(_ delegate: U) where U.T == T {
 //        self.delegateHost = ForwardingEntityMonitorDelegate(owner: self, delegate: delegate)
 //    }
 //
@@ -77,15 +77,15 @@
 //        }
 //    }
 //
-//    private typealias EntitySet = Set<T>
+//    fileprivate typealias EntitySet = Set<T>
 //
 //    private let context: NSManagedObjectContext
 //    private let frequency: FireFrequency
-//    private let entityPredicate: Predicate
-//    private let filterPredicate: Predicate?
-//    private lazy var combinedPredicate: Predicate = {
+//    private let entityPredicate: NSPredicate
+//    private let filterPredicate: NSPredicate?
+//    fileprivate lazy var combinedPredicate: NSPredicate = {
 //        if let filterPredicate = self.filterPredicate {
-//            return CompoundPredicate(andPredicateWithSubpredicates:
+//            return NSCompoundPredicate(andPredicateWithSubpredicates:
 //                [self.entityPredicate, filterPredicate])
 //        } else {
 //            return self.entityPredicate
@@ -103,11 +103,15 @@
 //    - parameter frequency: `FireFrequency` How frequently you wish to receive callbacks of changes. Default value is `.OnSave`.
 //    - parameter filterPredicate: An optional filtering predicate to be applied to entities being monitored.
 //    */
-//    public init(context: NSManagedObjectContext, frequency: FireFrequency = .onSave, filterPredicate: Predicate? = nil) {
+//    public init(context: NSManagedObjectContext, frequency: FireFrequency = .onSave, filterPredicate: NSPredicate? = nil) {
 //        self.context = context
 //        self.frequency = frequency
 //        self.filterPredicate = filterPredicate
-//        self.entityPredicate = Predicate(format: "entity == %@", T.entity())
+//        if #available(tvOSApplicationExtension 10.0, *) {
+//            self.entityPredicate = NSPredicate(format: "entity == %@", T.entity())
+//        } else {
+//            // Fallback on earlier versions
+//        }
 //    }
 //
 //    deinit {
@@ -115,7 +119,7 @@
 //    }
 //}
 //
-//private class BaseEntityMonitorDelegate<T: NSManagedObject where T: NSFetchRequestResult, T: Hashable>: NSObject {
+//private class BaseEntityMonitorDelegate<T: NSManagedObject>: NSObject where T: NSFetchRequestResult, T: Hashable {
 //
 //    private let ChangeObserverSelectorName = #selector(BaseEntityMonitorDelegate<T>.evaluateChangeNotification(_:))
 //
