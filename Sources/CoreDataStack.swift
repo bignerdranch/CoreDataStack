@@ -105,7 +105,7 @@ public final class CoreDataStack {
                                             on callbackQueue: DispatchQueue? = nil,
                                             callback: @escaping SetupCallback) {
 
-        let model = bundle.managedObjectModel(modelName: modelName)
+        let model = bundle.managedObjectModel(name: modelName)
         let storeFileURL = desiredStoreURL ?? URL(string: "\(modelName).sqlite", relativeTo: documentsDirectory!)!
         do {
             try createDirectoryIfNecessary(storeFileURL)
@@ -156,7 +156,7 @@ public final class CoreDataStack {
      */
     public static func constructInMemoryStack(modelName: String,
                                               in bundle: Bundle = Bundle.main) throws -> CoreDataStack {
-        let model = bundle.managedObjectModel(modelName: modelName)
+        let model = bundle.managedObjectModel(name: modelName)
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
         try coordinator.addPersistentStore(ofType: NSInMemoryStoreType, configurationName: nil, at: nil, options: nil)
         let stack = CoreDataStack(modelName: modelName, bundle: bundle, persistentStoreCoordinator: coordinator, storeType: .inMemory)
@@ -183,7 +183,7 @@ public final class CoreDataStack {
     }
     fileprivate var managedObjectModel: NSManagedObjectModel {
         get {
-            return bundle.managedObjectModel(managedObjectModelName)
+            return bundle.managedObjectModel(name: managedObjectModelName)
         }
     }
     fileprivate let saveBubbleDispatchGroup = DispatchGroup()

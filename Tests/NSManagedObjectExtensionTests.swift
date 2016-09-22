@@ -15,7 +15,7 @@ import CoreData
 class NSManagedObjectExtensionTests: XCTestCase {
 
     lazy var model: NSManagedObjectModel = {
-        return self.unitTestBundle.managedObjectModel(modelName: "Container_Example")
+        return self.unitTestBundle.managedObjectModel(name: "Container_Example")
     }()
     lazy var container: NSPersistentContainer = {
         return NSPersistentContainer(name: "Container_Example", managedObjectModel: self.model)
@@ -39,11 +39,6 @@ class NSManagedObjectExtensionTests: XCTestCase {
             expectation?.fulfill()
         }
         waitForExpectations(timeout: 5, handler: nil)
-    }
-
-    func testNewObject() {
-        let book = Book(context: container.viewContext)
-        XCTAssertNotNil(book)
     }
 
     func testFindFirst() {

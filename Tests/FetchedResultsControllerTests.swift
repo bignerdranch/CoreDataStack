@@ -49,7 +49,7 @@ class SampleFetchedResultsControllerDelegate: FetchedResultsControllerDelegate {
 class FetchedResultsControllerTests: TempDirectoryTestCase {
 
     lazy var model: NSManagedObjectModel = {
-        return self.unitTestBundle.managedObjectModel(modelName: "Container_Example")
+        return self.unitTestBundle.managedObjectModel(name: "Container_Example")
     }()
     lazy var container: NSPersistentContainer = {
         return NSPersistentContainer(name: "Container_Example", managedObjectModel: self.model)
