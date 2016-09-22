@@ -106,7 +106,7 @@ public final class CoreDataStack {
                               callbackQueue: dispatch_queue_t? = nil,
                               callback: CoreDataStackSetupCallback) {
 
-        let model = bundle.managedObjectModel(modelName: modelName)
+        let model = bundle.managedObjectModel(modelName)
         let storeFileURL = desiredStoreURL ?? NSURL(string: "\(modelName).sqlite", relativeToURL: documentsDirectory)!
         do {
             try createDirectoryIfNecessary(storeFileURL)
@@ -159,7 +159,7 @@ public final class CoreDataStack {
      */
     public static func constructInMemoryStack(withModelName modelName: String,
                                                             inBundle bundle: NSBundle = NSBundle.mainBundle()) throws -> CoreDataStack {
-        let model = bundle.managedObjectModel(modelName: modelName)
+        let model = bundle.managedObjectModel(modelName)
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
         try coordinator.addPersistentStoreWithType(NSInMemoryStoreType, configuration: nil, URL: nil, options: nil)
         let stack = CoreDataStack(modelName: modelName, bundle: bundle, persistentStoreCoordinator: coordinator, storeType: .InMemory)
@@ -185,7 +185,7 @@ public final class CoreDataStack {
     }
     private var managedObjectModel: NSManagedObjectModel {
         get {
-            return bundle.managedObjectModel(modelName: managedObjectModelName)
+            return bundle.managedObjectModel(managedObjectModelName)
         }
     }
 
@@ -449,16 +449,5 @@ private extension CoreDataStack {
             let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
             return urls.first
         }
-    }
-}
-
-private extension NSBundle {
-    static private let modelExtension = "momd"
-    func managedObjectModel(modelName modelName: String) -> NSManagedObjectModel {
-        guard let URL = URLForResource(modelName, withExtension: NSBundle.modelExtension),
-            let model = NSManagedObjectModel(contentsOfURL: URL) else {
-                preconditionFailure("Model not found or corrupted with name: \(modelName) in bundle: \(self)")
-        }
-        return model
     }
 }

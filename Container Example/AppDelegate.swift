@@ -13,7 +13,7 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    let persistentContainer = NSPersistentContainer(name: "UniqueConstraintModel")
+    let persistentContainer = NSPersistentContainer(name: "Container_Example")
     private let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
     private lazy var loadingVC: UIViewController = {
         return self.mainStoryboard.instantiateViewControllerWithIdentifier("LoadingVC")
@@ -45,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if try! Book.countInContext(moc) == 0 {
                 let books = StubbedBookData.books
                 for bookTitle in books {
-                    let book = Book(managedObjectContext: moc)
+                    let book = Book(context: moc)
                     book.title = bookTitle
                 }
 

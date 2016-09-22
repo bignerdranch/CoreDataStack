@@ -73,7 +73,7 @@ public enum FetchedResultsSectionChange<T: NSManagedObject> {
  */
 public protocol FetchedResultsControllerDelegate: class { // : class for weak capture
     /// Type of object being monitored. Must inherit from `NSManagedObject` and implement `CoreDataModelable`
-    associatedtype T: NSManagedObject, CoreDataModelable
+    associatedtype T: NSManagedObject
 
     /**
      Callback including all processed changes to objects
@@ -138,7 +138,7 @@ public struct FetchedResultsSectionInfo<T: NSManagedObject> {
 /**
  A type safe wrapper around an `NSFetchedResultsController`
  */
-public class FetchedResultsController<T: NSManagedObject where T: CoreDataModelable> {
+public class FetchedResultsController<T: NSManagedObject> {
 
     /// The `NSFetchRequest` being used by the `FetchedResultsController`
     public var fetchRequest: NSFetchRequest { return internalController.fetchRequest }
@@ -173,7 +173,6 @@ public class FetchedResultsController<T: NSManagedObject where T: CoreDataModela
     - parameter cacheName: An optional unique name used for caching results see `NSFetchedResultsController` for details
     */
     public init(fetchRequest: NSFetchRequest, managedObjectContext context: NSManagedObjectContext, sectionNameKeyPath: String? = nil, cacheName: String? = nil) {
-        assert(fetchRequest.entityName == T.entityName, "FetchResultsController created with incorrect NSFetchRequest entity type")
         internalController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: sectionNameKeyPath, cacheName: cacheName)
     }
 

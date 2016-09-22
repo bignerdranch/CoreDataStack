@@ -18,13 +18,40 @@
 		E40CFCEC1C80C50200CBDFF2 /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40CFCD91C80C4E700CBDFF2 /* Author.swift */; };
 		E40CFCED1C80C50200CBDFF2 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40CFCDA1C80C4E700CBDFF2 /* Book.swift */; };
 		E40CFCEE1C80C50200CBDFF2 /* BooksTestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40CFCDB1C80C4E700CBDFF2 /* BooksTestData.swift */; };
-		E40CFCEF1C80C50600CBDFF2 /* Sample.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E40CFCDC1C80C4E700CBDFF2 /* Sample.xcdatamodeld */; };
-		E40CFCF01C80C50700CBDFF2 /* Sample.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E40CFCDC1C80C4E700CBDFF2 /* Sample.xcdatamodeld */; };
 		E40CFCF11C80C50B00CBDFF2 /* TestModel.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = E40CFCD71C80C4DE00CBDFF2 /* TestModel.sqlite */; };
+		E40F30ED1D932C030087AD03 /* Container_Example.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E40F30EA1D932BFD0087AD03 /* Container_Example.xcdatamodeld */; };
+		E40F30EE1D932C030087AD03 /* Container_Example.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E40F30EA1D932BFD0087AD03 /* Container_Example.xcdatamodeld */; };
+		E40F30F01D932E700087AD03 /* Book+FirstInitial.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40F30EF1D932E700087AD03 /* Book+FirstInitial.swift */; };
+		E40F30F11D932E700087AD03 /* Book+FirstInitial.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40F30EF1D932E700087AD03 /* Book+FirstInitial.swift */; };
+		E40F30F21D9366F30087AD03 /* FetchedResultsControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440FEF11C80B0D9003DE8FF /* FetchedResultsControllerTests.swift */; };
+		E40F30F31D9366F80087AD03 /* EntityMonitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440FEF01C80B0D9003DE8FF /* EntityMonitorTests.swift */; };
+		E40F30F51D936F2E0087AD03 /* Bundle+CoreDataModelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40F30F41D936F2E0087AD03 /* Bundle+CoreDataModelHelper.swift */; };
+		E40F30F61D936F2E0087AD03 /* Bundle+CoreDataModelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40F30F41D936F2E0087AD03 /* Bundle+CoreDataModelHelper.swift */; };
+		E40F30F71D936F2E0087AD03 /* Bundle+CoreDataModelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40F30F41D936F2E0087AD03 /* Bundle+CoreDataModelHelper.swift */; };
+		E42857011D9B17CF009D95BC /* Author+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42856FB1D9B17CF009D95BC /* Author+CoreDataClass.swift */; };
+		E42857021D9B17CF009D95BC /* Author+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42856FB1D9B17CF009D95BC /* Author+CoreDataClass.swift */; };
+		E42857031D9B17CF009D95BC /* Author+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42856FC1D9B17CF009D95BC /* Author+CoreDataProperties.swift */; };
+		E42857041D9B17CF009D95BC /* Author+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42856FC1D9B17CF009D95BC /* Author+CoreDataProperties.swift */; };
+		E42857051D9B17CF009D95BC /* Book+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42856FD1D9B17CF009D95BC /* Book+CoreDataClass.swift */; };
+		E42857061D9B17CF009D95BC /* Book+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42856FD1D9B17CF009D95BC /* Book+CoreDataClass.swift */; };
+		E42857071D9B17CF009D95BC /* Book+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42856FE1D9B17CF009D95BC /* Book+CoreDataProperties.swift */; };
+		E42857081D9B17CF009D95BC /* Book+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42856FE1D9B17CF009D95BC /* Book+CoreDataProperties.swift */; };
+		E42857091D9B17CF009D95BC /* Publisher+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42856FF1D9B17CF009D95BC /* Publisher+CoreDataClass.swift */; };
+		E428570A1D9B17CF009D95BC /* Publisher+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42856FF1D9B17CF009D95BC /* Publisher+CoreDataClass.swift */; };
+		E428570B1D9B17CF009D95BC /* Publisher+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42857001D9B17CF009D95BC /* Publisher+CoreDataProperties.swift */; };
+		E428570C1D9B17CF009D95BC /* Publisher+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42857001D9B17CF009D95BC /* Publisher+CoreDataProperties.swift */; };
 		E42BEE561D37FC4700DD0632 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4B99C6F1B740321005B7E1A /* Assets.xcassets */; };
 		E42BEE571D37FC4E00DD0632 /* bnr-logo-square.png in Resources */ = {isa = PBXBuildFile; fileRef = E4DB61451BFFBB4400BD3E6B /* bnr-logo-square.png */; };
 		E42BEE5A1D37FCA800DD0632 /* CoreDataStack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C9BC2D1AEA848600A6BD1B /* CoreDataStack.framework */; };
 		E42BEE5C1D37FCAE00DD0632 /* CoreDataStack.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4C9BC2D1AEA848600A6BD1B /* CoreDataStack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E43599571D93223F003295AE /* NSManagedObject+FetchHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43599561D93223F003295AE /* NSManagedObject+FetchHelpers.swift */; };
+		E43599611D932458003295AE /* CoreDataStack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C9BC2D1AEA848600A6BD1B /* CoreDataStack.framework */; };
+		E435996A1D932540003295AE /* NSManagedObjectExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43599691D932540003295AE /* NSManagedObjectExtensionTests.swift */; };
+		E435996D1D932586003295AE /* BooksTestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40CFCDB1C80C4E700CBDFF2 /* BooksTestData.swift */; };
+		E435996F1D9326A5003295AE /* XCTest+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF51D51C935078007E19DF /* XCTest+Helpers.swift */; };
+		E43599781D9329D9003295AE /* Sample.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E43599741D9329D1003295AE /* Sample.xcdatamodeld */; };
+		E43599791D9329D9003295AE /* Sample.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E43599741D9329D1003295AE /* Sample.xcdatamodeld */; };
+		E435997A1D9329D9003295AE /* Sample.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E43599741D9329D1003295AE /* Sample.xcdatamodeld */; };
 		E436D63F1D37F36900224B36 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E436D63E1D37F36900224B36 /* AppDelegate.swift */; };
 		E436D6561D37F3D700224B36 /* BooksTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E436D6511D37F3D700224B36 /* BooksTableViewController.swift */; };
 		E436D6591D37F3D700224B36 /* BooksTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E436D6541D37F3D700224B36 /* BooksTableViewController.xib */; };
@@ -32,8 +59,6 @@
 		E436D6611D37F7D000224B36 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E436D65D1D37F7D000224B36 /* LaunchScreen.storyboard */; };
 		E436D6621D37F7D000224B36 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E436D65F1D37F7D000224B36 /* Main.storyboard */; };
 		E436D6641D37F83200224B36 /* MyCoreDataConnectedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E436D6631D37F83200224B36 /* MyCoreDataConnectedViewController.swift */; };
-		E436D6651D37FB1000224B36 /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40CFCD91C80C4E700CBDFF2 /* Author.swift */; };
-		E436D6661D37FB1000224B36 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40CFCDA1C80C4E700CBDFF2 /* Book.swift */; };
 		E436D6671D37FB1000224B36 /* BooksTestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40CFCDB1C80C4E700CBDFF2 /* BooksTestData.swift */; };
 		E43713DD1C8646AC009C3B39 /* CoreDataStack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E43713D31C8646AC009C3B39 /* CoreDataStack.framework */; };
 		E43713EA1C86470D009C3B39 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440FED71C80B04A003DE8FF /* CoreDataStack.swift */; };
@@ -46,7 +71,6 @@
 		E43713F11C86470D009C3B39 /* FetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440FEE91C80B06D003DE8FF /* FetchedResultsController.swift */; };
 		E43713F21C864714009C3B39 /* CoreDataStack.h in Headers */ = {isa = PBXBuildFile; fileRef = E40CFCCD1C80BEB200CBDFF2 /* CoreDataStack.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E43713F51C86479B009C3B39 /* CoreDataStackOSXSQLiteStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43713F41C86479B009C3B39 /* CoreDataStackOSXSQLiteStoreTests.swift */; };
-		E43713F61C864B9A009C3B39 /* Sample.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E40CFCDC1C80C4E700CBDFF2 /* Sample.xcdatamodeld */; };
 		E43713F71C864BFB009C3B39 /* TempDirectoryTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440FEF81C80B0F3003DE8FF /* TempDirectoryTestCase.swift */; };
 		E440FED81C80B04A003DE8FF /* CoreDataModelable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440FED61C80B04A003DE8FF /* CoreDataModelable.swift */; };
 		E440FED91C80B04A003DE8FF /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440FED71C80B04A003DE8FF /* CoreDataStack.swift */; };
@@ -64,8 +88,6 @@
 		E440FEEB1C80B06D003DE8FF /* FetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440FEE91C80B06D003DE8FF /* FetchedResultsController.swift */; };
 		E440FEEC1C80B06F003DE8FF /* EntityMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440FEE81C80B06D003DE8FF /* EntityMonitor.swift */; };
 		E440FEED1C80B06F003DE8FF /* FetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440FEE91C80B06D003DE8FF /* FetchedResultsController.swift */; };
-		E440FEF41C80B0DD003DE8FF /* EntityMonitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440FEF01C80B0D9003DE8FF /* EntityMonitorTests.swift */; };
-		E440FEF51C80B0DD003DE8FF /* FetchedResultsControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440FEF11C80B0D9003DE8FF /* FetchedResultsControllerTests.swift */; };
 		E440FEFA1C80B0F7003DE8FF /* TempDirectoryTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440FEF81C80B0F3003DE8FF /* TempDirectoryTestCase.swift */; };
 		E440FEFB1C80B0F7003DE8FF /* TempDirectoryTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440FEF81C80B0F3003DE8FF /* TempDirectoryTestCase.swift */; };
 		E440FEFE1C80B113003DE8FF /* CoreDataStackTVTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440FEFC1C80B10F003DE8FF /* CoreDataStackTVTests.swift */; };
@@ -98,6 +120,13 @@
 
 /* Begin PBXContainerItemProxy section */
 		E42BEE581D37FCA300DD0632 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4C9BC241AEA848600A6BD1B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4C9BC2C1AEA848600A6BD1B;
+			remoteInfo = CoreDataStack;
+		};
+		E43599621D932458003295AE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E4C9BC241AEA848600A6BD1B /* Project object */;
 			proxyType = 1;
@@ -150,12 +179,24 @@
 
 /* Begin PBXFileReference section */
 		E40CFCCD1C80BEB200CBDFF2 /* CoreDataStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoreDataStack.h; path = Sources/CoreDataStack.h; sourceTree = SOURCE_ROOT; };
-		E40CFCD71C80C4DE00CBDFF2 /* TestModel.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; name = TestModel.sqlite; path = "Sample Model/TestModel.sqlite"; sourceTree = SOURCE_ROOT; };
-		E40CFCD91C80C4E700CBDFF2 /* Author.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Author.swift; path = "Sample Model/Author.swift"; sourceTree = "<group>"; };
-		E40CFCDA1C80C4E700CBDFF2 /* Book.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Book.swift; path = "Sample Model/Book.swift"; sourceTree = "<group>"; };
+		E40CFCD71C80C4DE00CBDFF2 /* TestModel.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; name = TestModel.sqlite; path = "Sample Model/Deprecated/TestModel.sqlite"; sourceTree = SOURCE_ROOT; };
+		E40CFCD91C80C4E700CBDFF2 /* Author.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Author.swift; path = "Sample Model/Deprecated/Author.swift"; sourceTree = "<group>"; };
+		E40CFCDA1C80C4E700CBDFF2 /* Book.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Book.swift; path = "Sample Model/Deprecated/Book.swift"; sourceTree = "<group>"; };
 		E40CFCDB1C80C4E700CBDFF2 /* BooksTestData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BooksTestData.swift; path = "Sample Model/BooksTestData.swift"; sourceTree = "<group>"; };
-		E40CFCDD1C80C4E700CBDFF2 /* TestModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "TestModel 2.xcdatamodel"; sourceTree = "<group>"; };
-		E40CFCDE1C80C4E700CBDFF2 /* TestModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TestModel.xcdatamodel; sourceTree = "<group>"; };
+		E40F30EB1D932BFD0087AD03 /* UniqueConstraintModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UniqueConstraintModel.xcdatamodel; sourceTree = "<group>"; };
+		E40F30EF1D932E700087AD03 /* Book+FirstInitial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Book+FirstInitial.swift"; path = "Sample Model/Container/Book+FirstInitial.swift"; sourceTree = "<group>"; };
+		E40F30F41D936F2E0087AD03 /* Bundle+CoreDataModelHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Bundle+CoreDataModelHelper.swift"; path = "Sources/Bundle+CoreDataModelHelper.swift"; sourceTree = SOURCE_ROOT; };
+		E42856FB1D9B17CF009D95BC /* Author+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Author+CoreDataClass.swift"; path = "Sample Model/Container/Author+CoreDataClass.swift"; sourceTree = "<group>"; };
+		E42856FC1D9B17CF009D95BC /* Author+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Author+CoreDataProperties.swift"; path = "Sample Model/Container/Author+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		E42856FD1D9B17CF009D95BC /* Book+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Book+CoreDataClass.swift"; path = "Sample Model/Container/Book+CoreDataClass.swift"; sourceTree = "<group>"; };
+		E42856FE1D9B17CF009D95BC /* Book+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Book+CoreDataProperties.swift"; path = "Sample Model/Container/Book+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		E42856FF1D9B17CF009D95BC /* Publisher+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Publisher+CoreDataClass.swift"; path = "Sample Model/Container/Publisher+CoreDataClass.swift"; sourceTree = "<group>"; };
+		E42857001D9B17CF009D95BC /* Publisher+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Publisher+CoreDataProperties.swift"; path = "Sample Model/Container/Publisher+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		E43599561D93223F003295AE /* NSManagedObject+FetchHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSManagedObject+FetchHelpers.swift"; path = "Sources/NSManagedObject+FetchHelpers.swift"; sourceTree = SOURCE_ROOT; };
+		E435995C1D932458003295AE /* PostDeprecationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PostDeprecationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E43599691D932540003295AE /* NSManagedObjectExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSManagedObjectExtensionTests.swift; path = Tests/NSManagedObjectExtensionTests.swift; sourceTree = SOURCE_ROOT; };
+		E43599751D9329D1003295AE /* TestModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "TestModel 2.xcdatamodel"; sourceTree = "<group>"; };
+		E43599761D9329D1003295AE /* TestModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TestModel.xcdatamodel; sourceTree = "<group>"; };
 		E436D63C1D37F36900224B36 /* Container Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Container Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E436D63E1D37F36900224B36 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E436D64D1D37F36900224B36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -209,6 +250,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		E43599591D932458003295AE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E43599611D932458003295AE /* CoreDataStack.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E436D6391D37F36900224B36 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -273,6 +322,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E43599711D93270D003295AE /* Deprecated */ = {
+			isa = PBXGroup;
+			children = (
+				E440FED71C80B04A003DE8FF /* CoreDataStack.swift */,
+				E440FED61C80B04A003DE8FF /* CoreDataModelable.swift */,
+				E440FEDF1C80B05D003DE8FF /* NSPersistentStoreCoordinator+SQLiteHelpers.swift */,
+			);
+			name = Deprecated;
+			sourceTree = "<group>";
+		};
+		E43599721D93279D003295AE /* Deprecated */ = {
+			isa = PBXGroup;
+			children = (
+				E440FEF81C80B0F3003DE8FF /* TempDirectoryTestCase.swift */,
+				E43713F31C86474F009C3B39 /* OSX Tests */,
+				E450133F1C23576F00ADC83B /* tvOS Tests */,
+				E43A3C611BFCD0530019D6B4 /* Stack Tests */,
+			);
+			name = Deprecated;
+			sourceTree = "<group>";
+		};
+		E435997C1D932A1A003295AE /* Deprecated */ = {
+			isa = PBXGroup;
+			children = (
+				E43599741D9329D1003295AE /* Sample.xcdatamodeld */,
+				E40CFCD91C80C4E700CBDFF2 /* Author.swift */,
+				E40CFCDA1C80C4E700CBDFF2 /* Book.swift */,
+				E40CFCDB1C80C4E700CBDFF2 /* BooksTestData.swift */,
+				E4598B3F1B7CF86F00F7DAD9 /* Migration Samples */,
+			);
+			name = Deprecated;
+			sourceTree = "<group>";
+		};
 		E436D63D1D37F36900224B36 /* Container Example */ = {
 			isa = PBXGroup;
 			children = (
@@ -307,11 +389,15 @@
 		E4396EDA1C80B46D004BC954 /* Sample Model */ = {
 			isa = PBXGroup;
 			children = (
-				E40CFCD91C80C4E700CBDFF2 /* Author.swift */,
-				E40CFCDA1C80C4E700CBDFF2 /* Book.swift */,
-				E40CFCDB1C80C4E700CBDFF2 /* BooksTestData.swift */,
-				E40CFCDC1C80C4E700CBDFF2 /* Sample.xcdatamodeld */,
-				E4598B3F1B7CF86F00F7DAD9 /* Migration Samples */,
+				E40F30EA1D932BFD0087AD03 /* Container_Example.xcdatamodeld */,
+				E42856FB1D9B17CF009D95BC /* Author+CoreDataClass.swift */,
+				E42856FC1D9B17CF009D95BC /* Author+CoreDataProperties.swift */,
+				E42856FD1D9B17CF009D95BC /* Book+CoreDataClass.swift */,
+				E42856FE1D9B17CF009D95BC /* Book+CoreDataProperties.swift */,
+				E42856FF1D9B17CF009D95BC /* Publisher+CoreDataClass.swift */,
+				E42857001D9B17CF009D95BC /* Publisher+CoreDataProperties.swift */,
+				E435997C1D932A1A003295AE /* Deprecated */,
+				E40F30EF1D932E700087AD03 /* Book+FirstInitial.swift */,
 			);
 			name = "Sample Model";
 			sourceTree = "<group>";
@@ -323,17 +409,16 @@
 				E440FEE91C80B06D003DE8FF /* FetchedResultsController.swift */,
 			);
 			name = "Type Safe Monitors";
-			path = CoreDataStack;
 			sourceTree = "<group>";
 		};
 		E43A3C611BFCD0530019D6B4 /* Stack Tests */ = {
 			isa = PBXGroup;
 			children = (
 				E440FEFF1C80B124003DE8FF /* BatchOperationContextTests.swift */,
+				E440FF031C80B124003DE8FF /* SaveTests.swift */,
 				E440FF001C80B124003DE8FF /* CoreDataModelableTests.swift */,
 				E440FF011C80B124003DE8FF /* InitializationTests.swift */,
 				E440FF021C80B124003DE8FF /* ModelMigrationTests.swift */,
-				E440FF031C80B124003DE8FF /* SaveTests.swift */,
 				E440FF041C80B124003DE8FF /* StoreTeardownTests.swift */,
 				E4472C551CC92BD7003374CC /* StackCallbackQueueTests.swift */,
 				E4472C571CCAB397003374CC /* ChildMOCCreationTests.swift */,
@@ -344,7 +429,6 @@
 		E43A3C621BFCD0860019D6B4 /* Shared Test Utils */ = {
 			isa = PBXGroup;
 			children = (
-				E440FEF81C80B0F3003DE8FF /* TempDirectoryTestCase.swift */,
 				E4BF51D51C935078007E19DF /* XCTest+Helpers.swift */,
 			);
 			name = "Shared Test Utils";
@@ -394,8 +478,7 @@
 		E4C9BC231AEA848600A6BD1B = {
 			isa = PBXGroup;
 			children = (
-				E4C9BC2F1AEA848600A6BD1B /* Stack */,
-				E43A3C5D1BFCC6910019D6B4 /* Type Safe Monitors */,
+				E4C9BC2F1AEA848600A6BD1B /* Library */,
 				E4C9BC3C1AEA848600A6BD1B /* Tests */,
 				E4B99C671B740321005B7E1A /* Example */,
 				E4396EDA1C80B46D004BC954 /* Sample Model */,
@@ -415,20 +498,21 @@
 				E43713D31C8646AC009C3B39 /* CoreDataStack.framework */,
 				E43713DC1C8646AC009C3B39 /* CoreDataStackOSXTests.xctest */,
 				E436D63C1D37F36900224B36 /* Container Example.app */,
+				E435995C1D932458003295AE /* PostDeprecationTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		E4C9BC2F1AEA848600A6BD1B /* Stack */ = {
+		E4C9BC2F1AEA848600A6BD1B /* Library */ = {
 			isa = PBXGroup;
 			children = (
 				E40CFCCD1C80BEB200CBDFF2 /* CoreDataStack.h */,
-				E440FED71C80B04A003DE8FF /* CoreDataStack.swift */,
-				E440FED61C80B04A003DE8FF /* CoreDataModelable.swift */,
+				E43A3C5D1BFCC6910019D6B4 /* Type Safe Monitors */,
+				E43599711D93270D003295AE /* Deprecated */,
 				E4C9BC521AEA851F00A6BD1B /* Extensions */,
 				E4C9BC301AEA848600A6BD1B /* Supporting Files */,
 			);
-			name = Stack;
+			name = Library;
 			path = CoreDataStack;
 			sourceTree = "<group>";
 		};
@@ -443,12 +527,11 @@
 		E4C9BC3C1AEA848600A6BD1B /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				E43A3C611BFCD0530019D6B4 /* Stack Tests */,
+				E43599691D932540003295AE /* NSManagedObjectExtensionTests.swift */,
 				E43A3C631BFCD0BB0019D6B4 /* Type Safe Monitors Tests */,
 				E43A3C621BFCD0860019D6B4 /* Shared Test Utils */,
-				E43713F31C86474F009C3B39 /* OSX Tests */,
-				E450133F1C23576F00ADC83B /* tvOS Tests */,
 				E4C9BC3D1AEA848600A6BD1B /* Supporting Files */,
+				E43599721D93279D003295AE /* Deprecated */,
 			);
 			name = Tests;
 			path = CoreDataStackTests;
@@ -468,7 +551,8 @@
 				E440FEDC1C80B05D003DE8FF /* NSManagedObjectContext+AsyncHelpers.swift */,
 				E440FEDD1C80B05D003DE8FF /* NSManagedObjectContext+SaveHelpers.swift */,
 				E440FEDE1C80B05D003DE8FF /* NSPersistentStoreCoordinator+AsyncHelpers.swift */,
-				E440FEDF1C80B05D003DE8FF /* NSPersistentStoreCoordinator+SQLiteHelpers.swift */,
+				E43599561D93223F003295AE /* NSManagedObject+FetchHelpers.swift */,
+				E40F30F41D936F2E0087AD03 /* Bundle+CoreDataModelHelper.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -513,6 +597,24 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		E435995B1D932458003295AE /* PostDeprecationTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E43599641D932458003295AE /* Build configuration list for PBXNativeTarget "PostDeprecationTests" */;
+			buildPhases = (
+				E43599581D932458003295AE /* Sources */,
+				E43599591D932458003295AE /* Frameworks */,
+				E435995A1D932458003295AE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E43599631D932458003295AE /* PBXTargetDependency */,
+			);
+			name = PostDeprecationTests;
+			productName = DeprecatedCoreDataStackTests;
+			productReference = E435995C1D932458003295AE /* PostDeprecationTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		E436D63B1D37F36900224B36 /* Container Example */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E436D6501D37F36900224B36 /* Build configuration list for PBXNativeTarget "Container Example" */;
@@ -668,6 +770,10 @@
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Big Nerd Ranch";
 				TargetAttributes = {
+					E435995B1D932458003295AE = {
+						CreatedOnToolsVersion = 8.0;
+						ProvisioningStyle = Automatic;
+					};
 					E436D63B1D37F36900224B36 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 439592V3LM;
@@ -720,6 +826,7 @@
 				E4C9BC371AEA848600A6BD1B /* CoreDataStackTests */,
 				E45013311C23572400ADC83B /* CoreDataStackTVTests */,
 				E43713DB1C8646AC009C3B39 /* CoreDataStackOSXTests */,
+				E435995B1D932458003295AE /* PostDeprecationTests */,
 				E4B99C651B740321005B7E1A /* Example */,
 				E436D63B1D37F36900224B36 /* Container Example */,
 			);
@@ -727,6 +834,13 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		E435995A1D932458003295AE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E436D63A1D37F36900224B36 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -798,17 +912,43 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		E43599581D932458003295AE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E435996F1D9326A5003295AE /* XCTest+Helpers.swift in Sources */,
+				E42857091D9B17CF009D95BC /* Publisher+CoreDataClass.swift in Sources */,
+				E42857071D9B17CF009D95BC /* Book+CoreDataProperties.swift in Sources */,
+				E40F30F21D9366F30087AD03 /* FetchedResultsControllerTests.swift in Sources */,
+				E40F30F31D9366F80087AD03 /* EntityMonitorTests.swift in Sources */,
+				E40F30F01D932E700087AD03 /* Book+FirstInitial.swift in Sources */,
+				E435996D1D932586003295AE /* BooksTestData.swift in Sources */,
+				E42857011D9B17CF009D95BC /* Author+CoreDataClass.swift in Sources */,
+				E40F30ED1D932C030087AD03 /* Container_Example.xcdatamodeld in Sources */,
+				E42857051D9B17CF009D95BC /* Book+CoreDataClass.swift in Sources */,
+				E42857031D9B17CF009D95BC /* Author+CoreDataProperties.swift in Sources */,
+				E428570B1D9B17CF009D95BC /* Publisher+CoreDataProperties.swift in Sources */,
+				E435996A1D932540003295AE /* NSManagedObjectExtensionTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E436D6381D37F36900224B36 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E42857061D9B17CF009D95BC /* Book+CoreDataClass.swift in Sources */,
+				E42857081D9B17CF009D95BC /* Book+CoreDataProperties.swift in Sources */,
 				E436D6561D37F3D700224B36 /* BooksTableViewController.swift in Sources */,
 				E436D6671D37FB1000224B36 /* BooksTestData.swift in Sources */,
+				E42857041D9B17CF009D95BC /* Author+CoreDataProperties.swift in Sources */,
+				E428570C1D9B17CF009D95BC /* Publisher+CoreDataProperties.swift in Sources */,
+				E40F30F11D932E700087AD03 /* Book+FirstInitial.swift in Sources */,
+				E428570A1D9B17CF009D95BC /* Publisher+CoreDataClass.swift in Sources */,
 				E436D6641D37F83200224B36 /* MyCoreDataConnectedViewController.swift in Sources */,
-				E436D6661D37FB1000224B36 /* Book.swift in Sources */,
+				E42857021D9B17CF009D95BC /* Author+CoreDataClass.swift in Sources */,
+				E40F30EE1D932C030087AD03 /* Container_Example.xcdatamodeld in Sources */,
 				E436D63F1D37F36900224B36 /* AppDelegate.swift in Sources */,
 				E436D65B1D37F4F000224B36 /* UniqueConstraintModel.xcdatamodeld in Sources */,
-				E436D6651D37FB1000224B36 /* Author.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -818,6 +958,7 @@
 			files = (
 				E43713EA1C86470D009C3B39 /* CoreDataStack.swift in Sources */,
 				E43713EB1C86470D009C3B39 /* CoreDataModelable.swift in Sources */,
+				E40F30F71D936F2E0087AD03 /* Bundle+CoreDataModelHelper.swift in Sources */,
 				E43713EC1C86470D009C3B39 /* NSManagedObjectContext+AsyncHelpers.swift in Sources */,
 				E43713ED1C86470D009C3B39 /* NSManagedObjectContext+SaveHelpers.swift in Sources */,
 				E43713EE1C86470D009C3B39 /* NSPersistentStoreCoordinator+AsyncHelpers.swift in Sources */,
@@ -833,9 +974,9 @@
 			files = (
 				E4BF51D81C935078007E19DF /* XCTest+Helpers.swift in Sources */,
 				E43713F51C86479B009C3B39 /* CoreDataStackOSXSQLiteStoreTests.swift in Sources */,
-				E43713F61C864B9A009C3B39 /* Sample.xcdatamodeld in Sources */,
 				E4BF51DA1C936A6C007E19DF /* CoreDataStackOSXInMemoryStoreTests.swift in Sources */,
 				E43713F71C864BFB009C3B39 /* TempDirectoryTestCase.swift in Sources */,
+				E435997A1D9329D9003295AE /* Sample.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -845,6 +986,7 @@
 			files = (
 				E440FEE51C80B060003DE8FF /* NSManagedObjectContext+SaveHelpers.swift in Sources */,
 				E440FEEC1C80B06F003DE8FF /* EntityMonitor.swift in Sources */,
+				E40F30F61D936F2E0087AD03 /* Bundle+CoreDataModelHelper.swift in Sources */,
 				E440FEED1C80B06F003DE8FF /* FetchedResultsController.swift in Sources */,
 				E440FEE61C80B060003DE8FF /* NSPersistentStoreCoordinator+AsyncHelpers.swift in Sources */,
 				E440FEE41C80B060003DE8FF /* NSManagedObjectContext+AsyncHelpers.swift in Sources */,
@@ -858,11 +1000,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E43599791D9329D9003295AE /* Sample.xcdatamodeld in Sources */,
 				E40CFCED1C80C50200CBDFF2 /* Book.swift in Sources */,
 				E40CFCEE1C80C50200CBDFF2 /* BooksTestData.swift in Sources */,
 				E40CFCEC1C80C50200CBDFF2 /* Author.swift in Sources */,
 				E4BF51D71C935078007E19DF /* XCTest+Helpers.swift in Sources */,
-				E40CFCF01C80C50700CBDFF2 /* Sample.xcdatamodeld in Sources */,
 				E440FEFE1C80B113003DE8FF /* CoreDataStackTVTests.swift in Sources */,
 				E440FEFB1C80B0F7003DE8FF /* TempDirectoryTestCase.swift in Sources */,
 			);
@@ -886,9 +1028,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E43599571D93223F003295AE /* NSManagedObject+FetchHelpers.swift in Sources */,
 				E440FEE11C80B05D003DE8FF /* NSManagedObjectContext+SaveHelpers.swift in Sources */,
 				E440FEEA1C80B06D003DE8FF /* EntityMonitor.swift in Sources */,
 				E440FEEB1C80B06D003DE8FF /* FetchedResultsController.swift in Sources */,
+				E40F30F51D936F2E0087AD03 /* Bundle+CoreDataModelHelper.swift in Sources */,
 				E440FEE21C80B05D003DE8FF /* NSPersistentStoreCoordinator+AsyncHelpers.swift in Sources */,
 				E440FEE01C80B05D003DE8FF /* NSManagedObjectContext+AsyncHelpers.swift in Sources */,
 				E440FED81C80B04A003DE8FF /* CoreDataModelable.swift in Sources */,
@@ -903,20 +1047,18 @@
 			files = (
 				E440FEFA1C80B0F7003DE8FF /* TempDirectoryTestCase.swift in Sources */,
 				E4472C581CCAB397003374CC /* ChildMOCCreationTests.swift in Sources */,
-				E440FEF41C80B0DD003DE8FF /* EntityMonitorTests.swift in Sources */,
 				E440FF101C80B127003DE8FF /* StoreTeardownTests.swift in Sources */,
 				E40CFCEA1C80C4FD00CBDFF2 /* Book.swift in Sources */,
 				E440FF0C1C80B127003DE8FF /* CoreDataModelableTests.swift in Sources */,
 				E40CFCE91C80C4FD00CBDFF2 /* Author.swift in Sources */,
 				E40CFCEB1C80C4FD00CBDFF2 /* BooksTestData.swift in Sources */,
+				E43599781D9329D9003295AE /* Sample.xcdatamodeld in Sources */,
 				E440FF0F1C80B127003DE8FF /* SaveTests.swift in Sources */,
 				E440FF0E1C80B127003DE8FF /* ModelMigrationTests.swift in Sources */,
-				E40CFCEF1C80C50600CBDFF2 /* Sample.xcdatamodeld in Sources */,
 				E4BF51D61C935078007E19DF /* XCTest+Helpers.swift in Sources */,
 				E4472C561CC92BD7003374CC /* StackCallbackQueueTests.swift in Sources */,
 				E440FF0B1C80B127003DE8FF /* BatchOperationContextTests.swift in Sources */,
 				E440FF0D1C80B127003DE8FF /* InitializationTests.swift in Sources */,
-				E440FEF51C80B0DD003DE8FF /* FetchedResultsControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -927,6 +1069,11 @@
 			isa = PBXTargetDependency;
 			target = E4C9BC2C1AEA848600A6BD1B /* CoreDataStack */;
 			targetProxy = E42BEE581D37FCA300DD0632 /* PBXContainerItemProxy */;
+		};
+		E43599631D932458003295AE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4C9BC2C1AEA848600A6BD1B /* CoreDataStack */;
+			targetProxy = E43599621D932458003295AE /* PBXContainerItemProxy */;
 		};
 		E43713DF1C8646AC009C3B39 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -986,6 +1133,40 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		E43599651D932458003295AE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.bignerdranch.DeprecatedCoreDataStackTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+			};
+			name = Debug;
+		};
+		E43599661D932458003295AE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.bignerdranch.DeprecatedCoreDataStackTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		E436D64E1D37F36900224B36 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1364,6 +1545,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		E43599641D932458003295AE /* Build configuration list for PBXNativeTarget "PostDeprecationTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E43599651D932458003295AE /* Debug */,
+				E43599661D932458003295AE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E436D6501D37F36900224B36 /* Build configuration list for PBXNativeTarget "Container Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1448,15 +1638,26 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		E40CFCDC1C80C4E700CBDFF2 /* Sample.xcdatamodeld */ = {
+		E40F30EA1D932BFD0087AD03 /* Container_Example.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				E40CFCDD1C80C4E700CBDFF2 /* TestModel 2.xcdatamodel */,
-				E40CFCDE1C80C4E700CBDFF2 /* TestModel.xcdatamodel */,
+				E40F30EB1D932BFD0087AD03 /* UniqueConstraintModel.xcdatamodel */,
 			);
-			currentVersion = E40CFCDD1C80C4E700CBDFF2 /* TestModel 2.xcdatamodel */;
+			currentVersion = E40F30EB1D932BFD0087AD03 /* UniqueConstraintModel.xcdatamodel */;
+			name = Container_Example.xcdatamodeld;
+			path = "Sample Model/Container/Container_Example.xcdatamodeld";
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+		E43599741D9329D1003295AE /* Sample.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				E43599751D9329D1003295AE /* TestModel 2.xcdatamodel */,
+				E43599761D9329D1003295AE /* TestModel.xcdatamodel */,
+			);
+			currentVersion = E43599751D9329D1003295AE /* TestModel 2.xcdatamodel */;
 			name = Sample.xcdatamodeld;
-			path = "Sample Model/Sample.xcdatamodeld";
+			path = "Sample Model/Deprecated/Sample.xcdatamodeld";
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

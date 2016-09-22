@@ -21,8 +21,8 @@ public enum FireFrequency {
  Protocol for delegate callbacks of `NSManagedObject` entity change events.
  */
 public protocol EntityMonitorDelegate: class { // : class for weak capture
-    /// Type of object being monitored. Must inheirt from `NSManagedObject` and implement `CoreDataModelable`
-    associatedtype T: NSManagedObject, CoreDataModelable, Hashable
+    /// Type of object being monitored. Must inheirt from `NSManagedObject`
+    associatedtype T: NSManagedObject, Hashable
 
     /**
      Callback for when objects matching the predicate have been inserted
@@ -53,7 +53,7 @@ public protocol EntityMonitorDelegate: class { // : class for weak capture
  Class for monitoring changes within a given `NSManagedObjectContext`
     to a specific Core Data Entity with optional filtering via an `NSPredicate`.
  */
-public class EntityMonitor<T: NSManagedObject where T: CoreDataModelable, T: Hashable> {
+public class EntityMonitor<T: NSManagedObject where T: Hashable> {
 
     // MARK: - Public Properties
 
@@ -95,19 +95,23 @@ public class EntityMonitor<T: NSManagedObject where T: CoreDataModelable, T: Has
     // MARK: - Lifecycle
 
     /**
-    Initializer to create an `EntityMonitor` to monitor changes to a specific Core Data Entity.
-
-    This initializer is failable in the event your Entity is not within the supplied `NSManagedObjectContext`.
-
-    - parameter context: `NSManagedObjectContext` the context you want to monitor changes within.
-    - parameter frequency: `FireFrequency` How frequently you wish to receive callbacks of changes. Default value is `.OnSave`.
-    - parameter filterPredicate: An optional filtering predicate to be applied to entities being monitored.
-    */
-    public init(context: NSManagedObjectContext, frequency: FireFrequency = .OnSave, filterPredicate: NSPredicate? = nil) {
+     Initializer to create an `EntityMonitor` to monitor changes to a specific Core Data Entity.
+     This initializer is failable in the event your Entity is not within the supplied `NSManagedObjectContext`.
+     - parameter context: `NSManagedObjectContext` the context you want to monitor changes within.
+     - parameter entity: `NSEntityDescription` for the entity you wish to monitor
+     - parameter frequency: `FireFrequency` How frequently you wish to receive callbacks of changes. Default value is `.OnSave`.
+     - parameter filterPredicate: An optional filtering predicate to be applied to entities being monitored.
+     */
+    public init(context: NSManagedObjectContext, entity: NSEntityDescription,
+                frequency: FireFrequency = .OnSave, filterPredicate: NSPredicate? = nil) {
         self.context = context
         self.frequency = frequency
         self.filterPredicate = filterPredicate
-        self.entityPredicate = NSPredicate(format: "entity == %@", T.entityDescriptionInContext(context))
+        self.entityPredicate = NSPredicate(format: "entity == %@", entity)
+        guard let entityName = entity.managedObjectClassName else {
+            preconditionFailure("Entity Description is missing a class name")
+        }
+        precondition(entityName == String(T.self), "Class generic type must match entity descripton type")
     }
 
     deinit {
@@ -115,7 +119,7 @@ public class EntityMonitor<T: NSManagedObject where T: CoreDataModelable, T: Has
     }
 }
 
-private class BaseEntityMonitorDelegate<T: NSManagedObject where T: CoreDataModelable, T: Hashable>: NSObject {
+private class BaseEntityMonitorDelegate<T: NSManagedObject where T: Hashable>: NSObject {
 
     private let ChangeObserverSelectorName = #selector(BaseEntityMonitorDelegate<T>.evaluateChangeNotification(_:))
 

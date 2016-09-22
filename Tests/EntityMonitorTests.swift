@@ -48,33 +48,42 @@ class BookMonitorDelegate: EntityMonitorDelegate {
     }
 }
 
-class EntityMonitorTests: TempDirectoryTestCase {
-
-    var stack: CoreDataStack!
+class EntityMonitorTests: XCTestCase {
+    lazy var model: NSManagedObjectModel = {
+        return self.unitTestBundle.managedObjectModel("Container_Example")
+    }()
+    lazy var container: NSPersistentContainer = {
+        return NSPersistentContainer(name: "Container_Example", managedObjectModel: self.model)
+    }()
 
     override func setUp() {
         super.setUp()
 
         weak var setupEx = expectationWithDescription("Setup")
 
-        CoreDataStack.constructSQLiteStack(withModelName: "Sample", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
-            switch result {
-            case .Success(let stack):
-                self.stack = stack
-            case .Failure(let error):
-                self.failingOn(error)
+        continueAfterFailure = false
+
+        let configuration = NSPersistentStoreDescription()
+        configuration.type = NSInMemoryStoreType
+        container.persistentStoreDescriptions = [configuration]
+
+        container.loadPersistentStoresWithCompletionHandler() { storeDescription, error in
+            if let error = error {
+                XCTFail("Unresolved error \(error), \(error.userInfo)")
             }
             setupEx?.fulfill()
         }
 
         waitForExpectationsWithTimeout(10, handler: nil)
 
+        let moc = container.viewContext
+
         // Insert and save a new item so we can test updates
-        let moc = stack.mainQueueContext
-        let fr = NSFetchRequest(entityName: Author.entityName)
+        let fr = NSFetchRequest()
+        fr.entity = NSEntityDescription.entityForName("Author", inManagedObjectContext: moc)!
         let results = try! moc.executeFetchRequest(fr)
         if results.count < 1 {
-            let _ = Author(managedObjectContext: stack.mainQueueContext)
+            let _ = Author(context: container.viewContext)
             try! moc.saveContextAndWait()
         }
     }
@@ -83,8 +92,9 @@ class EntityMonitorTests: TempDirectoryTestCase {
 
     func testOnSaveNotifications() {
         // Setup monitor
-        let moc = stack.mainQueueContext
-        let authorMonitor = EntityMonitor<Author>(context: moc, frequency: .OnSave)
+        let moc = container.viewContext
+        let entityDescription = NSEntityDescription.entityForName("Author", inManagedObjectContext: moc)!
+        let authorMonitor = EntityMonitor<Author>(context: moc, entity: entityDescription, frequency: .OnSave)
         let authorMonitorDelegate = AuthorMonitorDelegate()
         authorMonitor.setDelegate(authorMonitorDelegate)
 
@@ -93,11 +103,11 @@ class EntityMonitorTests: TempDirectoryTestCase {
         deleteExpectation = expectationWithDescription("EntityMonitor Delete Callback")
 
         // Insert an Item
-        let entity = Author(managedObjectContext: moc)
+        let entity = Author(context: moc)
         try! moc.saveContextAndWait()
 
         // New book (since we aren't observing this shouldn't show up in our delegate callback)
-        let _ = Book(managedObjectContext: moc)
+        let _ = Book(context: moc)
         try! moc.saveContextAndWait()
 
         // Modify an existing
@@ -114,18 +124,19 @@ class EntityMonitorTests: TempDirectoryTestCase {
 
     func testOnChangeNotifications() {
         // Setup monitor
-        let moc = stack.mainQueueContext
-        let authorMonitor = EntityMonitor<Author>(context: moc, frequency: .OnChange)
+        let moc = container.viewContext
+        let entity = NSEntityDescription.entityForName("Author", inManagedObjectContext: moc)!
+        let authorMonitor = EntityMonitor<Author>(context: moc, entity: entity, frequency: .OnChange)
         let authorMonitorDelegate = AuthorMonitorDelegate()
         authorMonitor.setDelegate(authorMonitorDelegate)
 
         // Test Insert
         insertExpectation = expectationWithDescription("EntityMonitor Insert Callback")
-        let _ = Author(managedObjectContext: moc)
+        let _ = Author(context: moc)
         waitForExpectationsWithTimeout(10, handler: nil)
 
         // New Book (since we aren't observing this shouldn't show up in our delegate callback)
-        let _ = Book(managedObjectContext: moc)
+        let _ = Book(context: moc)
 
         // Test Update
         updateExpectation = expectationWithDescription("EntityMonitor Update Callback")
@@ -136,8 +147,8 @@ class EntityMonitorTests: TempDirectoryTestCase {
 
         // Test Delete
         deleteExpectation = expectationWithDescription("EntityMonitor Delete Callback")
-        let deleteMe = Author(managedObjectContext: moc)
-        stack.mainQueueContext.deleteObject(deleteMe)
+        let deleteMe = Author(context: moc)
+        container.viewContext.deleteObject(deleteMe)
         waitForExpectationsWithTimeout(10, handler: nil)
     }
 
@@ -147,13 +158,14 @@ class EntityMonitorTests: TempDirectoryTestCase {
         let predicate = NSPredicate(format: "title CONTAINS[cd] %@", matchingTitle)
 
         // Setup monitor
-        let moc = stack.mainQueueContext
-        let filteredMonitor = EntityMonitor<Book>(context: moc, filterPredicate: predicate)
+        let moc = container.viewContext
+        let entity = NSEntityDescription.entityForName("Book", inManagedObjectContext: moc)!
+        let filteredMonitor = EntityMonitor<Book>(context: moc, entity: entity, filterPredicate: predicate)
         let bookMonitorDelegate = BookMonitorDelegate()
         filteredMonitor.setDelegate(bookMonitorDelegate)
 
         // Create an initial book
-        let newBook = Book(managedObjectContext: moc)
+        let newBook = Book(context: moc)
         try! moc.saveContextAndWait()
 
         // Look for an update
