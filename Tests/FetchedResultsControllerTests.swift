@@ -9,7 +9,8 @@
 import XCTest
 
 import CoreData
-import CoreDataStack
+
+@testable import CoreDataStack
 
 // MARK: - FetchedResultsControllerDelegate
 
@@ -47,7 +48,12 @@ class SampleFetchedResultsControllerDelegate: FetchedResultsControllerDelegate {
 
 class FetchedResultsControllerTests: TempDirectoryTestCase {
 
-    var coreDataStack: CoreDataStack!
+    lazy var model: NSManagedObjectModel = {
+        return self.unitTestBundle.managedObjectModel(modelName: "Container_Example")
+    }()
+    lazy var container: NSPersistentContainer = {
+        return NSPersistentContainer(name: "Container_Example", managedObjectModel: self.model)
+    }()
     var fetchedResultsController: FetchedResultsController<Book>!
     var delegate = SampleFetchedResultsControllerDelegate()
     static let cacheName = "Cache"
@@ -57,19 +63,21 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
 
         weak var setupEx = expectation(description: "Setup")
 
-        // Setup Stack
-        CoreDataStack.constructSQLiteStack(modelName: "Container_Example", in: unitTestBundle, at: tempStoreURL) { result in
-            switch result {
-            case .success(let stack):
-                self.coreDataStack = stack
-            case .failure(let error):
-                self.failingOn(error)
+        continueAfterFailure = false
+
+        let configuration = NSPersistentStoreDescription()
+        configuration.type = NSInMemoryStoreType
+        container.persistentStoreDescriptions = [configuration]
+
+        container.loadPersistentStores() { storeDescription, error in
+            if let error = error as? NSError {
+                XCTFail("Unresolved error \(error), \(error.userInfo)")
             }
             setupEx?.fulfill()
         }
-        waitForExpectations(timeout: 10, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
 
-        let moc = coreDataStack.mainQueueContext
+        let moc = container.viewContext
 
         // Insert some Books
         let bookTitles = StubbedBookData.books
@@ -121,7 +129,7 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
     }
 
     func testObjectInserts() {
-        let moc = coreDataStack.mainQueueContext
+        let moc = container.viewContext
 
         // Insert some Books
         let newBook = Book(context: moc)
@@ -153,7 +161,7 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
         }
 
         // Delete a book
-        let moc = coreDataStack.mainQueueContext
+        let moc = container.viewContext
         moc.delete(firstBook)
         moc.processPendingChanges()
 
@@ -184,7 +192,7 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
 
         // Remame the book
         lastBook.title = "Narrow Sargasso Sea"
-        coreDataStack.mainQueueContext.processPendingChanges()
+        container.viewContext.processPendingChanges()
 
         XCTAssertEqual(delegate.didChangeContentCount, 1)
         XCTAssertEqual(delegate.willChangeContentCount, 1)
@@ -218,7 +226,7 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
             XCTFail("first fetched book missing")
             return
         }
-        let moc = coreDataStack.mainQueueContext
+        let moc = container.viewContext
 
         // Update a book
         XCTAssertEqual(firstBook.authors?.count, 0)
@@ -253,7 +261,7 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
     }
 
     func testSectionInserts() {
-        let moc = coreDataStack.mainQueueContext
+        let moc = container.viewContext
 
         //Create a new book with a title that will create a new section
         let newBook = Book(context: moc)
@@ -282,7 +290,7 @@ class FetchedResultsControllerTests: TempDirectoryTestCase {
     }
 
     func testSectionDeletions() {
-        let moc = coreDataStack.mainQueueContext
+        let moc = container.viewContext
 
         // Delete a book that will remove an entire section
         guard let firstBook = fetchedResultsController.first else {
