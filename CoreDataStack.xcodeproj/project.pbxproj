@@ -37,7 +37,6 @@
 		E435996A1D932540003295AE /* NSManagedObjectExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43599691D932540003295AE /* NSManagedObjectExtensionTests.swift */; };
 		E435996D1D932586003295AE /* BooksTestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40CFCDB1C80C4E700CBDFF2 /* BooksTestData.swift */; };
 		E435996F1D9326A5003295AE /* XCTest+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF51D51C935078007E19DF /* XCTest+Helpers.swift */; };
-		E43599701D9326C0003295AE /* TempDirectoryTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440FEF81C80B0F3003DE8FF /* TempDirectoryTestCase.swift */; };
 		E43599781D9329D9003295AE /* Sample.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E43599741D9329D1003295AE /* Sample.xcdatamodeld */; };
 		E43599791D9329D9003295AE /* Sample.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E43599741D9329D1003295AE /* Sample.xcdatamodeld */; };
 		E435997A1D9329D9003295AE /* Sample.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E43599741D9329D1003295AE /* Sample.xcdatamodeld */; };
@@ -326,6 +325,7 @@
 		E43599721D93279D003295AE /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
+				E440FEF81C80B0F3003DE8FF /* TempDirectoryTestCase.swift */,
 				E43713F31C86474F009C3B39 /* OSX Tests */,
 				E450133F1C23576F00ADC83B /* tvOS Tests */,
 				E43A3C611BFCD0530019D6B4 /* Stack Tests */,
@@ -901,7 +901,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E435996F1D9326A5003295AE /* XCTest+Helpers.swift in Sources */,
-				E43599701D9326C0003295AE /* TempDirectoryTestCase.swift in Sources */,
 				E40F30F21D9366F30087AD03 /* FetchedResultsControllerTests.swift in Sources */,
 				E40F30F31D9366F80087AD03 /* EntityMonitorTests.swift in Sources */,
 				E40F30F01D932E700087AD03 /* Book+FirstInitial.swift in Sources */,

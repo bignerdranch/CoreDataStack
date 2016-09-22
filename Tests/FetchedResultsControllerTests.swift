@@ -46,7 +46,7 @@ class SampleFetchedResultsControllerDelegate: FetchedResultsControllerDelegate {
 
 // MARK: - Test Cases
 
-class FetchedResultsControllerTests: TempDirectoryTestCase {
+class FetchedResultsControllerTests: XCTestCase {
 
     lazy var model: NSManagedObjectModel = {
         return self.unitTestBundle.managedObjectModel(name: "Container_Example")
