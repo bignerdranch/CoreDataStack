@@ -422,14 +422,3 @@ fileprivate extension CoreDataStack {
         }
     }
 }
-
-fileprivate extension Bundle {
-    static private let modelExtension = "momd"
-    fileprivate func managedObjectModel(modelName: String) -> NSManagedObjectModel {
-        guard let URL = url(forResource: modelName, withExtension: Bundle.modelExtension),
-            let model = NSManagedObjectModel(contentsOf: URL) else {
-                preconditionFailure("Model not found or corrupted with name: \(modelName) in bundle: \(self)")
-        }
-        return model
-    }
-}

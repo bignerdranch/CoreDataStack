@@ -15,7 +15,7 @@ import CoreData
 class NSManagedObjectExtensionTests: XCTestCase {
 
     lazy var model: NSManagedObjectModel = {
-        return self.unitTestBundle.managedObjectModel("Container_Example")
+        return self.unitTestBundle.managedObjectModel(modelName: "Container_Example")
     }()
     lazy var container: NSPersistentContainer = {
         return NSPersistentContainer(name: "Container_Example", managedObjectModel: self.model)
@@ -26,19 +26,19 @@ class NSManagedObjectExtensionTests: XCTestCase {
 
         continueAfterFailure = false
 
-        weak var expectation = self.expectationWithDescription("callback")
+        weak var expectation = self.expectation(description: "callback")
 
         let configuration = NSPersistentStoreDescription()
         configuration.type = NSInMemoryStoreType
         container.persistentStoreDescriptions = [configuration]
 
-        container.loadPersistentStoresWithCompletionHandler() { storeDescription, error in
-            if let error = error {
+        container.loadPersistentStores() { storeDescription, error in
+            if let error = error as? NSError {
                 XCTFail("Unresolved error \(error), \(error.userInfo)")
             }
             expectation?.fulfill()
         }
-        waitForExpectationsWithTimeout(5, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testNewObject() {
@@ -55,11 +55,7 @@ class NSManagedObjectExtensionTests: XCTestCase {
                 XCTFail("First Book not found"); return
             }
             firstBook.title = "Testing"
-            do {
-                try container.viewContext.saveContextAndWait()
-            } catch {
-                XCTFail("Failed to save context: \(error)")
-            }
+            try! container.viewContext.saveContextAndWait()
 
             let predicate1 = NSPredicate(format: "title CONTAINS[cd] %@", "Bob")
             let notFound = try Book.findFirstInContext(container.viewContext, predicate: predicate1)
@@ -78,11 +74,7 @@ class NSManagedObjectExtensionTests: XCTestCase {
         let totalBooks = 5
         for _ in 0..<totalBooks {
             let _ = Book(context: container.viewContext)
-            do {
-                try container.viewContext.saveContextAndWait()
-            } catch {
-                XCTFail("Failed to save context: \(error)")
-            }
+            try! container.viewContext.saveContextAndWait()
         }
 
         do {
@@ -126,11 +118,7 @@ class NSManagedObjectExtensionTests: XCTestCase {
         let totalBooks = 5
         for _ in 0..<totalBooks {
             let _ = Book(context: container.viewContext)
-            do {
-                try container.viewContext.saveContextAndWait()
-            } catch {
-                XCTFail("Failed to save context: \(error)")
-            }
+            try! container.viewContext.saveContextAndWait()
         }
 
         do {
@@ -172,13 +160,9 @@ class NSManagedObjectExtensionTests: XCTestCase {
         var exceptionBooks = [Book]()
         for counter in 0..<totalBooks {
             let newBook = Book(context: container.viewContext)
-            do {
-                try container.viewContext.saveContextAndWait()
-            } catch {
-                XCTFail("Failed to save context: \(error)")
-            }
+            try! container.viewContext.saveContextAndWait()
 
-            if counter % 2 == 0 {
+            if (counter % 2 == 0) {
                 exceptionBooks.append(newBook)
             }
         }
@@ -199,11 +183,7 @@ class NSManagedObjectExtensionTests: XCTestCase {
         let totalBooks = 5
         for _ in 0..<totalBooks {
             let _ = Book(context: container.viewContext)
-            do {
-                try container.viewContext.saveContextAndWait()
-            } catch {
-                XCTFail("Failed to save context: \(error)")
-            }
+            try! container.viewContext.saveContextAndWait()
         }
 
         do {

@@ -8,11 +8,11 @@
 
 import Foundation
 
-extension NSBundle {
+extension Bundle {
     static private let modelExtension = "momd"
     public func managedObjectModel(modelName: String) -> NSManagedObjectModel {
-        guard let URL = URLForResource(modelName, withExtension: NSBundle.modelExtension),
-            let model = NSManagedObjectModel(contentsOfURL: URL) else {
+        guard let URL = url(forResource: modelName, withExtension: Bundle.modelExtension),
+            let model = NSManagedObjectModel(contentsOf: URL) else {
                 preconditionFailure("Model not found or corrupted with name: \(modelName) in bundle: \(self)")
         }
         return model
