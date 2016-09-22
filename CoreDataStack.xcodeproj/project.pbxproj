@@ -217,7 +217,7 @@
 		E45013321C23572400ADC83B /* CoreDataStackTVTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreDataStackTVTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E47A83DE1C038871001A047E /* BooksTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooksTableViewController.swift; sourceTree = "<group>"; };
 		E47A83E81C03A4CD001A047E /* BooksTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BooksTableViewController.xib; sourceTree = "<group>"; };
-		E4B99C661B740321005B7E1A /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4B99C661B740321005B7E1A /* Legacy Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Legacy Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B99C681B740321005B7E1A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E4B99C6D1B740321005B7E1A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E4B99C6F1B740321005B7E1A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -305,6 +305,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E40F30F81D941FBA0087AD03 /* Extension Tests */ = {
+			isa = PBXGroup;
+			children = (
+				E43599691D932540003295AE /* NSManagedObjectExtensionTests.swift */,
+			);
+			name = "Extension Tests";
+			sourceTree = "<group>";
+		};
 		E43599711D93270D003295AE /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
@@ -468,7 +476,7 @@
 			children = (
 				E4C9BC2D1AEA848600A6BD1B /* CoreDataStack.framework */,
 				E4C9BC381AEA848600A6BD1B /* CoreDataStackTests.xctest */,
-				E4B99C661B740321005B7E1A /* Example.app */,
+				E4B99C661B740321005B7E1A /* Legacy Example.app */,
 				E45013091C23393500ADC83B /* CoreDataStack.framework */,
 				E45013321C23572400ADC83B /* CoreDataStackTVTests.xctest */,
 				E43713D31C8646AC009C3B39 /* CoreDataStack.framework */,
@@ -484,8 +492,8 @@
 			children = (
 				E40CFCCD1C80BEB200CBDFF2 /* CoreDataStack.h */,
 				E43A3C5D1BFCC6910019D6B4 /* Type Safe Monitors */,
-				E43599711D93270D003295AE /* Deprecated */,
 				E4C9BC521AEA851F00A6BD1B /* Extensions */,
+				E43599711D93270D003295AE /* Deprecated */,
 				E4C9BC301AEA848600A6BD1B /* Supporting Files */,
 			);
 			name = Library;
@@ -503,7 +511,7 @@
 		E4C9BC3C1AEA848600A6BD1B /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				E43599691D932540003295AE /* NSManagedObjectExtensionTests.swift */,
+				E40F30F81D941FBA0087AD03 /* Extension Tests */,
 				E43A3C631BFCD0BB0019D6B4 /* Type Safe Monitors Tests */,
 				E43A3C621BFCD0860019D6B4 /* Shared Test Utils */,
 				E4C9BC3D1AEA848600A6BD1B /* Supporting Files */,
@@ -682,9 +690,9 @@
 			productReference = E45013321C23572400ADC83B /* CoreDataStackTVTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		E4B99C651B740321005B7E1A /* Example */ = {
+		E4B99C651B740321005B7E1A /* Legacy Example */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E4B99C751B740321005B7E1A /* Build configuration list for PBXNativeTarget "Example" */;
+			buildConfigurationList = E4B99C751B740321005B7E1A /* Build configuration list for PBXNativeTarget "Legacy Example" */;
 			buildPhases = (
 				E4B99C621B740321005B7E1A /* Sources */,
 				E4B99C631B740321005B7E1A /* Frameworks */,
@@ -695,9 +703,9 @@
 			dependencies = (
 				E4B99C7A1B740330005B7E1A /* PBXTargetDependency */,
 			);
-			name = Example;
+			name = "Legacy Example";
 			productName = Example;
-			productReference = E4B99C661B740321005B7E1A /* Example.app */;
+			productReference = E4B99C661B740321005B7E1A /* Legacy Example.app */;
 			productType = "com.apple.product-type.application";
 		};
 		E4C9BC2C1AEA848600A6BD1B /* CoreDataStack */ = {
@@ -803,7 +811,7 @@
 				E45013311C23572400ADC83B /* CoreDataStackTVTests */,
 				E43713DB1C8646AC009C3B39 /* CoreDataStackOSXTests */,
 				E435995B1D932458003295AE /* PostDeprecationTests */,
-				E4B99C651B740321005B7E1A /* Example */,
+				E4B99C651B740321005B7E1A /* Legacy Example */,
 				E436D63B1D37F36900224B36 /* Container Example */,
 			);
 		};
@@ -1101,6 +1109,7 @@
 		E43599651D932458003295AE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
@@ -1120,6 +1129,7 @@
 		E43599661D932458003295AE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
@@ -1576,7 +1586,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E4B99C751B740321005B7E1A /* Build configuration list for PBXNativeTarget "Example" */ = {
+		E4B99C751B740321005B7E1A /* Build configuration list for PBXNativeTarget "Legacy Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4B99C761B740321005B7E1A /* Debug */,

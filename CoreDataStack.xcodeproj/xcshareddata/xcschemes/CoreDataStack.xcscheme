@@ -36,10 +36,10 @@
          </BuildActionEntry>
          <BuildActionEntry
             buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E435995B1D932458003295AE"
@@ -64,6 +64,16 @@
                BlueprintIdentifier = "E4C9BC371AEA848600A6BD1B"
                BuildableName = "CoreDataStackTests.xctest"
                BlueprintName = "CoreDataStackTests"
+               ReferencedContainer = "container:CoreDataStack.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E435995B1D932458003295AE"
+               BuildableName = "PostDeprecationTests.xctest"
+               BlueprintName = "PostDeprecationTests"
                ReferencedContainer = "container:CoreDataStack.xcodeproj">
             </BuildableReference>
          </TestableReference>
