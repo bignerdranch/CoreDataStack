@@ -19,8 +19,6 @@
 		E40CFCED1C80C50200CBDFF2 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40CFCDA1C80C4E700CBDFF2 /* Book.swift */; };
 		E40CFCEE1C80C50200CBDFF2 /* BooksTestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40CFCDB1C80C4E700CBDFF2 /* BooksTestData.swift */; };
 		E40CFCF11C80C50B00CBDFF2 /* TestModel.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = E40CFCD71C80C4DE00CBDFF2 /* TestModel.sqlite */; };
-		E40F30ED1D932C030087AD03 /* Container_Example.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E40F30EA1D932BFD0087AD03 /* Container_Example.xcdatamodeld */; };
-		E40F30EE1D932C030087AD03 /* Container_Example.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E40F30EA1D932BFD0087AD03 /* Container_Example.xcdatamodeld */; };
 		E40F30F01D932E700087AD03 /* Book+FirstInitial.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40F30EF1D932E700087AD03 /* Book+FirstInitial.swift */; };
 		E40F30F11D932E700087AD03 /* Book+FirstInitial.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40F30EF1D932E700087AD03 /* Book+FirstInitial.swift */; };
 		E40F30F21D9366F30087AD03 /* FetchedResultsControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E440FEF11C80B0D9003DE8FF /* FetchedResultsControllerTests.swift */; };
@@ -101,6 +99,8 @@
 		E4BF51D71C935078007E19DF /* XCTest+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF51D51C935078007E19DF /* XCTest+Helpers.swift */; };
 		E4BF51D81C935078007E19DF /* XCTest+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF51D51C935078007E19DF /* XCTest+Helpers.swift */; };
 		E4BF51DA1C936A6C007E19DF /* CoreDataStackOSXInMemoryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF51D91C936A6C007E19DF /* CoreDataStackOSXInMemoryStoreTests.swift */; };
+		E4C056031D943E69006D20A7 /* Container_Example.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4C056001D943E61006D20A7 /* Container_Example.xcdatamodeld */; };
+		E4C056041D943E69006D20A7 /* Container_Example.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4C056001D943E61006D20A7 /* Container_Example.xcdatamodeld */; };
 		E4C9BC391AEA848600A6BD1B /* CoreDataStack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C9BC2D1AEA848600A6BD1B /* CoreDataStack.framework */; };
 		E4DB61461BFFBB4400BD3E6B /* bnr-logo-square.png in Resources */ = {isa = PBXBuildFile; fileRef = E4DB61451BFFBB4400BD3E6B /* bnr-logo-square.png */; };
 		E4DB61481BFFBBD200BD3E6B /* MyCoreDataConnectedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DB61471BFFBBD200BD3E6B /* MyCoreDataConnectedViewController.swift */; };
@@ -171,7 +171,6 @@
 		E40CFCD91C80C4E700CBDFF2 /* Author.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Author.swift; path = "Sample Model/Deprecated/Author.swift"; sourceTree = "<group>"; };
 		E40CFCDA1C80C4E700CBDFF2 /* Book.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Book.swift; path = "Sample Model/Deprecated/Book.swift"; sourceTree = "<group>"; };
 		E40CFCDB1C80C4E700CBDFF2 /* BooksTestData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BooksTestData.swift; path = "Sample Model/BooksTestData.swift"; sourceTree = "<group>"; };
-		E40F30EB1D932BFD0087AD03 /* UniqueConstraintModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UniqueConstraintModel.xcdatamodel; sourceTree = "<group>"; };
 		E40F30EF1D932E700087AD03 /* Book+FirstInitial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Book+FirstInitial.swift"; path = "Sample Model/Container/Book+FirstInitial.swift"; sourceTree = "<group>"; };
 		E40F30F41D936F2E0087AD03 /* Bundle+CoreDataModelHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Bundle+CoreDataModelHelper.swift"; path = "Sources/Bundle+CoreDataModelHelper.swift"; sourceTree = SOURCE_ROOT; };
 		E43599561D93223F003295AE /* NSManagedObject+FetchHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSManagedObject+FetchHelpers.swift"; path = "Sources/NSManagedObject+FetchHelpers.swift"; sourceTree = SOURCE_ROOT; };
@@ -225,6 +224,7 @@
 		E4BF286E1C7F67B6005FC05F /* UniqueConstraintModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UniqueConstraintModel.xcdatamodel; sourceTree = "<group>"; };
 		E4BF51D51C935078007E19DF /* XCTest+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "XCTest+Helpers.swift"; path = "Tests/XCTest+Helpers.swift"; sourceTree = SOURCE_ROOT; };
 		E4BF51D91C936A6C007E19DF /* CoreDataStackOSXInMemoryStoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataStackOSXInMemoryStoreTests.swift; path = Tests/CoreDataStackOSXInMemoryStoreTests.swift; sourceTree = SOURCE_ROOT; };
+		E4C056011D943E61006D20A7 /* Container_Example.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Container_Example.xcdatamodel; sourceTree = "<group>"; };
 		E4C9BC2D1AEA848600A6BD1B /* CoreDataStack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreDataStack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4C9BC381AEA848600A6BD1B /* CoreDataStackTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreDataStackTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4DB61451BFFBB4400BD3E6B /* bnr-logo-square.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bnr-logo-square.png"; sourceTree = "<group>"; };
@@ -379,7 +379,7 @@
 		E4396EDA1C80B46D004BC954 /* Sample Model */ = {
 			isa = PBXGroup;
 			children = (
-				E40F30EA1D932BFD0087AD03 /* Container_Example.xcdatamodeld */,
+				E4C056001D943E61006D20A7 /* Container_Example.xcdatamodeld */,
 				E435997C1D932A1A003295AE /* Deprecated */,
 				E40F30EF1D932E700087AD03 /* Book+FirstInitial.swift */,
 			);
@@ -905,8 +905,8 @@
 				E40F30F31D9366F80087AD03 /* EntityMonitorTests.swift in Sources */,
 				E40F30F01D932E700087AD03 /* Book+FirstInitial.swift in Sources */,
 				E435996D1D932586003295AE /* BooksTestData.swift in Sources */,
-				E40F30ED1D932C030087AD03 /* Container_Example.xcdatamodeld in Sources */,
 				E435996A1D932540003295AE /* NSManagedObjectExtensionTests.swift in Sources */,
+				E4C056031D943E69006D20A7 /* Container_Example.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -918,9 +918,9 @@
 				E436D6671D37FB1000224B36 /* BooksTestData.swift in Sources */,
 				E40F30F11D932E700087AD03 /* Book+FirstInitial.swift in Sources */,
 				E436D6641D37F83200224B36 /* MyCoreDataConnectedViewController.swift in Sources */,
-				E40F30EE1D932C030087AD03 /* Container_Example.xcdatamodeld in Sources */,
 				E436D63F1D37F36900224B36 /* AppDelegate.swift in Sources */,
 				E436D65B1D37F4F000224B36 /* UniqueConstraintModel.xcdatamodeld in Sources */,
+				E4C056041D943E69006D20A7 /* Container_Example.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1624,17 +1624,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		E40F30EA1D932BFD0087AD03 /* Container_Example.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				E40F30EB1D932BFD0087AD03 /* UniqueConstraintModel.xcdatamodel */,
-			);
-			currentVersion = E40F30EB1D932BFD0087AD03 /* UniqueConstraintModel.xcdatamodel */;
-			name = Container_Example.xcdatamodeld;
-			path = "Sample Model/Container/Container_Example.xcdatamodeld";
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
 		E43599741D9329D1003295AE /* Sample.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
@@ -1654,6 +1643,17 @@
 			);
 			currentVersion = E4BF286E1C7F67B6005FC05F /* UniqueConstraintModel.xcdatamodel */;
 			path = UniqueConstraintModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+		E4C056001D943E61006D20A7 /* Container_Example.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				E4C056011D943E61006D20A7 /* Container_Example.xcdatamodel */,
+			);
+			currentVersion = E4C056011D943E61006D20A7 /* Container_Example.xcdatamodel */;
+			name = Container_Example.xcdatamodeld;
+			path = "Sample Model/Container/Container_Example.xcdatamodeld";
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
