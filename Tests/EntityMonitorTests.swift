@@ -56,6 +56,12 @@ class EntityMonitorTests: XCTestCase {
     lazy var container: NSPersistentContainer = {
         return NSPersistentContainer(name: "Container_Example", managedObjectModel: self.model)
     }()
+    lazy var authorEntityDescription: NSEntityDescription = {
+        return NSEntityDescription.entity(forEntityName: "Author", in: self.container.viewContext)!
+    }()
+    lazy var bookEntityDescription: NSEntityDescription = {
+        return Book.entity()
+    }()
 
     override func setUp() {
         super.setUp()
@@ -73,18 +79,18 @@ class EntityMonitorTests: XCTestCase {
                 XCTFail("Unresolved error \(error), \(error.userInfo)")
             }
             setupEx?.fulfill()
-
-            // Insert and save a new item so we can test updates
-            let moc = self.container.viewContext
-            let fr = NSFetchRequest<Author>()
-            fr.entity = Author.entity()
-            let results = try! moc.fetch(fr)
-            if results.count < 1 {
-                let _ = Author(context: moc)
-                try! moc.saveContextAndWait()
-            }
         }
         waitForExpectations(timeout: 5, handler: nil)
+
+        // Insert and save a new item so we can test updates
+        let moc = self.container.viewContext
+        let fr = NSFetchRequest<Author>()
+        fr.entity = authorEntityDescription
+        let results = try! moc.fetch(fr)
+        if results.count < 1 {
+            let _ = Author(context: moc)
+            try! moc.saveContextAndWait()
+        }
     }
 
     // MARK: - Tests
@@ -92,7 +98,7 @@ class EntityMonitorTests: XCTestCase {
     func testOnSaveNotifications() {
         // Setup monitor
         let moc = container.viewContext
-        let authorMonitor = EntityMonitor<Author>(context: moc, entity: Author.entity(), frequency: .onSave)
+        let authorMonitor = EntityMonitor<Author>(context: moc, entity: authorEntityDescription, frequency: .onSave)
         let authorMonitorDelegate = AuthorMonitorDelegate()
         authorMonitor.setDelegate(authorMonitorDelegate)
 
@@ -123,7 +129,7 @@ class EntityMonitorTests: XCTestCase {
     func testOnChangeNotifications() {
         // Setup monitor
         let moc = container.viewContext
-        let authorMonitor = EntityMonitor<Author>(context: moc, entity: Author.entity(), frequency: .onChange)
+        let authorMonitor = EntityMonitor<Author>(context: moc, entity: authorEntityDescription, frequency: .onChange)
         let authorMonitorDelegate = AuthorMonitorDelegate()
         authorMonitor.setDelegate(authorMonitorDelegate)
 
@@ -156,7 +162,7 @@ class EntityMonitorTests: XCTestCase {
 
         // Setup monitor
         let moc = container.viewContext
-        let filteredMonitor = EntityMonitor<Book>(context: moc, entity: Book.entity(), filterPredicate: predicate)
+        let filteredMonitor = EntityMonitor<Book>(context: moc, entity: bookEntityDescription, filterPredicate: predicate)
         let bookMonitorDelegate = BookMonitorDelegate()
         filteredMonitor.setDelegate(bookMonitorDelegate)
 
