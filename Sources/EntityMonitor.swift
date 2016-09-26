@@ -161,13 +161,6 @@ private class BaseEntityMonitorDelegate<T: NSManagedObject>: NSObject where T: N
 
         owner.context.performAndWait { [predicate = owner.combinedPredicate] in
             func process(_ value: Any?) -> EntitySet {
-
-//                guard let set = value as? NSSet else {
-//                    fatalError()
-//                }
-//                let filtered = set.filtered(using: predicate)
-//                let cast = filtered as? EntitySet
-
                 return (value as? NSSet)?.filtered(using: predicate) as? EntitySet ?? []
             }
 
@@ -175,17 +168,6 @@ private class BaseEntityMonitorDelegate<T: NSManagedObject>: NSObject where T: N
             let deleted = process(changeSet[NSDeletedObjectsKey])
             let updated = process(changeSet[NSUpdatedObjectsKey])
             self.handleChanges(inserted: inserted, deleted: deleted, updated: updated)
-
-
-//
-//            func process(_ value: AnyObject?) -> EntitySet {
-//                return value.flatMap { $0.filtered(using:predicate) as? EntitySet } ?? []
-//            }
-//
-//            let inserted = process(changeSet[NSInsertedObjectsKey] as AnyObject?)
-//            let deleted = process(changeSet[NSDeletedObjectsKey] as AnyObject?)
-//            let updated = process(changeSet[NSUpdatedObjectsKey] as AnyObject?)
-//            self.handleChanges(inserted: inserted, deleted: deleted, updated: updated)
         }
     }
 
