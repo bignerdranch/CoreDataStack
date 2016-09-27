@@ -7,7 +7,11 @@ before_script:
     - brew update
     - brew outdated carthage || brew upgrade carthage
     - gem install jazzy --no-rdoc --no-ri --no-document --quiet
-    
+
+branches:
+  only:
+    - master   
+
 after_success:
     - ./Resources/scripts/publish_docs.sh
 
@@ -16,4 +20,6 @@ env:
         secure: MkSIUBcC2r81tYPf4an39/hd5eB98Q96HwpCQpu/11O3SDg9q/nIRDUzN8+N/jFXlaboqAEVTHFHIXIk2x8LFJojib8WOJdqXpERXOPbS483cJenmi/1vCcij7wW9O7+24Xo5/H/bprO3P3wbpYPb8mQWnpmdqyQs0IuXOVqsmfS6gftN9mgNlV8bwEPa5V9MbdJviA6kFryfruAVlFUcKd39bv1wRaPGPRZIWM+QzMNK3J+dPsyWBb+f7XBZa3bQ2/hYEdfWW5NU6GN93OZJjP7gwXssZbDZjPDVpM9lvx5suYVKeMyFL4QFTYo9TsNk/V94KnxYcqnhDZ/BFHyjysto3K5bixYTaWUJPBqUJi9F0+Vd9ldt627xaNHHiGevptHyUvWWwgH1S8cF55FGE/Ptwc3MRmrr3IFOqbFDHV/hpMr5Sroz2dCHJohzJZRnWUppMgSY4SXu+1bB3F1P40y22yUKirsjmwWfJEEBcWNpOnMQCgKvFKG89shGqGfXYcRXkouhOqnGVpSUV+92Fli7O9GzjvLxAVm127kPypTZYYUwAaowm0BF4+lLMLZxmpUP42fTzENhbYLofVrpOuR7tisEJshrmjF9XYZVvu9R39EyMscXN+fnMlGWGLFAkimd4lUZVAAcZT++GL3BCEFKD9gGEAGbdtW9M42Nyk=
 
 script:
-    - bundle exec fastlane test
+  - ./Resources/scripts/validate_carthage.sh
+  - ./Resources/scripts/validate_cocoapods.sh
+  - bundle exec fastlane test
