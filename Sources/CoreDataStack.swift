@@ -97,6 +97,7 @@ public final class CoreDataStack {
      - parameter in: NSBundle that contains the `XCDataModel`. Default value is mainBundle()
      - parameter at: Optional URL to use for storing the `SQLite` file. Defaults to "(modelName).sqlite" in the Documents directory.
      - parameter on: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
+     - parameter persistentStoreOptions: Custom options for persistent store. Default value is stockSQLiteStoreOptions
      - parameter callback: The `SQLite` persistent store coordinator will be setup asynchronously. This callback will be passed either an initialized `CoreDataStack` object or an `ErrorType` value.
      */
     public static func constructSQLiteStack(modelName: String,
@@ -247,6 +248,7 @@ public extension CoreDataStack {
      For `SQLite` based stacks, this function will also remove the `SQLite` store from disk.
 
      - parameter on: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
+     - parameter persistentStoreOptions: Custom options for persistent store. Default value is stockSQLiteStoreOptions
      - parameter callback: A callback with a `success` or an `ErrorType` value with the error
      */
     public func resetStore(on callbackQueue: DispatchQueue? = nil,
@@ -367,6 +369,7 @@ public extension CoreDataStack {
      a discrete `NSPersistentStoreCoordinator` created with the same store used by the stack in construction.
 
      - parameter on: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
+     - parameter persistentStoreOptions: Custom options for persistent store. Default value is stockSQLiteStoreOptions
      - parameter callback: A callback with either the new `NSManagedObjectContext` or an `ErrorType` value with the error
      */
     public func newBatchOperationContext(on callbackQueue: DispatchQueue? = nil,
