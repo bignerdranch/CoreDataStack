@@ -103,6 +103,7 @@ public final class CoreDataStack {
                                             in bundle: Bundle = Bundle.main,
                                             at desiredStoreURL: URL? = nil,
                                             on callbackQueue: DispatchQueue? = nil,
+                                            with persistentStoreOptions: [AnyHashable: Any]? = NSPersistentStoreCoordinator.stockSQLiteStoreOptions,
                                             callback: @escaping SetupCallback) {
 
         let model = bundle.managedObjectModel(modelName: modelName)
@@ -118,7 +119,8 @@ public final class CoreDataStack {
         let callbackQueue: DispatchQueue = callbackQueue ?? backgroundQueue
         NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(
             model,
-            storeFileURL: storeFileURL) { coordinatorResult in
+            storeFileURL: storeFileURL,
+            persistentStoreOptions: persistentStoreOptions) { coordinatorResult in
                 switch coordinatorResult {
                 case .success(let coordinator):
                     let stack = CoreDataStack(modelName : modelName,
@@ -247,7 +249,9 @@ public extension CoreDataStack {
      - parameter on: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
      - parameter callback: A callback with a `success` or an `ErrorType` value with the error
      */
-    public func resetStore(on callbackQueue: DispatchQueue? = nil, callback: @escaping StoreResetCallback) {
+    public func resetStore(on callbackQueue: DispatchQueue? = nil,
+                           with persistentStoreOptions: [AnyHashable: Any]? = NSPersistentStoreCoordinator.stockSQLiteStoreOptions,
+                            callback: @escaping StoreResetCallback) {
         let backgroundQueue = DispatchQueue.global(qos: .background)
         let callbackQueue: DispatchQueue = callbackQueue ?? backgroundQueue
         self.saveBubbleDispatchGroup.notify(queue: backgroundQueue) {
@@ -305,7 +309,10 @@ public extension CoreDataStack {
                 }
 
                 // Setup a new stack
-                NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(mom, storeFileURL: storeURL) { result in
+                NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(
+                mom,
+                storeFileURL: storeURL,
+                persistentStoreOptions: persistentStoreOptions) { result in
                     switch result {
                     case .success (let coordinator):
                         self.persistentStoreCoordinator = coordinator
@@ -362,7 +369,9 @@ public extension CoreDataStack {
      - parameter on: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
      - parameter callback: A callback with either the new `NSManagedObjectContext` or an `ErrorType` value with the error
      */
-    public func newBatchOperationContext(on callbackQueue: DispatchQueue? = nil, callback: @escaping BatchContextCallback) {
+    public func newBatchOperationContext(on callbackQueue: DispatchQueue? = nil,
+                                         with persistentStoreOptions: [AnyHashable: Any]? = NSPersistentStoreCoordinator.stockSQLiteStoreOptions,
+                                         callback: @escaping BatchContextCallback) {
         let moc = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         moc.mergePolicy = NSMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
         moc.name = "Batch Operation Context"
@@ -380,7 +389,10 @@ public extension CoreDataStack {
         case .sqLite(let storeURL):
             let backgroundQueue = DispatchQueue.global(qos: .background)
             let callbackQueue: DispatchQueue = callbackQueue ?? backgroundQueue
-            NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(managedObjectModel, storeFileURL: storeURL) { result in
+            NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(
+            managedObjectModel,
+            storeFileURL: storeURL,
+            persistentStoreOptions: persistentStoreOptions) { result in
                 switch result {
                 case .success(let coordinator):
                     moc.persistentStoreCoordinator = coordinator

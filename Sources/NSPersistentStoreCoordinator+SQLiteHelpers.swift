@@ -34,6 +34,7 @@ public extension NSPersistentStoreCoordinator {
     @available(OSX, introduced: 10.10, deprecated: 10.12, message: "Use NSPersistentContainer")
     public class func setupSQLiteBackedCoordinator(_ managedObjectModel: NSManagedObjectModel,
                                                    storeFileURL: URL,
+                                                   persistentStoreOptions: [AnyHashable: Any]? = stockSQLiteStoreOptions,
                                                    completion: @escaping (CoreDataStack.CoordinatorResult) -> Void) {
         let backgroundQueue = DispatchQueue.global(qos: .background)
         backgroundQueue.async {
@@ -42,7 +43,7 @@ public extension NSPersistentStoreCoordinator {
                 try coordinator.addPersistentStore(ofType: NSSQLiteStoreType,
                                                            configurationName: nil,
                                                            at: storeFileURL,
-                                                           options: stockSQLiteStoreOptions)
+                                                           options: persistentStoreOptions)
                 completion(.success(coordinator))
             } catch let error {
                 completion(.failure(error))
