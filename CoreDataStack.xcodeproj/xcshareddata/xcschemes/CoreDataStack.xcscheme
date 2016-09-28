@@ -34,6 +34,20 @@
                ReferencedContainer = "container:CoreDataStack.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E435995B1D932458003295AE"
+               BuildableName = "PostDeprecationTests.xctest"
+               BlueprintName = "PostDeprecationTests"
+               ReferencedContainer = "container:CoreDataStack.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
