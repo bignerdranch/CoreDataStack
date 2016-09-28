@@ -104,6 +104,7 @@ public final class CoreDataStack {
         inBundle bundle: NSBundle = NSBundle.mainBundle(),
                  withStoreURL desiredStoreURL: NSURL? = nil,
                               callbackQueue: dispatch_queue_t? = nil,
+                              persistentStoreOptions: [NSObject: AnyObject]? = NSPersistentStoreCoordinator.stockSQLiteStoreOptions,
                               callback: CoreDataStackSetupCallback) {
 
         let model = bundle.managedObjectModel(modelName: modelName)
@@ -119,7 +120,8 @@ public final class CoreDataStack {
         let callbackQueue: dispatch_queue_t = callbackQueue ?? backgroundQueue
         NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(
             model,
-            storeFileURL: storeFileURL) { coordinatorResult in
+            storeFileURL: storeFileURL,
+            persistentStoreOptions: persistentStoreOptions) { coordinatorResult in
                 switch coordinatorResult {
                 case .Success(let coordinator):
                     let stack = CoreDataStack(modelName : modelName,
@@ -250,7 +252,9 @@ public extension CoreDataStack {
      - parameter callbackQueue: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
      - parameter resetCallback: A callback with a `Success` or an `ErrorType` value with the error
      */
-    public func resetStore(callbackQueue: dispatch_queue_t? = nil, resetCallback: CoreDataStackStoreResetCallback) {
+    public func resetStore(callbackQueue: dispatch_queue_t? = nil,
+                           persistentStoreOptions: [NSObject: AnyObject]? = NSPersistentStoreCoordinator.stockSQLiteStoreOptions,
+                           resetCallback: CoreDataStackStoreResetCallback) {
         let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
         let callbackQueue: dispatch_queue_t = callbackQueue ?? backgroundQueue
         dispatch_group_notify(self.saveBubbleDispatchGroup, backgroundQueue) {
@@ -310,14 +314,17 @@ public extension CoreDataStack {
                     }
                     return
                 }
-
+                
                 // Setup a new stack
-                NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(mom, storeFileURL: storeURL) { result in
-                    switch result {
-                    case .Success (let coordinator):
-                        self.persistentStoreCoordinator = coordinator
-                        dispatch_async(callbackQueue) {
-                            resetCallback(.Success)
+                NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(
+                    mom,
+                    storeFileURL: storeURL,
+                    persistentStoreOptions: persistentStoreOptions) { result in
+                        switch result {
+                        case .Success (let coordinator):
+                            self.persistentStoreCoordinator = coordinator
+                            dispatch_async(callbackQueue) {
+                                resetCallback(.Success)
                         }
 
                     case .Failure (let error):
@@ -391,7 +398,9 @@ public extension CoreDataStack {
      - parameter callbackQueue: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
      - parameter setupCallback: A callback with either the new `NSManagedObjectContext` or an `ErrorType` value with the error
      */
-    public func newBatchOperationContext(callbackQueue: dispatch_queue_t? = nil, setupCallback: CoreDataStackBatchMOCCallback) {
+    public func newBatchOperationContext(callbackQueue: dispatch_queue_t? = nil,
+                                         persistentStoreOptions: [NSObject: AnyObject]? = NSPersistentStoreCoordinator.stockSQLiteStoreOptions,
+                                         setupCallback: CoreDataStackBatchMOCCallback) {
         let moc = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
         moc.mergePolicy = NSMergePolicy(mergeType: .MergeByPropertyObjectTrumpMergePolicyType)
         moc.name = "Batch Operation Context"
@@ -409,12 +418,15 @@ public extension CoreDataStack {
         case .SQLite(let storeURL):
             let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
             let callbackQueue: dispatch_queue_t = callbackQueue ?? backgroundQueue
-            NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(managedObjectModel, storeFileURL: storeURL) { result in
-                switch result {
-                case .Success(let coordinator):
-                    moc.persistentStoreCoordinator = coordinator
-                    dispatch_async(callbackQueue) {
-                        setupCallback(.Success(moc))
+            NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(
+                managedObjectModel,
+                storeFileURL: storeURL,
+                persistentStoreOptions: persistentStoreOptions) { result in
+                    switch result {
+                    case .Success(let coordinator):
+                        moc.persistentStoreCoordinator = coordinator
+                        dispatch_async(callbackQueue) {
+                            setupCallback(.Success(moc))
                     }
                 case .Failure(let error):
                     dispatch_async(callbackQueue) {
