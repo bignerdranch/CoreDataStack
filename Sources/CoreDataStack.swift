@@ -97,6 +97,7 @@ public final class CoreDataStack {
      - parameter inBundle: NSBundle that contains the `XCDataModel`. Default value is mainBundle()
      - parameter withStoreURL: Optional URL to use for storing the `SQLite` file. Defaults to "(modelName).sqlite" in the Documents directory.
      - parameter callbackQueue: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
+     - parameter persistentStoreOptions: Custom options for persistent store. Default value is stockSQLiteStoreOptions
      - parameter callback: The `SQLite` persistent store coordinator will be setup asynchronously. This callback will be passed either an initialized `CoreDataStack` object or an `ErrorType` value.
      */
     public static func constructSQLiteStack(withModelName
@@ -250,6 +251,7 @@ public extension CoreDataStack {
      For `SQLite` based stacks, this function will also remove the `SQLite` store from disk.
 
      - parameter callbackQueue: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
+     - parameter persistentStoreOptions: Custom options for persistent store. Default value is stockSQLiteStoreOptions
      - parameter resetCallback: A callback with a `Success` or an `ErrorType` value with the error
      */
     public func resetStore(callbackQueue: dispatch_queue_t? = nil,
@@ -314,7 +316,7 @@ public extension CoreDataStack {
                     }
                     return
                 }
-                
+
                 // Setup a new stack
                 NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(
                     mom,
@@ -396,6 +398,7 @@ public extension CoreDataStack {
      a discrete `NSPersistentStoreCoordinator` created with the same store used by the stack in construction.
 
      - parameter callbackQueue: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
+     - parameter persistentStoreOptions: Custom options for persistent store. Default value is stockSQLiteStoreOptions
      - parameter setupCallback: A callback with either the new `NSManagedObjectContext` or an `ErrorType` value with the error
      */
     public func newBatchOperationContext(callbackQueue: dispatch_queue_t? = nil,

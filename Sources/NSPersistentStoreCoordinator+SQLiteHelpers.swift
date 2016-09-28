@@ -28,6 +28,7 @@ public extension NSPersistentStoreCoordinator {
 
      - parameter managedObjectModel: The `NSManagedObjectModel` describing the data model.
      - parameter storeFileURL: The URL where the SQLite store file will reside.
+     - parameter persistentStoreOptions: Custom options for persistent store. Default value is stockSQLiteStoreOptions
      - parameter completion: A completion closure with a `CoordinatorResult` that will be executed following the `NSPersistentStore` being added to the `NSPersistentStoreCoordinator`.
      */
     @available(iOS, introduced=8.0, deprecated=10.0, message="Use NSPersistentContainer")
