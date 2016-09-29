@@ -1,6 +1,5 @@
 disabled_rules:
   - valid_docs
-  - conditional_binding_cascade
 
 included:
 
