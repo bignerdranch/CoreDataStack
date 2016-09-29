@@ -22,6 +22,7 @@ clone_project() {
 
   echo "=================Creating Cartfile================="
   echo "git \"$BUILD_DIR\" \"$BRANCH_NAME\"" > ./Cartfile
+  less ./Cartfile
 }
 
 bootstrap() {
