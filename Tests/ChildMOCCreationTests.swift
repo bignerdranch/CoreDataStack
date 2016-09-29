@@ -11,7 +11,7 @@ import XCTest
 @testable import CoreDataStack
 
 class ChildMOCCreationTests: TempDirectoryTestCase {
-    
+
     var stack: CoreDataStack!
 
     override func setUp() {

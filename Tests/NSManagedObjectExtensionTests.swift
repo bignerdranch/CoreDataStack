@@ -55,7 +55,11 @@ class NSManagedObjectExtensionTests: XCTestCase {
                 XCTFail("First Book not found"); return
             }
             firstBook.title = "Testing"
-            try! container.viewContext.saveContextAndWait()
+            do {
+                try container.viewContext.saveContextAndWait()
+            } catch {
+                XCTFail("Failed to save context: \(error)")
+            }
 
             let predicate1 = NSPredicate(format: "title CONTAINS[cd] %@", "Bob")
             let notFound = try Book.findFirstInContext(container.viewContext, predicate: predicate1)
@@ -74,7 +78,11 @@ class NSManagedObjectExtensionTests: XCTestCase {
         let totalBooks = 5
         for _ in 0..<totalBooks {
             let _ = Book(context: container.viewContext)
-            try! container.viewContext.saveContextAndWait()
+            do {
+                try container.viewContext.saveContextAndWait()
+            } catch {
+                XCTFail("Failed to save context: \(error)")
+            }
         }
 
         do {
@@ -118,7 +126,11 @@ class NSManagedObjectExtensionTests: XCTestCase {
         let totalBooks = 5
         for _ in 0..<totalBooks {
             let _ = Book(context: container.viewContext)
-            try! container.viewContext.saveContextAndWait()
+            do {
+                try container.viewContext.saveContextAndWait()
+            } catch {
+                XCTFail("Failed to save context: \(error)")
+            }
         }
 
         do {
@@ -160,9 +172,13 @@ class NSManagedObjectExtensionTests: XCTestCase {
         var exceptionBooks = [Book]()
         for counter in 0..<totalBooks {
             let newBook = Book(context: container.viewContext)
-            try! container.viewContext.saveContextAndWait()
+            do {
+                try container.viewContext.saveContextAndWait()
+            } catch {
+                XCTFail("Failed to save context: \(error)")
+            }
 
-            if (counter % 2 == 0) {
+            if counter % 2 == 0 {
                 exceptionBooks.append(newBook)
             }
         }
@@ -183,7 +199,11 @@ class NSManagedObjectExtensionTests: XCTestCase {
         let totalBooks = 5
         for _ in 0..<totalBooks {
             let _ = Book(context: container.viewContext)
-            try! container.viewContext.saveContextAndWait()
+            do {
+                try container.viewContext.saveContextAndWait()
+            } catch {
+                XCTFail("Failed to save context: \(error)")
+            }
         }
 
         do {

@@ -121,7 +121,7 @@ public class EntityMonitor<T: NSManagedObject where T: Hashable> {
 
 private class BaseEntityMonitorDelegate<T: NSManagedObject where T: Hashable>: NSObject {
 
-    private let ChangeObserverSelectorName = #selector(BaseEntityMonitorDelegate<T>.evaluateChangeNotification(_:))
+    private let changeObserverSelectorName = #selector(BaseEntityMonitorDelegate<T>.evaluateChangeNotification(_:))
 
     typealias Owner = EntityMonitor<T>
     typealias EntitySet = Owner.EntitySet
@@ -142,7 +142,7 @@ private class BaseEntityMonitorDelegate<T: NSManagedObject where T: Hashable>: N
         }
 
         NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: ChangeObserverSelectorName,
+            selector: changeObserverSelectorName,
             name: notificationName,
             object: owner.context)
     }

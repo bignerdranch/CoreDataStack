@@ -13,7 +13,7 @@ import CoreData
 extension Publisher {
 
     @nonobjc public override class func fetchRequest() -> NSFetchRequest {
-        return NSFetchRequest(entityName: "Publisher");
+        return NSFetchRequest(entityName: "Publisher")
     }
 
     @NSManaged public var name: String?

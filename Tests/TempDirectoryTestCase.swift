@@ -40,7 +40,7 @@ class TempDirectoryTestCase: XCTestCase {
             }
         }
     }
-    
+
     override func tearDown() {
         removeTempDir()
         super.tearDown()

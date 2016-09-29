@@ -31,7 +31,11 @@ class StoreTeardownTests: TempDirectoryTestCase {
             expectation?.fulfill()
         }
 
-        memoryStack = try! CoreDataStack.constructInMemoryStack(withModelName: "Sample", inBundle: unitTestBundle)
+        do {
+            memoryStack = try CoreDataStack.constructInMemoryStack(withModelName: "Sample", inBundle: unitTestBundle)
+        } catch {
+            failingOn(error)
+        }
 
         waitForExpectationsWithTimeout(10, handler: nil)
     }
@@ -47,7 +51,11 @@ class StoreTeardownTests: TempDirectoryTestCase {
         }
 
         // Save just the worker context synchronously
-        try! worker.saveContextAndWait()
+        do {
+            try worker.saveContextAndWait()
+        } catch {
+            failingOn(error)
+        }
 
         // The reset function will wait for all changes to bubble up before removing the store file.
         weak var expectation = expectationWithDescription("callback")
@@ -62,7 +70,11 @@ class StoreTeardownTests: TempDirectoryTestCase {
                         NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: worker)
                     }
                 }
-                try! worker.saveContextAndWait()
+                do {
+                    try worker.saveContextAndWait()
+                } catch {
+                    self.failingOn(error)
+                }
                 break
 
             case .Failure(let error):
@@ -83,7 +95,11 @@ class StoreTeardownTests: TempDirectoryTestCase {
         }
 
         // Save just the worker context synchronously
-        try! worker.saveContextAndWait()
+        do {
+            try worker.saveContextAndWait()
+        } catch {
+            self.failingOn(error)
+        }
 
         // The reset function will wait for all changes to bubble up before removing the store file.
         weak var expectation = expectationWithDescription("callback")
@@ -97,7 +113,11 @@ class StoreTeardownTests: TempDirectoryTestCase {
                         NSEntityDescription.insertNewObjectForEntityForName("Author", inManagedObjectContext: worker)
                     }
                 }
-                try! worker.saveContextAndWait()
+                do {
+                    try worker.saveContextAndWait()
+                } catch {
+                    self.failingOn(error)
+                }
                 break
             case .Failure(let error):
                 self.failingOn(error)

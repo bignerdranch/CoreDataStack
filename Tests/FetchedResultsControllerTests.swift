@@ -6,6 +6,8 @@
 //  Copyright © 2015 Big Nerd Ranch. All rights reserved.
 //
 
+// swiftlint:disable force_try
+
 import XCTest
 
 import CoreData
@@ -92,7 +94,8 @@ class FetchedResultsControllerTests: XCTestCase {
         let fr = NSFetchRequest()
         fr.entity = Book.entity()
         fr.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-        fetchedResultsController = FetchedResultsController<Book>(fetchRequest: fr, managedObjectContext: moc, sectionNameKeyPath: "firstInitial", cacheName: FetchedResultsControllerTests.cacheName)
+        fetchedResultsController = FetchedResultsController<Book>(fetchRequest: fr, managedObjectContext: moc,
+            sectionNameKeyPath: "firstInitial", cacheName: FetchedResultsControllerTests.cacheName)
         fetchedResultsController.setDelegate(self.delegate)
 
         do {

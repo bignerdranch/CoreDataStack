@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
     private lazy var myCoreDataVC: MyCoreDataConnectedViewController = {
         return self.mainStoryboard.instantiateViewControllerWithIdentifier("CoreDataVC")
-            as! MyCoreDataConnectedViewController
+            as! MyCoreDataConnectedViewController // swiftlint:disable:this force_cast
     }()
 
     func applicationDidFinishLaunching(application: UIApplication) {
@@ -42,20 +42,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func seedInitialData() {
         let moc = persistentContainer.newBackgroundContext()
         moc.performBlockAndWait() {
-            if try! Book.countInContext(moc) == 0 {
-                let books = StubbedBookData.books
-                for bookTitle in books {
-                    let book = Book(context: moc)
-                    book.title = bookTitle
-                }
+            do {
+                let bookCount = try Book.countInContext(moc)
+                if bookCount == 0 {
+                    let books = StubbedBookData.books
+                    for bookTitle in books {
+                        let book = Book(context: moc)
+                        book.title = bookTitle
+                    }
 
-                do {
-                    try moc.save()
-                } catch {
-                    fatalError("Saving records should not fail. Error: \(error)")
+                    do {
+                        try moc.save()
+                    } catch {
+                        fatalError("Saving records should not fail. Error: \(error)")
+                    }
                 }
+            } catch {
+                fatalError("Failed to fetch book count: \(error)")
             }
         }
     }
 }
-

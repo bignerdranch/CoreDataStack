@@ -61,7 +61,7 @@ extension NSFetchRequestResult where Self: NSManagedObject {
         let fetchRequest = fetchRequestForEntity(inContext: context)
         fetchRequest.sortDescriptors = sortDescriptors
         fetchRequest.predicate = predicate
-        return try context.executeFetchRequest(fetchRequest) as! [Self]
+        return try context.executeFetchRequest(fetchRequest) as! [Self] // swiftlint:disable:this force_cast
     }
 
     // MARK: - Counting Objects
@@ -114,11 +114,11 @@ extension NSFetchRequestResult where Self: NSManagedObject {
     // MARK: Private Funcs
 
     static private func removeAllObjectsReturnedByRequest(fetchRequest: NSFetchRequest, inContext context: NSManagedObjectContext) throws {
-        // TODO: rcedwards A batch delete would be more efficient here on iOS 9 and up
-        //                  however it complicates things since the request requires a context with
-        //                  an NSPersistentStoreCoordinator directly connected. (MOC cannot be a child of another MOC)
+        // A batch delete would be more efficient here on iOS 9 and up
+        //   however it complicates things since the request requires a context with
+        //   an NSPersistentStoreCoordinator directly connected. (MOC cannot be a child of another MOC)
         fetchRequest.includesPropertyValues = false
         fetchRequest.includesSubentities = false
-        try context.executeFetchRequest(fetchRequest).lazy.forEach { context.deleteObject($0 as! Self) }
+        try context.executeFetchRequest(fetchRequest).lazy.forEach { context.deleteObject($0 as! Self) } // swiftlint:disable:this force_cast
     }
 }

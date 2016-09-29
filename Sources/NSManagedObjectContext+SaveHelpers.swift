@@ -19,7 +19,7 @@ public extension NSManagedObjectContext {
     /**
     Convenience method to synchronously save the `NSManagedObjectContext` if changes are present.
     Method also ensures that the save is executed on the correct queue when using Main/Private queue concurrency types.
-     
+
      - throws: Errors produced by the `save()` function on the `NSManagedObjectContext`
     */
     public func saveContextAndWait() throws {
@@ -86,7 +86,7 @@ public extension NSManagedObjectContext {
      If any parent contexts are found, they too will be saved asynchronously.
      Method also ensures that the save is executed on the correct queue when using Main/Private queue concurrency types.
 
-    - parameter completion: Completion closure with a `SaveResult` to be executed 
+    - parameter completion: Completion closure with a `SaveResult` to be executed
         either upon the completion of the top most context's save operation or the first encountered save error.
      */
     public func saveContextToStore(completion: CoreDataStackSaveCompletion? = nil) {
