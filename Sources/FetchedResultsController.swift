@@ -6,6 +6,8 @@
 //  Copyright © 2015 Big Nerd Ranch. All rights reserved.
 //
 
+// swiftlint:disable line_length
+
 import CoreData
 
 #if os(iOS) || os(watchOS) || os(tvOS)
@@ -344,5 +346,5 @@ import CoreData
             delegate?.fetchedResultsControllerDidPerformFetch(owner)
         }
     }
-    
+
 #endif

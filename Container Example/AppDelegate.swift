@@ -6,6 +6,9 @@
 //  Copyright © 2016 Big Nerd Ranch. All rights reserved.
 //
 
+// swiftlint:disable force_try
+// swiftlint:disable force_cast
+
 import UIKit
 import CoreData
 
@@ -58,4 +61,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 }
-

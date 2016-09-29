@@ -6,6 +6,8 @@
 //  Copyright © 2016 Big Nerd Ranch. All rights reserved.
 //
 
+// swiftlint:disable force_try
+
 import XCTest
 
 import CoreData
@@ -157,7 +159,7 @@ class NSManagedObjectExtensionTests: XCTestCase {
             let newBook = Book(context: container.viewContext)
             try! container.viewContext.saveContextAndWait()
 
-            if (counter % 2 == 0) {
+            if counter % 2 == 0 {
                 exceptionBooks.append(newBook)
             }
         }

@@ -6,6 +6,8 @@
 //  Copyright © 2015 Big Nerd Ranch. All rights reserved.
 //
 
+// swiftlint:disable force_cast
+
 import UIKit
 
 import CoreDataStack

@@ -77,6 +77,7 @@ import CoreData
 
     - parameter context: `NSManagedObjectContext` to find the entities within.
     - parameter predicate: An optional `NSPredicate` for filtering
+
     - throws: Any error produced from `executeFetchRequest`
 
     - returns: `Self?`: The first entity that matches the optional predicate or `nil`.
@@ -158,9 +159,9 @@ import CoreData
     // MARK: Private Funcs
 
     static private func removeAllObjectsReturnedByRequest(_ fetchRequest: NSFetchRequest<Self>, inContext context: NSManagedObjectContext) throws {
-        // TODO: rcedwards A batch delete would be more efficient here on iOS 9 and up 
-        //                  however it complicates things since the request requires a context with
-        //                  an NSPersistentStoreCoordinator directly connected. (MOC cannot be a child of another MOC)
+        // A batch delete would be more efficient here on iOS 9 and up
+        //  however it complicates things since the request requires a context with
+        //  an NSPersistentStoreCoordinator directly connected. (MOC cannot be a child of another MOC)
         fetchRequest.includesPropertyValues = false
         fetchRequest.includesSubentities = false
         try context.fetch(fetchRequest).lazy.forEach(context.delete(_:))

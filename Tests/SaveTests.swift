@@ -162,7 +162,7 @@ class SaveTests: TempDirectoryTestCase {
         // assert that we still have the same number of authors
         XCTAssertEqual(newFRC.fetchedObjects?.count, 5)
     }
-    
+
     private func authorsFetchedResultsController() -> NSFetchedResultsController<Author> {
         let fetchRequest = NSFetchRequest<Author>(entityName: "Author")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "lastName", ascending: true)]
@@ -199,16 +199,17 @@ class SaveTests: TempDirectoryTestCase {
     }
 }
 
-class EmptyFRCDelegate : NSObject, NSFetchedResultsControllerDelegate {
+class EmptyFRCDelegate: NSObject, NSFetchedResultsControllerDelegate {
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         // nothing
     }
-    
+
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         // nothing
     }
-    
-    private func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: AnyObject, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+
+    private func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: AnyObject,
+        at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         // nothing
     }
 }
