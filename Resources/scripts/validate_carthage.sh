@@ -25,7 +25,7 @@ clone_project() {
   fi
 
   echo "=================Creating Cartfile================="
-  echo "git \"$CLONE_URL\" \"$BRANCH_NAME\"" > ./Cartfile
+  echo "git \"$BUILD_DIR\" \"$BRANCH_NAME\"" > ./Cartfile
   less -FX ./Cartfile
 }
 
