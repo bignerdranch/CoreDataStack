@@ -1,6 +1,0 @@
-[
-    "-project", "CoreDataStack.xcodeproj",
-    "-scheme", "CoreDataStack",
-    "-configuration", "Debug",
-    "-sdk", "iphonesimulator"
-]
