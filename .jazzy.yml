@@ -13,7 +13,7 @@ custom_categories:
     - NSFetchRequestResult
     - NSManagedObjectContext
     - NSPersistentStoreCoordinator
-    - NSBundle
+    - Bundle
   - name: Supporting Structs and Enums
     children:
     - FetchedResultsObjectChange
@@ -24,6 +24,7 @@ custom_categories:
     children:
     - CoreDataStack
     - CoreDataModelable
+    - Error
 github_url: "https://github.com/bignerdranch/CoreDataStack"
 head: |
   <meta property="og:site_name" content="Core Data Stack Programming Guide">
@@ -33,6 +34,6 @@ head: |
 hide_documentation_coverage: false
 skip_undocumented: false
 module: CoreDataStack
-module_version: "1.3.0"
+module_version: "2.0.0"
 root_url: "http://bignerdranch.github.io/CoreDataStack/"
 theme: fullwidth

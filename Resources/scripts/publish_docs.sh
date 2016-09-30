@@ -20,14 +20,14 @@ generate_docs() {
     else
         BUILD_DIR="$HOME/workspace/CoreDataStack"
         BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
-        IS_PR=false
+        MASTER_BRANCH=$BRANCH_NAME
         echo "=================Not Running in CI================="
     fi
 
     if [ "$IS_PR" == "false" ]; then
         if [[ $BRANCH_NAME = "$MASTER_BRANCH" ]]; then
             echo -e "Generating Jazzy output \n"
-            jazzy --output "$BUILD_DIR"/"$DOCS_DIR" --clean --podspec "$BUILD_DIR"/BNRCoreDataStack.podspec --module "CoreDataStack" --config "$BUILD_DIR"/.jazzy.yml
+            jazzy --output "$BUILD_DIR"/"$DOCS_DIR" --clean --config "$BUILD_DIR"/.jazzy.yml
         else
             echo "Aborting doc generation. Not on master branch." 1>&2
             exit 1
