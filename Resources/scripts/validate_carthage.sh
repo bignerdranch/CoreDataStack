@@ -12,7 +12,13 @@ clone_project() {
     BRANCH_NAME=$CIRCLE_BRANCH
     BUILD_DIR=$(pwd)
   elif [[ $TRAVIS ]]; then
-    BRANCH_NAME=$TRAVIS_BRANCH
+    if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+        BRANCH_NAME=$TRAVIS_PULL_REQUEST_BRANCH
+        echo "Testing Pull Request Branch: \"$TRAVIS_PULL_REQUEST_BRANCH\""
+    else
+        BRANCH_NAME=$TRAVIS_BRANCH
+        echo "Testing Branch: \"$TRAVIS_BRANCH\""
+    fi
     BUILD_DIR=$TRAVIS_BUILD_DIR
   else
     BUILD_DIR="$HOME/workspace/CoreDataStack"
