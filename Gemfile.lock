@@ -54,7 +54,7 @@ GEM
     colored (1.2)
     commander (4.4.0)
       highline (~> 1.7.2)
-    credentials_manager (0.16.2)
+    credentials_manager (0.16.1)
       colored
       commander (>= 4.3.5)
       highline (>= 1.7.1)
