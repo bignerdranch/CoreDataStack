@@ -7,6 +7,9 @@ before_script:
     - brew update
     - brew outdated carthage || brew upgrade carthage
     - gem install jazzy --no-rdoc --no-ri --no-document --quiet
+    - export IOS_SIMULATOR_UDID=`instruments -s devices | grep "iPhone 6s (10.0" | awk -F '[ ]' '{print $4}' | awk -F '[\[]' '{print $2}' | sed 's/.$//'`
+    - echo $IOS_SIMULATOR_UDID
+    - open -a "simulator" --args -CurrentDeviceUDID $IOS_SIMULATOR_UDID
 
 branches:
   only:
