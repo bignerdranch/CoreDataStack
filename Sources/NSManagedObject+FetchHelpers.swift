@@ -10,6 +10,10 @@ import Foundation
 
 import CoreData
 
+/**
+ Protocol extension to `NSFetchRequestResult` that allow for convenience
+ methods that make fetching, inserting, deleting, and change management easier.
+ */
 @available(iOS, introduced: 10.0)
 @available(OSX, introduced: 10.12)
 extension NSFetchRequestResult where Self: NSManagedObject {
