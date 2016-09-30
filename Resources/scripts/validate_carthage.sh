@@ -19,14 +19,13 @@ clone_project() {
         BRANCH_NAME=$TRAVIS_BRANCH
         echo "Testing Branch: \"$TRAVIS_BRANCH\""
     fi
-    BUILD_DIR=$TRAVIS_BUILD_DIR
   else
     BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
     echo "=================Not Running in CI================="
   fi
 
   echo "=================Creating Cartfile================="
-  echo "git \"$BUILD_DIR\" \"$BRANCH_NAME\"" > ./Cartfile
+  echo "git \"$CLONE_URL\" \"$BRANCH_NAME\"" > ./Cartfile
   less -FX ./Cartfile
 }
 
