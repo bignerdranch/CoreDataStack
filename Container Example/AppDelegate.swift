@@ -3,7 +3,7 @@
 //  Container Example
 //
 //  Created by Robert Edwards on 7/14/16.
-//  Copyright © 2016 Big Nerd Ranch. All rights reserved.
+//  Copyright © 2015-2016 Big Nerd Ranch. All rights reserved.
 //
 
 // swiftlint:disable force_try

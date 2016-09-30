@@ -3,7 +3,7 @@
 //  CoreDataStackTVTests
 //
 //  Created by Robert Edwards on 12/17/15.
-//  Copyright © 2015 Big Nerd Ranch. All rights reserved.
+//  Copyright © 2015-2016 Big Nerd Ranch. All rights reserved.
 //
 
 import XCTest
