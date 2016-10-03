@@ -32,10 +32,8 @@ Similarly our [EnittyMonitor](./Sources/EntityMonitor.swift) still serves a nich
 - macOS 10.10
 - tvOS 9.0
 - iOS 8.0
-
-### Build Time:
 - Xcode 8.0
-- Swift 2.3
+- Swift 3.0
 
 ## Installation
 
