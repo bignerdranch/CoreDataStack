@@ -28,6 +28,8 @@
 		E40F30F51D936F2E0087AD03 /* Bundle+CoreDataModelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40F30F41D936F2E0087AD03 /* Bundle+CoreDataModelHelper.swift */; };
 		E40F30F61D936F2E0087AD03 /* Bundle+CoreDataModelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40F30F41D936F2E0087AD03 /* Bundle+CoreDataModelHelper.swift */; };
 		E40F30F71D936F2E0087AD03 /* Bundle+CoreDataModelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40F30F41D936F2E0087AD03 /* Bundle+CoreDataModelHelper.swift */; };
+		E417A74E1DA7FF4700FC4BE2 /* NSManagedObject+FetchHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43599561D93223F003295AE /* NSManagedObject+FetchHelpers.swift */; };
+		E417A74F1DA7FF4800FC4BE2 /* NSManagedObject+FetchHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43599561D93223F003295AE /* NSManagedObject+FetchHelpers.swift */; };
 		E42857011D9B17CF009D95BC /* Author+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42856FB1D9B17CF009D95BC /* Author+CoreDataClass.swift */; };
 		E42857021D9B17CF009D95BC /* Author+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42856FB1D9B17CF009D95BC /* Author+CoreDataClass.swift */; };
 		E42857031D9B17CF009D95BC /* Author+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42856FC1D9B17CF009D95BC /* Author+CoreDataProperties.swift */; };
@@ -958,6 +960,7 @@
 			files = (
 				E43713EA1C86470D009C3B39 /* CoreDataStack.swift in Sources */,
 				E43713EB1C86470D009C3B39 /* CoreDataModelable.swift in Sources */,
+				E417A74F1DA7FF4800FC4BE2 /* NSManagedObject+FetchHelpers.swift in Sources */,
 				E40F30F71D936F2E0087AD03 /* Bundle+CoreDataModelHelper.swift in Sources */,
 				E43713EC1C86470D009C3B39 /* NSManagedObjectContext+AsyncHelpers.swift in Sources */,
 				E43713ED1C86470D009C3B39 /* NSManagedObjectContext+SaveHelpers.swift in Sources */,
@@ -986,6 +989,7 @@
 			files = (
 				E440FEE51C80B060003DE8FF /* NSManagedObjectContext+SaveHelpers.swift in Sources */,
 				E440FEEC1C80B06F003DE8FF /* EntityMonitor.swift in Sources */,
+				E417A74E1DA7FF4700FC4BE2 /* NSManagedObject+FetchHelpers.swift in Sources */,
 				E40F30F61D936F2E0087AD03 /* Bundle+CoreDataModelHelper.swift in Sources */,
 				E440FEED1C80B06F003DE8FF /* FetchedResultsController.swift in Sources */,
 				E440FEE61C80B060003DE8FF /* NSPersistentStoreCoordinator+AsyncHelpers.swift in Sources */,
