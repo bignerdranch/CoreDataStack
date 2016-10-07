@@ -13,6 +13,7 @@ import CoreData
     methods that make fetching, inserting, deleting, and change management easier.
     */
     @available(iOS, introduced = 8.0, deprecated = 10.0, message = "Use Xcode automatic generated subclass")
+    @available(tvOS, introduced = 9.0, deprecated = 10.0, message = "Use Xcode automatic generated subclass")
     @available(OSX, introduced = 10.10, deprecated = 10.12, message = "Use Xcode automatic generated subclass")
     @objc public protocol CoreDataModelable {
     /**

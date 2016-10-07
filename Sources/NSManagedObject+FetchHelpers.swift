@@ -11,8 +11,8 @@ import Foundation
 import CoreData
 
 @available(iOS, introduced=10.0)
+@available(tvOS, introduced=10.0)
 @available(OSX, introduced=10.12)
-
 extension NSFetchRequestResult where Self: NSManagedObject {
     /**
      Creates a new fetch request for the `NSManagedObject` entity.
