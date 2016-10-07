@@ -13,7 +13,7 @@ For complete source documentation see: [Documentation](http://bignerdranch.githu
 
 ## Deprecations
 
-With the introduction of Apple's [NSPersistentContainer](https://developer.apple.com/reference/coredata/nspersistentcontainer), in iOS 10/macOS 10.12, BNR has chosen to deprecate the [CoreDataStack](./Sources/CoreDataStack.swift). See [container example](./Container Example) for tips on using an `NSPersistentContainer`
+With the introduction of Apple's [NSPersistentContainer](https://developer.apple.com/reference/coredata/nspersistentcontainer), in iOS 10/macOS 10.12, BNR has chosen to deprecate the [CoreDataStack](./Sources/CoreDataStack.swift) class. See [container example](./Container Example) for tips on using an `NSPersistentContainer`
 
 Apple has also added a type method [`entity()`](https://developer.apple.com/reference/coredata/nsmanagedobject/1640588-entity) to `NSManagedObject` allowing us to deprecate [CoreDataModelable](./Sources/CoreDataModelable.swift) and migrate many of those same convenience functions to an extension of [`NSManagedObject`](./Sources/NSManagedObject+FetchHelpers.swift).
 
@@ -25,12 +25,14 @@ While Apple also [introduced some type safety](https://developer.apple.com/refer
 
 Similarly our [EnittyMonitor](./Sources/EntityMonitor.swift) still serves a niche not covered by built in CoreData objects. See [Entity Monitor](#entity_monitor)
 
-
 ## Minimum Requirements
 
-- OS X 10.10
+### Runtime:
+- macOS 10.10
 - tvOS 9.0
 - iOS 8.0
+
+### Build Time:
 - Xcode 8.0
 - Swift 2.3
 
