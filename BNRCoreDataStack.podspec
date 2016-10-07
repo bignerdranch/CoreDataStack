@@ -51,7 +51,6 @@ DESC
   s.source_files  = "Sources"
 
   s.frameworks = "CoreData"
-  s.pod_target_xcconfig = { 'SWIFT_VERSION' => '2.3',
-    'SWIFT_INCLUDE_PATHS': '$(PODS_ROOT)/Sources' }
+  s.pod_target_xcconfig = { 'SWIFT_VERSION' => '2.3' }
 
 end
