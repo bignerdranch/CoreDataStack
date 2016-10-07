@@ -24,5 +24,5 @@ env:
 
 script:
   - ./Resources/scripts/validate_carthage.sh
-  # - ./Resources/scripts/validate_cocoapods.sh re-enable after new spec is published
+  - ./Resources/scripts/validate_cocoapods.sh
   - bundle exec fastlane test
