@@ -25,6 +25,9 @@ public typealias CoreDataStackBatchMOCCallback = CoreDataStack.BatchContextResul
 
  Calling `save()` on any `NSMangedObjectContext` belonging to the stack will automatically bubble the changes all the way to the `NSPersistentStore`
  */
+@available(iOS, introduced=8.0, deprecated=10.0, message="Use NSPersistentContainer")
+@available(tvOS, introduced = 9.0, deprecated = 10.0, message = "Use NSPersistentContainer")
+@available(OSX, introduced=10.10, deprecated=10.12, message="Use NSPersistentContainer")
 public final class CoreDataStack {
 
     /// CoreDataStack specific ErrorTypes
@@ -95,7 +98,8 @@ public final class CoreDataStack {
      - parameter inBundle: NSBundle that contains the `XCDataModel`. Default value is mainBundle()
      - parameter withStoreURL: Optional URL to use for storing the `SQLite` file. Defaults to "(modelName).sqlite" in the Documents directory.
      - parameter callbackQueue: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
-     - parameter callback: The `SQLite` persistent store coordinator will be setup asynchronously. This callback will be passed either an initialized `CoreDataStack` object or an `ErrorType` value.
+     - parameter callback: The `SQLite` persistent store coordinator will be setup asynchronously.
+                            This callback will be passed either an initialized `CoreDataStack` object or an `ErrorType` value.
      */
     public static func constructSQLiteStack(withModelName
         modelName: String,
@@ -104,7 +108,7 @@ public final class CoreDataStack {
                               callbackQueue: dispatch_queue_t? = nil,
                               callback: CoreDataStackSetupCallback) {
 
-        let model = bundle.managedObjectModel(modelName: modelName)
+        let model = bundle.managedObjectModel(modelName)
         let storeFileURL = desiredStoreURL ?? NSURL(string: "\(modelName).sqlite", relativeToURL: documentsDirectory)!
         do {
             try createDirectoryIfNecessary(storeFileURL)
@@ -157,7 +161,7 @@ public final class CoreDataStack {
      */
     public static func constructInMemoryStack(withModelName modelName: String,
                                                             inBundle bundle: NSBundle = NSBundle.mainBundle()) throws -> CoreDataStack {
-        let model = bundle.managedObjectModel(modelName: modelName)
+        let model = bundle.managedObjectModel(modelName)
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
         try coordinator.addPersistentStoreWithType(NSInMemoryStoreType, configuration: nil, URL: nil, options: nil)
         let stack = CoreDataStack(modelName: modelName, bundle: bundle, persistentStoreCoordinator: coordinator, storeType: .InMemory)
@@ -183,7 +187,7 @@ public final class CoreDataStack {
     }
     private var managedObjectModel: NSManagedObjectModel {
         get {
-            return bundle.managedObjectModel(modelName: managedObjectModelName)
+            return bundle.managedObjectModel(managedObjectModelName)
         }
     }
 
@@ -204,7 +208,7 @@ public final class CoreDataStack {
 }
 
 public extension CoreDataStack {
-    // TODO: rcedwards These will be replaced with Box/Either or something native to Swift (fingers crossed) https://github.com/bignerdranch/CoreDataStack/issues/10
+    // These will be replaced with Box/Either or something native to Swift (fingers crossed) https://github.com/bignerdranch/CoreDataStack/issues/10
 
     // MARK: - Operation Result Types
 
@@ -294,8 +298,12 @@ public extension CoreDataStack {
 
                             // Remove journal files if present
                             // Eat the error because different versions of SQLite might have different journal files
-                            let _ = try? fm.removeItemAtURL(storeURL.URLByAppendingPathComponent("-shm"))
-                            let _ = try? fm.removeItemAtURL(storeURL.URLByAppendingPathComponent("-wal"))
+                            if let indexURL = storeURL.URLByAppendingPathComponent("-shm") {
+                                let _ = try? fm.removeItemAtURL(indexURL)
+                            }
+                            if let walFile = storeURL.URLByAppendingPathComponent("-wal") {
+                                let _ = try? fm.removeItemAtURL(walFile)
+                            }
                         }
                     }
                 } catch let resetError {
@@ -443,16 +451,5 @@ private extension CoreDataStack {
             let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
             return urls.first
         }
-    }
-}
-
-private extension NSBundle {
-    static private let modelExtension = "momd"
-    func managedObjectModel(modelName modelName: String) -> NSManagedObjectModel {
-        guard let URL = URLForResource(modelName, withExtension: NSBundle.modelExtension),
-            let model = NSManagedObjectModel(contentsOfURL: URL) else {
-                preconditionFailure("Model not found or corrupted with name: \(modelName) in bundle: \(self)")
-        }
-        return model
     }
 }

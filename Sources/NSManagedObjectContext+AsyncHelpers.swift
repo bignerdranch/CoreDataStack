@@ -15,7 +15,7 @@ extension NSManagedObjectContext {
 
      You use this method to safely address managed objects on a concurrent
      queue.
-     
+
      - attention: This method may safely be called reentrantly.
      - parameter body: The method body to perform on the reciever.
      - returns: The value returned from the inner function.

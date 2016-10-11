@@ -13,6 +13,9 @@ public extension NSPersistentStoreCoordinator {
     /**
      Default persistent store options used for the `SQLite` backed `NSPersistentStoreCoordinator`
      */
+    @available(iOS, introduced=8.0, deprecated=10.0, message="Use NSPersistentStoreDescription")
+    @available(tvOS, introduced=9.0, deprecated=10.0, message="Use NSPersistentStoreDescription")
+    @available(OSX, introduced=10.10, deprecated=10.12, message="Use NSPersistentStoreDescription")
     public static var stockSQLiteStoreOptions: [NSObject: AnyObject] {
         return [
             NSMigratePersistentStoresAutomaticallyOption: true,
@@ -26,8 +29,12 @@ public extension NSPersistentStoreCoordinator {
 
      - parameter managedObjectModel: The `NSManagedObjectModel` describing the data model.
      - parameter storeFileURL: The URL where the SQLite store file will reside.
-     - parameter completion: A completion closure with a `CoordinatorResult` that will be executed following the `NSPersistentStore` being added to the `NSPersistentStoreCoordinator`.
+     - parameter completion: A completion closure with a `CoordinatorResult` that will be executed
+                                following the `NSPersistentStore` being added to the `NSPersistentStoreCoordinator`.
      */
+    @available(iOS, introduced=8.0, deprecated=10.0, message="Use NSPersistentContainer")
+    @available(tvOS, introduced=9.0, deprecated=10.0, message="Use NSPersistentStoreDescription")
+    @available(OSX, introduced=10.10, deprecated=10.12, message="Use NSPersistentContainer")
     public class func setupSQLiteBackedCoordinator(managedObjectModel: NSManagedObjectModel,
                                                    storeFileURL: NSURL,
                                                    completion: (CoreDataStack.CoordinatorResult) -> Void) {

@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "BNRCoreDataStack"
-  s.version      = "1.2.6"
+  s.version      = "1.3.0"
   s.summary      = "The Big Nerd Ranch Core Data stack."
 
   s.description  = <<-DESC
@@ -29,8 +29,6 @@ DESC
 
   s.homepage     = "https://github.com/bignerdranch/CoreDataStack"
   s.license      = "MIT"
-  # s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
-
 
   s.authors              = ["Robert Edwards", "John Gallagher", "Brian Hardy", "Zachary Waldowski"]
 
@@ -53,5 +51,6 @@ DESC
   s.source_files  = "Sources"
 
   s.frameworks = "CoreData"
+  s.pod_target_xcconfig = { 'SWIFT_VERSION' => '2.3' }
 
 end

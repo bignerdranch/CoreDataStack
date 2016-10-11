@@ -7,24 +7,33 @@ generate_docs() {
 
     local MASTER_BRANCH="master"
     local BUILD_DIR BRANCH_NAME
+    local IS_PR=false
 
     if [[ $CIRCLECI ]]; then
         BRANCH_NAME=$CIRCLE_BRANCH
         BUILD_DIR=$(pwd)
+        IS_PR=$CI_PULL_REQUEST
     elif [[ $TRAVIS ]]; then
         BRANCH_NAME=$TRAVIS_BRANCH
         BUILD_DIR=$TRAVIS_BUILD_DIR
+        IS_PR="$TRAVIS_PULL_REQUEST"
     else
         BUILD_DIR="$HOME/workspace/CoreDataStack"
         BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+        MASTER_BRANCH=$BRANCH_NAME
         echo "=================Not Running in CI================="
     fi
 
-    if [[ $BRANCH_NAME = "$MASTER_BRANCH" ]]; then
-        echo -e "Generating Jazzy output \n"
-       jazzy --output "$BUILD_DIR"/"$DOCS_DIR" --clean --podspec "$BUILD_DIR"/BNRCoreDataStack.podspec --module "CoreDataStack" --config "$BUILD_DIR"/.jazzy.yml
+    if [ "$IS_PR" == "false" ]; then
+        if [[ $BRANCH_NAME = "$MASTER_BRANCH" ]]; then
+            echo -e "Generating Jazzy output \n"
+            jazzy --output "$BUILD_DIR"/"$DOCS_DIR" --clean --config "$BUILD_DIR"/.jazzy.yml
+        else
+            echo "Aborting doc generation. Not on master branch." 1>&2
+            exit 1
+        fi
     else
-        echo "Aborting doc generation. Not on master branch." 1>&2
+        echo "Aborting doc generation. This is a pull request" 1>&2
         exit 1
     fi
 }

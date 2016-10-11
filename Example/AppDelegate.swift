@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
     private lazy var myCoreDataVC: MyCoreDataConnectedViewController = {
         return self.mainStoryboard.instantiateViewControllerWithIdentifier("CoreDataVC")
-            as! MyCoreDataConnectedViewController
+            as! MyCoreDataConnectedViewController // swiftlint:disable:this force_cast
     }()
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
@@ -74,4 +74,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 }
-

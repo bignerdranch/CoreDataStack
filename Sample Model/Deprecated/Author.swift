@@ -11,13 +11,15 @@ import CoreData
 import CoreDataStack
 
 @objc(Author)
-class Author: NSManagedObject, CoreDataModelable {
+class Author: NSManagedObject {
 
     @NSManaged var firstName: String?
     @NSManaged var lastName: String?
     @NSManaged var books: Set<Book>
+}
 
-    // MARK: - CoreDataModelable
-
-    static let entityName = "Author"
+extension Author: CoreDataModelable {
+    static var entityName: String {
+        return "Author"
+    }
 }

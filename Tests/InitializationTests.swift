@@ -48,7 +48,7 @@ class InitializationTests: TempDirectoryTestCase {
     func testExpectedFailureOfInitializationUsingInvalidURL() {
         weak var ex1 = expectationWithDescription("SQLite Callback")
         let storeURL = NSURL(fileURLWithPath: "/store.sqlite")
-        
+
         CoreDataStack.constructSQLiteStack(withModelName: "Sample", inBundle: unitTestBundle, withStoreURL: storeURL) { result in
             switch result {
             case .Success(_):
@@ -58,9 +58,9 @@ class InitializationTests: TempDirectoryTestCase {
             }
             ex1?.fulfill()
         }
-        
+
         waitForExpectationsWithTimeout(10, handler: nil)
-        
+
         XCTAssertNil(sqlStack)
     }
 }

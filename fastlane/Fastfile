@@ -7,9 +7,9 @@ opt_out_usage
 
 PROJECT_FILE = "CoreDataStack.xcodeproj"
 
-SCHEMES = ["CoreDataStackOSX", "CoreDataStackTV"]
+TVOS_SCHEME = "CoreDataStackTV"
+MACOS_SCHEME = "CoreDataStackOSX"
 IOS_SCHEME = "CoreDataStack"
-SCHEMES.push IOS_SCHEME
 
 # We always want to run on the latest version of iOS installed 
 # so we're grabbing the highest device by name i.e. iPhone 6s > iPhone 4
@@ -20,7 +20,6 @@ LATEST_IPHONE_DEVICE = FastlaneCore::Simulator.all.map { |d| d.name }.select { |
 #######################################################################
   
 before_all do
-    reset_simulators
 end
 
 after_all do |lane|
@@ -36,16 +35,15 @@ end
 
 desc "Runs all the tests"
 lane :test do
-    SCHEMES.each { |scheme|
-        if scheme == IOS_SCHEME 
-            scan(scheme: scheme, 
-                project: PROJECT_FILE, 
-                device: LATEST_IPHONE_DEVICE, 
-                clean: true)
-        else
-            scan(scheme: scheme, 
-                project: PROJECT_FILE, 
-                clean: true)
-        end
-    }
+    # iOS
+    xctest(scheme: IOS_SCHEME,
+        destination: "platform=iOS Simulator,name=#{LATEST_IPHONE_DEVICE},OS=10.0")
+
+    # macOS
+    xctest(scheme: MACOS_SCHEME,
+        destination: "platform=macOS,arch=x86_64")
+
+    # tvOS
+    xctest(scheme: TVOS_SCHEME,
+        destination: "platform=tvOS Simulator,OS=10.0,name=Apple TV 1080p")
 end

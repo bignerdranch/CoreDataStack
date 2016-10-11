@@ -7,26 +7,31 @@
 EXIT_CODE=0
 
 clone_project() {
-  local BRANCH_NAME BUILD_DIR
+  local BRANCH_NAME
+  local CLONE_URL="https://github.com/bignerdranch/CoreDataStack.git"
   if [[ $CIRCLECI ]]; then
     BRANCH_NAME=$CIRCLE_BRANCH
-    BUILD_DIR=$(pwd)
   elif [[ $TRAVIS ]]; then
-    BRANCH_NAME=$TRAVIS_BRANCH
-    BUILD_DIR=$TRAVIS_BUILD_DIR
+    if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+        BRANCH_NAME=$TRAVIS_PULL_REQUEST_BRANCH
+        echo "Testing Pull Request Branch: \"$TRAVIS_PULL_REQUEST_BRANCH\""
+    else
+        BRANCH_NAME=$TRAVIS_BRANCH
+        echo "Testing Branch: \"$TRAVIS_BRANCH\""
+    fi
   else
-    BUILD_DIR="$HOME/workspace/CoreDataStack"
     BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
     echo "=================Not Running in CI================="
   fi
 
   echo "=================Creating Cartfile================="
-  echo "git \"$BUILD_DIR\" \"$BRANCH_NAME\"" > ./Cartfile
+  echo "git \"$CLONE_URL\" \"$BRANCH_NAME\"" > ./Cartfile
+  less -FX ./Cartfile
 }
 
 bootstrap() {
   echo "=================Bootstrapping Carthage================="
-  carthage bootstrap --configuration Debug
+  carthage bootstrap --configuration Debug --verbose --toolchain "com.apple.dt.toolchain.Swift_2_3"
   EXIT_CODE=$?
 }
 

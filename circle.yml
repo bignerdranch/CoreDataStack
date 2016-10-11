@@ -1,13 +1,14 @@
-machine:
-  xcode:
-    version: "7.3"
-test:
-  override:
-    - ./Resources/scripts/validate_carthage.sh
-    - ./Resources/scripts/validate_cocoapods.sh
-    - bundle exec fastlane test
-deployment:
-  master:
-    branch: master
-    commands:
-      - ./Resources/scripts/public_docs.sh
+# Starting Point
+# machine:
+#   xcode:
+#     version: "7.3"
+# test:
+#   override:
+#     - ./Resources/scripts/validate_carthage.sh
+#     - ./Resources/scripts/validate_cocoapods.sh
+#     - bundle exec fastlane test
+# deployment:
+#   master:
+#     branch: master
+#     commands:
+#       - ./Resources/scripts/public_docs.sh

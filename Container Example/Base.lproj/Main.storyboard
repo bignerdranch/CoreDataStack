@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11163.2" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11133"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="9oz-P6-1IV">
+            <objects>
+                <viewController storyboardIdentifier="LoadingVC" id="7zb-CS-0Ys" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="6NC-TB-9ex"/>
+                        <viewControllerLayoutGuide type="bottom" id="7M2-jZ-Gor"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="R5t-IL-p3R">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="K6i-ra-ywI">
+                                <subviews>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="hx5-Hc-1f5"/>
+                                </subviews>
+                            </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gkH-uC-l1l">
+                                <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="18"/>
+                                <color key="textColor" red="0.41568627953529358" green="0.5058823823928833" blue="0.21176470816135406" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.96078431606292725" green="0.95686274766921997" blue="0.94509804248809814" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="gkH-uC-l1l" firstAttribute="top" secondItem="hx5-Hc-1f5" secondAttribute="bottom" constant="14" id="Au4-Jr-579"/>
+                            <constraint firstItem="K6i-ra-ywI" firstAttribute="centerY" secondItem="R5t-IL-p3R" secondAttribute="centerY" id="N83-9X-VJd"/>
+                            <constraint firstItem="gkH-uC-l1l" firstAttribute="centerX" secondItem="hx5-Hc-1f5" secondAttribute="centerX" id="cym-7g-x2s"/>
+                            <constraint firstItem="K6i-ra-ywI" firstAttribute="centerX" secondItem="R5t-IL-p3R" secondAttribute="centerX" id="wob-3T-3u8"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SMf-Q2-Rmj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="396" y="-6"/>
+        </scene>
+        <!--My Core Data Connected View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController storyboardIdentifier="CoreDataVC" id="BYZ-38-t0r" customClass="MyCoreDataConnectedViewController" customModule="Container_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bnr-logo-square.png" translatesAutoresizingMaskIntoConstraints="NO" id="qEj-kg-LeY"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stack Setup Complete" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xQT-7j-YEd">
+                                <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="18"/>
+                                <color key="textColor" red="0.88235294818878174" green="0.34509804844856262" blue="0.16078431904315948" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tIx-6e-GVy">
+                                <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="16"/>
+                                <state key="normal" title="Display Fetched Results Controller">
+                                    <color key="titleColor" red="0.41568627949999998" green="0.50588238240000005" blue="0.21176470820000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="showFRC:" destination="BYZ-38-t0r" eventType="touchUpInside" id="drL-2c-5eY"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.96078431606292725" green="0.95686274766921997" blue="0.94509804248809814" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="tIx-6e-GVy" firstAttribute="top" secondItem="qEj-kg-LeY" secondAttribute="bottom" constant="16" id="HOR-rf-oCT"/>
+                            <constraint firstItem="qEj-kg-LeY" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="MMx-Zq-xLN"/>
+                            <constraint firstItem="qEj-kg-LeY" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Mct-VO-YEC"/>
+                            <constraint firstItem="xQT-7j-YEd" firstAttribute="centerX" secondItem="qEj-kg-LeY" secondAttribute="centerX" id="h2z-0a-RBa"/>
+                            <constraint firstItem="qEj-kg-LeY" firstAttribute="top" secondItem="xQT-7j-YEd" secondAttribute="bottom" constant="8" id="kRO-bp-szQ"/>
+                            <constraint firstItem="tIx-6e-GVy" firstAttribute="centerX" secondItem="qEj-kg-LeY" secondAttribute="centerX" id="xja-mt-gUp"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-414" y="-5"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="bnr-logo-square.png" width="300" height="300"/>
+    </resources>
+</document>
