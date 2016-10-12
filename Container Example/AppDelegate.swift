@@ -3,8 +3,11 @@
 //  Container Example
 //
 //  Created by Robert Edwards on 7/14/16.
-//  Copyright © 2016 Big Nerd Ranch. All rights reserved.
+//  Copyright © 2015-2016 Big Nerd Ranch. All rights reserved.
 //
+
+// swiftlint:disable force_try
+// swiftlint:disable force_cast
 
 import UIKit
 import CoreData
@@ -16,19 +19,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let persistentContainer = NSPersistentContainer(name: "Container_Example")
     private let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
     private lazy var loadingVC: UIViewController = {
-        return self.mainStoryboard.instantiateViewControllerWithIdentifier("LoadingVC")
+        return self.mainStoryboard.instantiateViewController(withIdentifier: "LoadingVC")
     }()
     private lazy var myCoreDataVC: MyCoreDataConnectedViewController = {
-        return self.mainStoryboard.instantiateViewControllerWithIdentifier("CoreDataVC")
-            as! MyCoreDataConnectedViewController // swiftlint:disable:this force_cast
+        return self.mainStoryboard.instantiateViewController(withIdentifier: "CoreDataVC")
+            as! MyCoreDataConnectedViewController
     }()
 
-    func applicationDidFinishLaunching(application: UIApplication) {
-        window = UIWindow(frame: UIScreen.mainScreen().bounds)
+    func applicationDidFinishLaunching(_ application: UIApplication) {
+        window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = loadingVC
 
-        persistentContainer.loadPersistentStoresWithCompletionHandler() { storeDescription, error in
-            if let error = error {
+        persistentContainer.loadPersistentStores() { storeDescription, error in
+            if let error = error as? NSError {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
             self.seedInitialData()
@@ -41,24 +44,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private func seedInitialData() {
         let moc = persistentContainer.newBackgroundContext()
-        moc.performBlockAndWait() {
-            do {
-                let bookCount = try Book.countInContext(moc)
-                if bookCount == 0 {
-                    let books = StubbedBookData.books
-                    for bookTitle in books {
-                        let book = Book(context: moc)
-                        book.title = bookTitle
-                    }
-
-                    do {
-                        try moc.save()
-                    } catch {
-                        fatalError("Saving records should not fail. Error: \(error)")
-                    }
+        moc.performAndWait() {
+            if try! Book.countInContext(moc) == 0 {
+                let books = StubbedBookData.books
+                for bookTitle in books {
+                    let book = Book(context: moc)
+                    book.title = bookTitle
                 }
-            } catch {
-                fatalError("Failed to fetch book count: \(error)")
+
+                do {
+                    try moc.save()
+                } catch {
+                    fatalError("Saving records should not fail. Error: \(error)")
+                }
             }
         }
     }

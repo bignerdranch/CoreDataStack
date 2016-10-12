@@ -3,7 +3,7 @@
 //  CoreDataStack
 //
 //  Created by Robert Edwards on 07/14/16.
-//  Copyright © 2016 Big Nerd Ranch. All rights reserved.
+//  Copyright © 2015-2016 Big Nerd Ranch. All rights reserved.
 //
 
 import UIKit
@@ -19,9 +19,9 @@ class MyCoreDataConnectedViewController: UIViewController {
     }
 
     // MARK: - Actions
-    @IBAction func showFRC(sender: UIButton) {
+    @IBAction func showFRC(_ sender: UIButton) {
         let booksVC = BooksTableViewController(persistentContainer: persistentContainer)
         let navController = UINavigationController(rootViewController: booksVC)
-        presentViewController(navController, animated: true, completion: nil)
+        present(navController, animated: true, completion: nil)
     }
 }

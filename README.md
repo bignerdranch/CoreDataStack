@@ -34,7 +34,7 @@ Similarly our [EnittyMonitor](./Sources/EntityMonitor.swift) still serves a nich
 
 ### Build Time:
 - Xcode 8.0
-- Swift 2.3
+- Swift 3.0
 
 ## Installation
 

@@ -3,7 +3,7 @@
 //  CoreDataStack
 //
 //  Created by Robert Edwards on 3/11/16.
-//  Copyright © 2016 Big Nerd Ranch. All rights reserved.
+//  Copyright © 2015-2016 Big Nerd Ranch. All rights reserved.
 //
 
 import XCTest
@@ -16,8 +16,8 @@ class CoreDataStackOSXInMemoryStoreTests: XCTestCase {
 
     func testInMemoryStackInitializationSucceeded() {
         do {
-            stack = try CoreDataStack.constructInMemoryStack(withModelName: "Sample",
-                inBundle: unitTestBundle)
+            stack = try CoreDataStack.constructInMemoryStack(modelName: "Sample",
+                                                             in: unitTestBundle)
         } catch {
             failingOn(error)
         }

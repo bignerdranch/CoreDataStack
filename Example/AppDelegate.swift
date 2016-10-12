@@ -3,8 +3,10 @@
 //  Example
 //
 //  Created by Robert Edwards on 8/6/15.
-//  Copyright © 2015 Big Nerd Ranch. All rights reserved.
+//  Copyright © 2015-2016 Big Nerd Ranch. All rights reserved.
 //
+
+// swiftlint:disable force_cast
 
 import UIKit
 
@@ -17,40 +19,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var coreDataStack: CoreDataStack?
     private let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
     private lazy var loadingVC: UIViewController = {
-        return self.mainStoryboard.instantiateViewControllerWithIdentifier("LoadingVC")
+        return self.mainStoryboard.instantiateViewController(withIdentifier: "LoadingVC")
     }()
     private lazy var myCoreDataVC: MyCoreDataConnectedViewController = {
-        return self.mainStoryboard.instantiateViewControllerWithIdentifier("CoreDataVC")
-            as! MyCoreDataConnectedViewController // swiftlint:disable:this force_cast
+        return self.mainStoryboard.instantiateViewController(withIdentifier: "CoreDataVC")
+            as! MyCoreDataConnectedViewController
     }()
 
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-
-        window = UIWindow(frame: UIScreen.mainScreen().bounds)
+    func applicationDidFinishLaunching(_ application: UIApplication) {
+        window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = loadingVC
 
-        CoreDataStack.constructSQLiteStack(withModelName: "UniqueConstraintModel") { result in
+        CoreDataStack.constructSQLiteStack(modelName: "UniqueConstraintModel") { result in
             switch result {
-            case .Success(let stack):
+            case .success(let stack):
                 self.coreDataStack = stack
                 self.seedInitialData()
 
                 // Note don't actually use dispatch_after
                 // Arbitrary 2 second delay to illustrate an async setup.
                 // dispatch_async(dispatch_get_main_queue()) {} should be used in production
-                let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(2 * NSEC_PER_SEC))
-                dispatch_after(delay, dispatch_get_main_queue()) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                     self.myCoreDataVC.coreDataStack = stack
                     self.window?.rootViewController = self.myCoreDataVC
                 }
-            case .Failure(let error):
+            case .failure(let error):
                 assertionFailure("\(error)")
             }
         }
 
         window?.makeKeyAndVisible()
-
-        return true
     }
 
     private func seedInitialData() {

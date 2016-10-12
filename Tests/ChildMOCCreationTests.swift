@@ -3,7 +3,7 @@
 //  CoreDataStack
 //
 //  Created by Robert Edwards on 4/22/16.
-//  Copyright © 2016 Big Nerd Ranch. All rights reserved.
+//  Copyright © 2015-2016 Big Nerd Ranch. All rights reserved.
 //
 
 import XCTest
@@ -17,7 +17,7 @@ class ChildMOCCreationTests: TempDirectoryTestCase {
     override func setUp() {
         super.setUp()
         do {
-            stack = try CoreDataStack.constructInMemoryStack(withModelName: "Sample", inBundle: unitTestBundle)
+            stack = try CoreDataStack.constructInMemoryStack(modelName: "Sample", in: unitTestBundle)
         } catch {
             XCTFail("Unexpected error in test: \(error)")
         }
@@ -25,11 +25,11 @@ class ChildMOCCreationTests: TempDirectoryTestCase {
 
 
     func testBackgroundMOCCreation() {
-        XCTAssertEqual(stack.newChildContext().concurrencyType, NSManagedObjectContextConcurrencyType.PrivateQueueConcurrencyType)
+        XCTAssertEqual(stack.newChildContext(type: .privateQueueConcurrencyType).concurrencyType, .privateQueueConcurrencyType)
     }
 
     func testMainQueueMOCCreation() {
-        XCTAssertEqual(stack.newChildContext(concurrencyType: .MainQueueConcurrencyType).concurrencyType, NSManagedObjectContextConcurrencyType.MainQueueConcurrencyType)
+        XCTAssertEqual(stack.newChildContext(type: .mainQueueConcurrencyType).concurrencyType, .mainQueueConcurrencyType)
     }
 
 }
