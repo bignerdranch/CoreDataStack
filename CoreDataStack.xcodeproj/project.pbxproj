@@ -102,6 +102,8 @@
 		E4C056031D943E69006D20A7 /* Container_Example.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4C056001D943E61006D20A7 /* Container_Example.xcdatamodeld */; };
 		E4C056041D943E69006D20A7 /* Container_Example.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4C056001D943E61006D20A7 /* Container_Example.xcdatamodeld */; };
 		E4C9BC391AEA848600A6BD1B /* CoreDataStack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C9BC2D1AEA848600A6BD1B /* CoreDataStack.framework */; };
+		E4D5981A1DAEDF6F00C1801F /* NSManagedObject+FetchHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43599561D93223F003295AE /* NSManagedObject+FetchHelpers.swift */; };
+		E4D5981B1DAEDF6F00C1801F /* NSManagedObject+FetchHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43599561D93223F003295AE /* NSManagedObject+FetchHelpers.swift */; };
 		E4DB61461BFFBB4400BD3E6B /* bnr-logo-square.png in Resources */ = {isa = PBXBuildFile; fileRef = E4DB61451BFFBB4400BD3E6B /* bnr-logo-square.png */; };
 		E4DB61481BFFBBD200BD3E6B /* MyCoreDataConnectedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DB61471BFFBBD200BD3E6B /* MyCoreDataConnectedViewController.swift */; };
 /* End PBXBuildFile section */
@@ -930,6 +932,7 @@
 			files = (
 				E43713EA1C86470D009C3B39 /* CoreDataStack.swift in Sources */,
 				E43713EB1C86470D009C3B39 /* CoreDataModelable.swift in Sources */,
+				E4D5981B1DAEDF6F00C1801F /* NSManagedObject+FetchHelpers.swift in Sources */,
 				E40F30F71D936F2E0087AD03 /* Bundle+CoreDataModelHelper.swift in Sources */,
 				E43713EC1C86470D009C3B39 /* NSManagedObjectContext+AsyncHelpers.swift in Sources */,
 				E43713ED1C86470D009C3B39 /* NSManagedObjectContext+SaveHelpers.swift in Sources */,
@@ -958,6 +961,7 @@
 			files = (
 				E440FEE51C80B060003DE8FF /* NSManagedObjectContext+SaveHelpers.swift in Sources */,
 				E440FEEC1C80B06F003DE8FF /* EntityMonitor.swift in Sources */,
+				E4D5981A1DAEDF6F00C1801F /* NSManagedObject+FetchHelpers.swift in Sources */,
 				E40F30F61D936F2E0087AD03 /* Bundle+CoreDataModelHelper.swift in Sources */,
 				E440FEED1C80B06F003DE8FF /* FetchedResultsController.swift in Sources */,
 				E440FEE61C80B060003DE8FF /* NSPersistentStoreCoordinator+AsyncHelpers.swift in Sources */,
