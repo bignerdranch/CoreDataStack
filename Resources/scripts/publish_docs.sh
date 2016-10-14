@@ -42,30 +42,42 @@ generate_docs() {
 }
 
 commit_changes() {
-    local build_num
+    local build_num, gitRemoteURL, commitMessage
     if [[ $CIRCLECI ]]; then
-        build_num=$CIRCLE_BUILD_NUM     
+        build_num=$CIRCLE_BUILD_NUM
+        # gitRemoteURL="https://${GH_TOKEN}@github.com/bignerdranch/CoreDataStack"
+        # commitMessage = "Refresh docs from successful ci build $build_num"
+        echo "=================CIRCLECI Not Configured for Doc Pushing================="
+        exit 1
     elif [[ $TRAVIS ]]; then
         build_num=$TRAVIS_BUILD_NUMBER
+        gitRemoteURL="https://${GH_TOKEN}@github.com/bignerdranch/CoreDataStack"
+        commitMessage="Refresh docs from successful ci build $build_num"
     else
-        echo "=================Not Running in CI================="
-        exit 1
+        build_num=false
+        gitRemoteURL="https://github.com/bignerdranch/CoreDataStack"
+        commitMessage="Manually refreshing docs from \"$HOSTNAME\""
     fi
-
-    local username="ci"
-    local email="ci@bignerdranch.com"
 
     echo -e "Moving into docs directory \n"
     pushd $DOCS_DIR
 
     git init
-    git config user.email "$email"
-    git config user.name "$username"
+
+    local username="ci"
+    local email="ci@bignerdranch.com"
+    if [[ $CIRCLECI ]]; then
+        git config user.email "$email"
+        git config user.name "$username"
+    elif [[ $TRAVIS ]]; then
+        git config user.email "$email"
+        git config user.name "$username"
+    fi
 
     echo -e "Adding new docs \n"
     git add -A
-    git commit -m "Refresh docs from successful ci build $build_num"
-    git push --force --quiet "https://${GH_TOKEN}@github.com/bignerdranch/CoreDataStack" master:gh-pages > /dev/null 2>&1
+    git commit -m "$commitMessage"
+    git push --force --quiet "$gitRemoteURL" master:gh-pages > /dev/null 2>&1
     echo -e "Published latest docs.\n"
 
     echo -e "Moving out of gh-pages clone and cleaning up"
