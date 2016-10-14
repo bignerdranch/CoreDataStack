@@ -16,13 +16,16 @@ generate_docs() {
     elif [[ $TRAVIS ]]; then
         BRANCH_NAME=$TRAVIS_BRANCH
         BUILD_DIR=$TRAVIS_BUILD_DIR
-        IS_PR="$TRAVIS_PULL_REQUEST"
+        IS_PR=$TRAVIS_PULL_REQUEST
     else
         BUILD_DIR="$HOME/workspace/CoreDataStack"
         BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
         MASTER_BRANCH=$BRANCH_NAME
         echo "=================Not Running in CI================="
     fi
+
+    echo "Current Branch: $BRANCH_NAME"
+    echo "Is this a PR: $IS_PR"
 
     if [ "$IS_PR" == "false" ]; then
         if [[ $BRANCH_NAME = "$MASTER_BRANCH" ]]; then
