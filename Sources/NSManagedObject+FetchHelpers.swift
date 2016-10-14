@@ -15,6 +15,7 @@ import CoreData
  methods that make fetching, inserting, deleting, and change management easier.
  */
 @available(iOS, introduced: 10.0)
+@available(tvOS, introduced: 10.0)
 @available(OSX, introduced: 10.12)
 extension NSFetchRequestResult where Self: NSManagedObject {
     /**

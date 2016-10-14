@@ -27,7 +27,7 @@ generate_docs() {
     if [ "$IS_PR" == "false" ]; then
         if [[ $BRANCH_NAME = "$MASTER_BRANCH" ]]; then
             echo -e "Generating Jazzy output \n"
-            jazzy --output "$BUILD_DIR"/"$DOCS_DIR" --clean --config "$BUILD_DIR"/.jazzy.yml
+            bundle exec jazzy --output "$BUILD_DIR"/"$DOCS_DIR" --clean --config "$BUILD_DIR"/.jazzy.yml
         else
             echo "Aborting doc generation. Not on master branch." 1>&2
             exit 1
