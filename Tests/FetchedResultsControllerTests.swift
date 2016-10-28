@@ -3,7 +3,7 @@
 //  CoreDataStack
 //
 //  Created by Robert Edwards on 11/19/15.
-//  Copyright © 2015 Big Nerd Ranch. All rights reserved.
+//  Copyright © 2015-2016 Big Nerd Ranch. All rights reserved.
 //
 
 // swiftlint:disable force_try
@@ -11,7 +11,8 @@
 import XCTest
 
 import CoreData
-import CoreDataStack
+
+@testable import CoreDataStack
 
 // MARK: - FetchedResultsControllerDelegate
 
@@ -22,25 +23,25 @@ class SampleFetchedResultsControllerDelegate: FetchedResultsControllerDelegate {
     var didChangeContentCount = 0
     var didPerformFetchCount = 0
 
-    func fetchedResultsController(controller: FetchedResultsController<Book>,
+    func fetchedResultsController(_ controller: FetchedResultsController<Book>,
         didChangeObject change: FetchedResultsObjectChange<Book>) {
             didChangeObjectCalls.append(change)
     }
 
-    func fetchedResultsController(controller: FetchedResultsController<Book>,
+    func fetchedResultsController(_ controller: FetchedResultsController<Book>,
         didChangeSection change: FetchedResultsSectionChange<Book>) {
             didChangeSectionCalls.append(change)
     }
 
-    func fetchedResultsControllerWillChangeContent(controller: FetchedResultsController<Book>) {
+    func fetchedResultsControllerWillChangeContent(_ controller: FetchedResultsController<Book>) {
         willChangeContentCount += 1
     }
 
-    func fetchedResultsControllerDidChangeContent(controller: FetchedResultsController<Book>) {
+    func fetchedResultsControllerDidChangeContent(_ controller: FetchedResultsController<Book>) {
         didChangeContentCount += 1
     }
 
-    func fetchedResultsControllerDidPerformFetch(controller: FetchedResultsController<Book>) {
+    func fetchedResultsControllerDidPerformFetch(_ controller: FetchedResultsController<Book>) {
         didPerformFetchCount += 1
     }
 }
@@ -50,12 +51,11 @@ class SampleFetchedResultsControllerDelegate: FetchedResultsControllerDelegate {
 class FetchedResultsControllerTests: XCTestCase {
 
     lazy var model: NSManagedObjectModel = {
-        return self.unitTestBundle.managedObjectModel("Container_Example")
+        return self.unitTestBundle.managedObjectModel(name: "Container_Example")
     }()
     lazy var container: NSPersistentContainer = {
         return NSPersistentContainer(name: "Container_Example", managedObjectModel: self.model)
     }()
-
     var fetchedResultsController: FetchedResultsController<Book>!
     var delegate = SampleFetchedResultsControllerDelegate()
     static let cacheName = "Cache"
@@ -63,7 +63,7 @@ class FetchedResultsControllerTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        weak var setupEx = expectationWithDescription("Setup")
+        weak var setupEx = expectation(description: "Setup")
 
         continueAfterFailure = false
 
@@ -71,14 +71,13 @@ class FetchedResultsControllerTests: XCTestCase {
         configuration.type = NSInMemoryStoreType
         container.persistentStoreDescriptions = [configuration]
 
-        container.loadPersistentStoresWithCompletionHandler() { storeDescription, error in
-            if let error = error {
+        container.loadPersistentStores() { storeDescription, error in
+            if let error = error as? NSError {
                 XCTFail("Unresolved error \(error), \(error.userInfo)")
             }
             setupEx?.fulfill()
         }
-
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
 
         let moc = container.viewContext
 
@@ -91,7 +90,7 @@ class FetchedResultsControllerTests: XCTestCase {
         try! moc.saveContextAndWait()
 
         // Setup fetched results controller
-        let fr = NSFetchRequest()
+        let fr = NSFetchRequest<Book>()
         fr.entity = Book.entity()
         fr.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         fetchedResultsController = FetchedResultsController<Book>(fetchRequest: fr, managedObjectContext: moc,
@@ -149,11 +148,11 @@ class FetchedResultsControllerTests: XCTestCase {
             return
         }
         switch change {
-        case let .Insert(book, indexPath):
+        case let .insert(book, indexPath):
             XCTAssertEqual(book, newBook)
-            XCTAssertEqual(indexPath, NSIndexPath(forRow: 0, inSection: 0))
+            XCTAssertEqual(indexPath, IndexPath(row: 0, section: 0))
             break
-        case .Move, .Delete, .Update:
+        case .move, .delete, .update:
             XCTFail("Incorrect update type")
         }
     }
@@ -166,7 +165,7 @@ class FetchedResultsControllerTests: XCTestCase {
 
         // Delete a book
         let moc = container.viewContext
-        moc.deleteObject(firstBook)
+        moc.delete(firstBook)
         moc.processPendingChanges()
 
         XCTAssertEqual(delegate.didChangeContentCount, 1)
@@ -178,10 +177,10 @@ class FetchedResultsControllerTests: XCTestCase {
         }
 
         switch change {
-        case .Delete(let book, let indexPath):
+        case .delete(let book, let indexPath):
             XCTAssertEqual(book, firstBook)
-            XCTAssertEqual(indexPath, NSIndexPath(forRow: 0, inSection: 0))
-        case .Update, .Move, .Insert:
+            XCTAssertEqual(indexPath, IndexPath(row: 0, section: 0))
+        case .update, .move, .insert:
             XCTFail("Unexpected change type")
         }
     }
@@ -201,7 +200,7 @@ class FetchedResultsControllerTests: XCTestCase {
         XCTAssertEqual(delegate.didChangeContentCount, 1)
         XCTAssertEqual(delegate.willChangeContentCount, 1)
 
-        // iOS 8 will report an .Update and .Move where as iOS 9 reports only the .Move
+        // iOS 8 will report an .Update and .move where as iOS 9 reports only the .move
         XCTAssertLessThanOrEqual(delegate.didChangeObjectCalls.count, 2)
 
         guard let change = delegate.didChangeObjectCalls.first else {
@@ -209,18 +208,18 @@ class FetchedResultsControllerTests: XCTestCase {
             return
         }
 
-        let expectedToPath = NSIndexPath(forRow: 1, inSection: 11)
-        let expectedFromPath = NSIndexPath(forRow: 3, inSection: 18)
+        let expectedToPath = IndexPath(row: 1, section: 11)
+        let expectedFromPath = IndexPath(row: 3, section: 18)
 
         switch change {
-        case let .Move(object: book, fromIndexPath: fromIndexPath, toIndexPath: toIndexPath):
+        case let .move(object: book, fromIndexPath: fromIndexPath, toIndexPath: toIndexPath):
             XCTAssertEqual(book, lastBook)
             XCTAssertEqual(fromIndexPath, expectedFromPath)
             XCTAssertEqual(toIndexPath, expectedToPath)
-        case let .Update(object: book, indexPath: indexPath): // iOS 8 Reports and Update and Move
+        case let .update(object: book, indexPath: indexPath): // iOS 8 Reports and Update and move
             XCTAssertEqual(book, lastBook)
             XCTAssertEqual(indexPath, expectedFromPath)
-        case .Insert, .Delete:
+        case .insert, .delete:
             XCTFail("Incorrect change type: \(change)")
         }
     }
@@ -250,7 +249,7 @@ class FetchedResultsControllerTests: XCTestCase {
         }
 
         switch change {
-        case let .Update(book, indexPath):
+        case let .update(book, indexPath):
             XCTAssertEqual(book, firstBook)
             XCTAssertEqual(book.authors?.count, 1)
             guard let authors = book.authors?.allObjects as? [Author] else {
@@ -258,8 +257,8 @@ class FetchedResultsControllerTests: XCTestCase {
                 return
             }
             XCTAssertEqual(authors.first, author)
-            XCTAssertEqual(indexPath, NSIndexPath(forRow: 0, inSection: 0))
-        case .Delete, .Move, .Insert:
+            XCTAssertEqual(indexPath, IndexPath(row: 0, section: 0))
+        case .delete, .move, .insert:
             XCTFail("Wrong type of update")
         }
     }
@@ -282,13 +281,13 @@ class FetchedResultsControllerTests: XCTestCase {
         }
 
         switch sectionChange {
-        case let .Insert(sectionInfo, sectionIndex):
+        case let .insert(sectionInfo, sectionIndex):
             XCTAssertEqual(sectionInfo.indexTitle, "#")
             XCTAssertEqual(sectionInfo.objects.first, newBook)
             XCTAssertEqual(sectionInfo.objects.count, 1)
             XCTAssertEqual(sectionInfo.name, "#")
             XCTAssertEqual(sectionIndex, 0)
-        case .Delete:
+        case .delete:
             XCTFail("Wrong section update type")
         }
     }
@@ -302,7 +301,7 @@ class FetchedResultsControllerTests: XCTestCase {
             return
         }
         XCTAssertEqual(firstBook.title, "1984")
-        moc.deleteObject(firstBook)
+        moc.delete(firstBook)
         moc.processPendingChanges()
 
         XCTAssertEqual(delegate.didChangeContentCount, 1)
@@ -314,12 +313,12 @@ class FetchedResultsControllerTests: XCTestCase {
             return
         }
         switch sectionChange {
-        case let .Delete(sectionInfo, sectionIndex):
+        case let .delete(sectionInfo, sectionIndex):
             XCTAssertEqual(sectionInfo.objects.count, 0)
             XCTAssertEqual(sectionInfo.name, "1")
             XCTAssertEqual(sectionInfo.indexTitle, "1")
             XCTAssertEqual(sectionIndex, 0)
-        case .Insert:
+        case .insert:
             XCTFail("Incorrect section update type")
         }
     }

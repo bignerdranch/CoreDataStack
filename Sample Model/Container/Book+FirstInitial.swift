@@ -3,15 +3,15 @@
 //  CoreDataStack
 //
 //  Created by Robert Edwards on 9/21/16.
-//  Copyright © 2016 Big Nerd Ranch. All rights reserved.
+//  Copyright © 2015-2016 Big Nerd Ranch. All rights reserved.
 //
 
 import Foundation
 
 extension Book {
     var firstInitial: String? {
-        willAccessValueForKey("title")
-        defer { didAccessValueForKey("title") }
+        willAccessValue(forKey: "title")
+        defer { didAccessValue(forKey: "title") }
         guard let title = title,
             let first = title.characters.first else {
                 return nil
@@ -21,9 +21,9 @@ extension Book {
         return initial
     }
 
-    func addAuthor(author: Author) {
+    func addAuthor(_ author: Author) {
         if let authors = authors {
-            self.authors = authors.setByAddingObject(author)
+            self.authors = NSSet(set: authors.adding(author))
         } else {
             authors = NSSet(set: [author])
         }

@@ -3,7 +3,7 @@
 //  CoreDataStackTVTests
 //
 //  Created by Robert Edwards on 12/17/15.
-//  Copyright © 2015 Big Nerd Ranch. All rights reserved.
+//  Copyright © 2015-2016 Big Nerd Ranch. All rights reserved.
 //
 
 import XCTest
@@ -21,7 +21,7 @@ class CoreDataStackTVTests: TempDirectoryTestCase {
         let modelName = "Sample"
 
         do {
-            inMemoryStack = try CoreDataStack.constructInMemoryStack(withModelName: modelName, inBundle: unitTestBundle)
+            inMemoryStack = try CoreDataStack.constructInMemoryStack(modelName: modelName, in: unitTestBundle)
         } catch {
             failingOn(error)
         }
@@ -31,17 +31,17 @@ class CoreDataStackTVTests: TempDirectoryTestCase {
             return
         }
 
-        weak var ex1 = expectationWithDescription("SQLite Setup")
-        CoreDataStack.constructSQLiteStack(withModelName: modelName, inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
+        weak var ex1 = expectation(description: "SQLite Setup")
+        CoreDataStack.constructSQLiteStack(modelName: modelName, in: unitTestBundle, at: tempStoreURL) { result in
             switch result {
-            case .Success(let stack):
+            case .success(let stack):
                 self.sqlStack = stack
-            case .Failure(let error):
+            case .failure(let error):
                 self.failingOn(error)
             }
             ex1?.fulfill()
         }
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
     }
 
     func testInMemoryInitialization() {

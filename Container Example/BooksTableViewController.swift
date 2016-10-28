@@ -3,7 +3,7 @@
 //  CoreDataStack
 //
 //  Created by Robert Edwards on 07/14/16.
-//  Copyright © 2016 Big Nerd Ranch. All rights reserved.
+//  Copyright © 2015-2016 Big Nerd Ranch. All rights reserved.
 //
 
 import UIKit
@@ -16,14 +16,15 @@ import CoreDataStack
 class BooksTableViewController: UITableViewController {
 
     private var persistentContainer: NSPersistentContainer!
-    private lazy var fetchedResultsController: FetchedResultsController<Book> = {
-        let fetchRequest = NSFetchRequest()
+    private lazy var fetchedResultsController: NSFetchedResultsController<Book> = {
+        let fetchRequest = NSFetchRequest<Book>()
         fetchRequest.entity = Book.entity()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-        let frc = FetchedResultsController<Book>(fetchRequest: fetchRequest,
-            managedObjectContext: self.persistentContainer.viewContext,
-            sectionNameKeyPath: "firstInitial")
-        frc.setDelegate(self.frcDelegate)
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                             managedObjectContext: self.persistentContainer.viewContext,
+                                             sectionNameKeyPath: "firstInitial",
+                                             cacheName: nil)
+        frc.delegate = self.frcDelegate
         return frc
     }()
 
@@ -45,7 +46,7 @@ class BooksTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "GenericReuseCell")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "GenericReuseCell")
 
         do {
             try fetchedResultsController.performFetch()
@@ -53,52 +54,55 @@ class BooksTableViewController: UITableViewController {
             print("Failed to fetch objects: \(error)")
         }
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done,
-            target: self,
-            action: #selector(dismiss))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done,
+                                                            target: self,
+                                                            action: #selector(dismissViewController))
     }
 
     // MARK: - Actions
 
-    @objc private func dismiss() {
-        dismissViewControllerAnimated(true, completion: nil)
+    @objc private func dismissViewController() {
+        dismiss(animated: true, completion: nil)
     }
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return fetchedResultsController.sections?.count ?? 0
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return fetchedResultsController.sections?[section].objects.count ?? 0
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return fetchedResultsController.sections?[section].numberOfObjects ?? 0
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("GenericReuseCell") ?? UITableViewCell()
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "GenericReuseCell") ?? UITableViewCell()
 
         guard let sections = fetchedResultsController.sections else {
-            assertionFailure("Sections missing")
-            return cell
+            fatalError("Sections missing")
         }
 
         let section = sections[indexPath.section]
-        let book = section.objects[indexPath.row]
+        guard let itemsInSection = section.objects as? [Book] else {
+            fatalError("Missing items")
+        }
+
+        let book = itemsInSection[indexPath.row]
         cell.textLabel?.text = book.title
 
         return cell
     }
 
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return fetchedResultsController.sections?[section].indexTitle
     }
 
-    override func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
+    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         return fetchedResultsController.sections?.map() { $0.indexTitle ?? "" }
     }
 }
 
-class BooksFetchedResultsControllerDelegate: FetchedResultsControllerDelegate {
+class BooksFetchedResultsControllerDelegate: NSObject, NSFetchedResultsControllerDelegate {
 
     private weak var tableView: UITableView?
 
@@ -108,43 +112,44 @@ class BooksFetchedResultsControllerDelegate: FetchedResultsControllerDelegate {
         self.tableView = tableView
     }
 
-    func fetchedResultsControllerDidPerformFetch(controller: FetchedResultsController<Book>) {
-        tableView?.reloadData()
-    }
-
-    func fetchedResultsControllerWillChangeContent(controller: FetchedResultsController<Book>) {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView?.beginUpdates()
     }
 
-    func fetchedResultsControllerDidChangeContent(controller: FetchedResultsController<Book>) {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView?.endUpdates()
     }
 
-    func fetchedResultsController(controller: FetchedResultsController<Book>,
-        didChangeObject change: FetchedResultsObjectChange<Book>) {
-            switch change {
-            case let .Insert(_, indexPath):
-                tableView?.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
+                    didChange anObject: Any,
+                    at indexPath: IndexPath?,
+                    for type: NSFetchedResultsChangeType,
+                    newIndexPath: IndexPath?) {
+        switch type {
+        case .insert:
+            tableView?.insertRows(at: [indexPath!], with: .automatic)
 
-            case let .Delete(_, indexPath):
-                tableView?.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        case .delete:
+            tableView?.deleteRows(at: [indexPath!], with: .automatic)
 
-            case let .Move(_, fromIndexPath, toIndexPath):
-                tableView?.moveRowAtIndexPath(fromIndexPath, toIndexPath: toIndexPath)
+        case .move:
+            tableView?.moveRow(at: indexPath!, to: newIndexPath!)
 
-            case let .Update(_, indexPath):
-                tableView?.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-            }
+        case .update:
+            tableView?.reloadRows(at: [indexPath!], with: .automatic)
+        }
     }
 
-    func fetchedResultsController(controller: FetchedResultsController<Book>,
-        didChangeSection change: FetchedResultsSectionChange<Book>) {
-            switch change {
-            case let .Insert(_, index):
-                tableView?.insertSections(NSIndexSet(index: index), withRowAnimation: .Automatic)
-
-            case let .Delete(_, index):
-                tableView?.deleteSections(NSIndexSet(index: index), withRowAnimation: .Automatic)
-            }
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
+                    didChange sectionInfo: NSFetchedResultsSectionInfo,
+                    atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        switch type {
+        case .insert:
+            tableView?.insertSections(IndexSet(integer: sectionIndex), with: .automatic)
+        case .delete:
+            tableView?.deleteSections(IndexSet(integer: sectionIndex), with: .automatic)
+        case .move, .update:
+            tableView?.reloadSections(IndexSet(integer: sectionIndex), with: .automatic)
+        }
     }
 }

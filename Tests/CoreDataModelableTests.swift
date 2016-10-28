@@ -3,7 +3,7 @@
 //  CoreDataStack
 //
 //  Created by Robert Edwards on 11/18/15.
-//  Copyright © 2015 Big Nerd Ranch. All rights reserved.
+//  Copyright © 2015-2016 Big Nerd Ranch. All rights reserved.
 //
 
 // swiftlint:disable force_try
@@ -19,18 +19,18 @@ class CoreDataModelableTests: TempDirectoryTestCase {
     override func setUp() {
         super.setUp()
 
-        weak var expectation = expectationWithDescription("callback")
-        CoreDataStack.constructSQLiteStack(withModelName: "Sample", inBundle: unitTestBundle, withStoreURL: tempStoreURL) { result in
+        weak var expectation = self.expectation(description: "callback")
+        CoreDataStack.constructSQLiteStack(modelName: "Sample", in: unitTestBundle, at: tempStoreURL) { result in
             switch result {
-            case .Success(let stack):
+            case .success(let stack):
                 self.stack = stack
-            case .Failure(let error):
+            case .failure(let error):
                 XCTFail("Error constructing stack: \(error)")
             }
             expectation?.fulfill()
         }
 
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
     }
 
     func testNewObject() {

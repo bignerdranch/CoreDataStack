@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E4B99C651B740321005B7E1A"
-               BuildableName = "Example.app"
-               BlueprintName = "Example"
+               BuildableName = "Legacy Example.app"
+               BlueprintName = "Legacy Example"
                ReferencedContainer = "container:CoreDataStack.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -58,8 +58,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B99C651B740321005B7E1A"
-            BuildableName = "Example.app"
-            BlueprintName = "Example"
+            BuildableName = "Legacy Example.app"
+            BlueprintName = "Legacy Example"
             ReferencedContainer = "container:CoreDataStack.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -81,8 +81,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B99C651B740321005B7E1A"
-            BuildableName = "Example.app"
-            BlueprintName = "Example"
+            BuildableName = "Legacy Example.app"
+            BlueprintName = "Legacy Example"
             ReferencedContainer = "container:CoreDataStack.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -106,8 +106,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B99C651B740321005B7E1A"
-            BuildableName = "Example.app"
-            BlueprintName = "Example"
+            BuildableName = "Legacy Example.app"
+            BlueprintName = "Legacy Example"
             ReferencedContainer = "container:CoreDataStack.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
