@@ -29,6 +29,7 @@ public extension NSPersistentStoreCoordinator {
 
      - parameter managedObjectModel: The `NSManagedObjectModel` describing the data model.
      - parameter storeFileURL: The URL where the SQLite store file will reside.
+     - parameter persistentStoreOptions: Custom options for persistent store. Default value is stockSQLiteStoreOptions
      - parameter completion: A completion closure with a `CoordinatorResult` that will be executed
                                 following the `NSPersistentStore` being added to the `NSPersistentStoreCoordinator`.
      */
@@ -37,6 +38,7 @@ public extension NSPersistentStoreCoordinator {
     @available(OSX, introduced=10.10, deprecated=10.12, message="Use NSPersistentContainer")
     public class func setupSQLiteBackedCoordinator(managedObjectModel: NSManagedObjectModel,
                                                    storeFileURL: NSURL,
+                                                   persistentStoreOptions: [NSObject: AnyObject]? = stockSQLiteStoreOptions,
                                                    completion: (CoreDataStack.CoordinatorResult) -> Void) {
         let backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
         dispatch_async(backgroundQueue) {
@@ -45,7 +47,7 @@ public extension NSPersistentStoreCoordinator {
                 try coordinator.addPersistentStoreWithType(NSSQLiteStoreType,
                                                            configuration: nil,
                                                            URL: storeFileURL,
-                                                           options: stockSQLiteStoreOptions)
+                                                           options: persistentStoreOptions)
                 completion(.Success(coordinator))
             } catch let error {
                 completion(.Failure(error))
