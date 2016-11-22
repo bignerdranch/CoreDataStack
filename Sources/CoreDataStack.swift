@@ -92,17 +92,19 @@ public final class CoreDataStack {
 
     /**
      Creates a `SQLite` backed Core Data stack for a given model in the supplied `NSBundle`.
-
+     
      - parameter modelName: Base name of the `XCDataModel` file.
      - parameter in: NSBundle that contains the `XCDataModel`. Default value is mainBundle()
      - parameter at: Optional URL to use for storing the `SQLite` file. Defaults to "(modelName).sqlite" in the Documents directory.
+     - parameter persistentStoreOptions: Custom options for persistent store. Default value is stockSQLiteStoreOptions
      - parameter on: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
      - parameter callback: The `SQLite` persistent store coordinator will be setup asynchronously.
-                            This callback will be passed either an initialized `CoreDataStack` object or an `ErrorType` value.
+     This callback will be passed either an initialized `CoreDataStack` object or an `ErrorType` value.
      */
     public static func constructSQLiteStack(modelName: String,
                                             in bundle: Bundle = Bundle.main,
                                             at desiredStoreURL: URL? = nil,
+                                            persistentStoreOptions: [AnyHashable : Any]? = NSPersistentStoreCoordinator.stockSQLiteStoreOptions,
                                             on callbackQueue: DispatchQueue? = nil,
                                             callback: @escaping SetupCallback) {
 
@@ -119,7 +121,8 @@ public final class CoreDataStack {
         let callbackQueue: DispatchQueue = callbackQueue ?? backgroundQueue
         NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(
             model,
-            storeFileURL: storeFileURL) { coordinatorResult in
+            storeFileURL: storeFileURL,
+            persistentStoreOptions: persistentStoreOptions) { coordinatorResult in
                 switch coordinatorResult {
                 case .success(let coordinator):
                     let stack = CoreDataStack(modelName : modelName,
@@ -244,11 +247,14 @@ public extension CoreDataStack {
     /**
      This function resets the `NSPersistentStore` connected to the `NSPersistentStoreCoordinator`.
      For `SQLite` based stacks, this function will also remove the `SQLite` store from disk.
-
+     
+     - parameter persistentStoreOptions: Custom options for persistent store. Default value is stockSQLiteStoreOptions
      - parameter on: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
      - parameter callback: A callback with a `success` or an `ErrorType` value with the error
      */
-    public func resetStore(on callbackQueue: DispatchQueue? = nil, callback: @escaping StoreResetCallback) {
+    public func resetStore(with persistentStoreOptions: [AnyHashable: Any]? = NSPersistentStoreCoordinator.stockSQLiteStoreOptions,
+                           on callbackQueue: DispatchQueue? = nil,
+                           callback: @escaping StoreResetCallback) {
         let backgroundQueue = DispatchQueue.global(qos: .background)
         let callbackQueue: DispatchQueue = callbackQueue ?? backgroundQueue
         self.saveBubbleDispatchGroup.notify(queue: backgroundQueue) {
@@ -306,19 +312,21 @@ public extension CoreDataStack {
                 }
 
                 // Setup a new stack
-                NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(mom, storeFileURL: storeURL) { result in
-                    switch result {
-                    case .success (let coordinator):
-                        self.persistentStoreCoordinator = coordinator
-                        callbackQueue.async {
-                            callback(.success)
-                        }
-
-                    case .failure (let error):
-                        callbackQueue.async {
-                            callback(.failure(error))
-                        }
-                    }
+                NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(mom,
+                                                                          storeFileURL: storeURL,
+                                                                          persistentStoreOptions: persistentStoreOptions) { result in
+                                                                            switch result {
+                                                                            case .success (let coordinator):
+                                                                                self.persistentStoreCoordinator = coordinator
+                                                                                callbackQueue.async {
+                                                                                    callback(.success)
+                                                                                }
+                                                                                
+                                                                            case .failure (let error):
+                                                                                callbackQueue.async {
+                                                                                    callback(.failure(error))
+                                                                                }
+                                                                            }
                 }
             }
         }
@@ -359,11 +367,14 @@ public extension CoreDataStack {
     /**
      Creates a new background `NSManagedObjectContext` connected to
      a discrete `NSPersistentStoreCoordinator` created with the same store used by the stack in construction.
-
+     
+     - parameter persistentStoreOptions: Custom options for persistent store. Default value is stockSQLiteStoreOptions
      - parameter on: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
      - parameter callback: A callback with either the new `NSManagedObjectContext` or an `ErrorType` value with the error
      */
-    public func newBatchOperationContext(on callbackQueue: DispatchQueue? = nil, callback: @escaping BatchContextCallback) {
+    public func newBatchOperationContext(with persistentStoreOptions: [AnyHashable: Any]? = NSPersistentStoreCoordinator.stockSQLiteStoreOptions,
+                                         on callbackQueue: DispatchQueue? = nil,
+                                         callback: @escaping BatchContextCallback) {
         let moc = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         moc.mergePolicy = NSMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
         moc.name = "Batch Operation Context"
@@ -381,18 +392,20 @@ public extension CoreDataStack {
         case .sqLite(let storeURL):
             let backgroundQueue = DispatchQueue.global(qos: .background)
             let callbackQueue: DispatchQueue = callbackQueue ?? backgroundQueue
-            NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(managedObjectModel, storeFileURL: storeURL) { result in
-                switch result {
-                case .success(let coordinator):
-                    moc.persistentStoreCoordinator = coordinator
-                    callbackQueue.async {
-                        callback(.success(moc))
-                    }
-                case .failure(let error):
-                    callbackQueue.async {
-                        callback(.failure(error))
-                    }
-                }
+            NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(managedObjectModel,
+                                                                      storeFileURL: storeURL,
+                                                                      persistentStoreOptions: persistentStoreOptions) { result in
+                                                                        switch result {
+                                                                        case .success(let coordinator):
+                                                                            moc.persistentStoreCoordinator = coordinator
+                                                                            callbackQueue.async {
+                                                                                callback(.success(moc))
+                                                                            }
+                                                                        case .failure(let error):
+                                                                            callbackQueue.async {
+                                                                                callback(.failure(error))
+                                                                            }
+                                                                        }
             }
         }
     }
