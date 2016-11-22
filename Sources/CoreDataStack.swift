@@ -310,7 +310,7 @@ public extension CoreDataStack {
                     }
                     return
                 }
-
+                
                 // Setup a new stack
                 NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(mom,
                                                                           storeFileURL: storeURL,
@@ -321,7 +321,7 @@ public extension CoreDataStack {
                                                                                 callbackQueue.async {
                                                                                     callback(.success)
                                                                                 }
-                                                                                
+                                                                            
                                                                             case .failure (let error):
                                                                                 callbackQueue.async {
                                                                                     callback(.failure(error))
