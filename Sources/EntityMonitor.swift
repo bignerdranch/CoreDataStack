@@ -108,10 +108,10 @@ public class EntityMonitor<T: NSManagedObject where T: Hashable> {
         self.frequency = frequency
         self.filterPredicate = filterPredicate
         self.entityPredicate = NSPredicate(format: "entity == %@", entity)
-        guard let entityName = entity.managedObjectClassName else {
-            preconditionFailure("Entity Description is missing a class name")
+        guard let entityClass = NSClassFromString(entity.managedObjectClassName) else {
+            preconditionFailure("Entity Description is missing a class name or does not represent a class")
         }
-        precondition(entityName == String(T.self), "Class generic type must match entity descripton type")
+        precondition(entityClass == T.self, "Class generic type must match entity descripton type")
     }
 
     deinit {
