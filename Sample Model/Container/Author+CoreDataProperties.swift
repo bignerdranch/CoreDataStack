@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension Author {
 
     @nonobjc public override class func fetchRequest() -> NSFetchRequest {

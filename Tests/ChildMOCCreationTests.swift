@@ -23,7 +23,6 @@ class ChildMOCCreationTests: TempDirectoryTestCase {
         }
     }
 
-
     func testBackgroundMOCCreation() {
         XCTAssertEqual(stack.newChildContext(type: .privateQueueConcurrencyType).concurrencyType, .privateQueueConcurrencyType)
     }

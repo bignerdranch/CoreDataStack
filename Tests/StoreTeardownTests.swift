@@ -38,7 +38,6 @@ class StoreTeardownTests: TempDirectoryTestCase {
         waitForExpectations(timeout: 10, handler: nil)
     }
 
-
     func testPersistentStoreReset() {
         // Insert some fresh objects
         let worker = sqlStack.newChildContext()

@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Big Nerd Ranch. All rights reserved.
 //
 
+// swiftlint:disable file_length
+
 import Foundation
 import CoreData
 
@@ -186,9 +188,7 @@ public final class CoreDataStack {
         }
     }
     fileprivate var managedObjectModel: NSManagedObjectModel {
-        get {
-            return bundle.managedObjectModel(name: managedObjectModelName)
-        }
+        return bundle.managedObjectModel(name: managedObjectModelName)
     }
     fileprivate let saveBubbleDispatchGroup = DispatchGroup()
 
@@ -310,7 +310,7 @@ public extension CoreDataStack {
                     }
                     return
                 }
-                
+
                 // Setup a new stack
                 NSPersistentStoreCoordinator.setupSQLiteBackedCoordinator(mom,
                                                                           storeFileURL: storeURL,
@@ -321,7 +321,7 @@ public extension CoreDataStack {
                                                                                 callbackQueue.async {
                                                                                     callback(.success)
                                                                                 }
-                                                                            
+
                                                                             case .failure (let error):
                                                                                 callbackQueue.async {
                                                                                     callback(.failure(error))
@@ -430,9 +430,7 @@ fileprivate extension CoreDataStack {
 
 fileprivate extension CoreDataStack {
     fileprivate static var documentsDirectory: URL? {
-        get {
-            let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-            return urls.first
-        }
+        let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return urls.first
     }
 }

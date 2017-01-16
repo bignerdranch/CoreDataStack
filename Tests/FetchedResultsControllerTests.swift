@@ -57,7 +57,10 @@ class FetchedResultsControllerTests: XCTestCase {
         return NSPersistentContainer(name: "Container_Example", managedObjectModel: self.model)
     }()
     var fetchedResultsController: FetchedResultsController<Book>!
+
+    //swiftlint:disable weak_delegate (false positive)
     var delegate = SampleFetchedResultsControllerDelegate()
+
     static let cacheName = "Cache"
 
     override func setUp() {
@@ -71,7 +74,7 @@ class FetchedResultsControllerTests: XCTestCase {
         configuration.type = NSInMemoryStoreType
         container.persistentStoreDescriptions = [configuration]
 
-        container.loadPersistentStores() { storeDescription, error in
+        container.loadPersistentStores() { _, error in
             if let error = error as? NSError {
                 XCTFail("Unresolved error \(error), \(error.userInfo)")
             }
