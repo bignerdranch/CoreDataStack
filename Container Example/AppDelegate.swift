@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = loadingVC
 
-        persistentContainer.loadPersistentStores() { storeDescription, error in
+        persistentContainer.loadPersistentStores() { _, error in
             if let error = error as? NSError {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }

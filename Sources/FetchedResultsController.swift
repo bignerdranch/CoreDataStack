@@ -75,6 +75,7 @@ import CoreData
      */
     public protocol FetchedResultsControllerDelegate: class { // : class for weak capture
         /// Type of object being monitored. Must inherit from `NSManagedObject` and implement `CoreDataModelable`
+        // swiftlint:disable type_name
         associatedtype T: NSManagedObject
 
         /**

@@ -9,9 +9,9 @@
 import UIKit
 
 import CoreData
-
-// Remove me
 import CoreDataStack
+
+// swiftlint:disable weak_delegate (False positive)
 
 class BooksTableViewController: UITableViewController {
 

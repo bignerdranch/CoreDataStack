@@ -20,9 +20,7 @@ class BatchOperationContextTests: TempDirectoryTestCase {
     var operationContext: NSManagedObjectContext!
 
     var bookFetchRequest: NSFetchRequest<NSFetchRequestResult> {
-        get {
-            return NSFetchRequest<NSFetchRequestResult>(entityName: "Book")
-        }
+        return NSFetchRequest<NSFetchRequestResult>(entityName: "Book")
     }
 
     override func setUp() {

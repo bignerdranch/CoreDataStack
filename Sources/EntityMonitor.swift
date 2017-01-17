@@ -22,6 +22,7 @@ public enum FireFrequency {
  */
 public protocol EntityMonitorDelegate: class { // : class for weak capture
     /// Type of object being monitored. Must inheirt from `NSManagedObject` and implement `NSFetchRequestResult`
+    // swiftlint:disable type_name
     associatedtype T: NSManagedObject, NSFetchRequestResult, Hashable
 
     /**

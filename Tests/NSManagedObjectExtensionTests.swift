@@ -34,7 +34,7 @@ class NSManagedObjectExtensionTests: XCTestCase {
         configuration.type = NSInMemoryStoreType
         container.persistentStoreDescriptions = [configuration]
 
-        container.loadPersistentStores() { storeDescription, error in
+        container.loadPersistentStores() { _, error in
             if let error = error as? NSError {
                 XCTFail("Unresolved error \(error), \(error.userInfo)")
             }

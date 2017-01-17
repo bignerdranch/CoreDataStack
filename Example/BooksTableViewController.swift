@@ -11,6 +11,8 @@ import UIKit
 import CoreDataStack
 import CoreData
 
+// swiftlint:disable weak_delegate (False positive)
+
 class BooksTableViewController: UITableViewController {
 
     private var stack: CoreDataStack!

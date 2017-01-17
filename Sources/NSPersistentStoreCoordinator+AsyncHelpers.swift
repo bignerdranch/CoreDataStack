@@ -25,6 +25,7 @@ extension NSPersistentStoreCoordinator {
             var error: Error?
 
             // performAndWait is marked @escaping as of iOS 10.0.
+            // swiftlint:disable type_name
             typealias Fn = (() -> Void) -> Void
             let performAndWaitNoescape = unsafeBitCast(self.performAndWait, to: Fn.self)
             performAndWaitNoescape {
