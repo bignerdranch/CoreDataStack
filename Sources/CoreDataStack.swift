@@ -171,9 +171,6 @@ public final class CoreDataStack {
 
     // MARK: - Private Implementation
 
-    private let managedObjectModelName: String
-    private let bundle: Bundle
-
     fileprivate enum StoreType {
         case inMemory
         case sqLite(storeURL: URL)
@@ -187,15 +184,17 @@ public final class CoreDataStack {
             mainQueueContext = constructMainQueueContext()
         }
     }
-    fileprivate var managedObjectModel: NSManagedObjectModel {
-        return bundle.managedObjectModel(name: managedObjectModelName)
-    }
+    fileprivate var managedObjectModel: NSManagedObjectModel
     fileprivate let saveBubbleDispatchGroup = DispatchGroup()
 
-    private init(modelName: String, bundle: Bundle, persistentStoreCoordinator: NSPersistentStoreCoordinator, storeType: StoreType) {
-        self.bundle = bundle
+    private convenience init(modelName: String, bundle: Bundle, persistentStoreCoordinator: NSPersistentStoreCoordinator, storeType: StoreType) {
+        let model = bundle.managedObjectModel(name: modelName)
+        self.init(model:model, persistentStoreCoordinator: persistentStoreCoordinator, storeType:storeType)
+    }
+
+    private init(model: NSManagedObjectModel, persistentStoreCoordinator: NSPersistentStoreCoordinator, storeType: StoreType) {
         self.storeType = storeType
-        managedObjectModelName = modelName
+        managedObjectModel = model
 
         self.persistentStoreCoordinator = persistentStoreCoordinator
         privateQueueContext.persistentStoreCoordinator = persistentStoreCoordinator
