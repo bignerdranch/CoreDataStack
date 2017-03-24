@@ -111,7 +111,26 @@ public final class CoreDataStack {
                                             callback: @escaping SetupCallback) {
 
         let model = bundle.managedObjectModel(name: modelName)
-        let storeFileURL = desiredStoreURL ?? URL(string: "\(modelName).sqlite", relativeTo: documentsDirectory!)!
+        self.constructSQLiteStack(model: model, at: desiredStoreURL, fileName:modelName, persistentStoreOptions: persistentStoreOptions, on: callbackQueue, callback: callback)
+    }
+
+    /**
+     Creates a `SQLite` backed Core Data stack for a given model.
+
+     - parameter model: The data model.
+     - parameter at: Optional URL to use for storing the `SQLite` file. Defaults to "(modelName).sqlite" in the Documents directory.
+     - parameter persistentStoreOptions: Custom options for persistent store. Default value is stockSQLiteStoreOptions
+     - parameter on: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
+     - parameter callback: The `SQLite` persistent store coordinator will be setup asynchronously.
+     This callback will be passed either an initialized `CoreDataStack` object or an `ErrorType` value.
+     */
+    public static func constructSQLiteStack(model: NSManagedObjectModel,
+                                            at desiredStoreURL: URL? = nil,
+                                            fileName:String = "db",
+                                            persistentStoreOptions: [AnyHashable : Any]? = NSPersistentStoreCoordinator.stockSQLiteStoreOptions,
+                                            on callbackQueue: DispatchQueue? = nil,
+                                            callback: @escaping SetupCallback){
+        let storeFileURL = desiredStoreURL ?? URL(string: fileName, relativeTo: documentsDirectory!)!
         do {
             try createDirectoryIfNecessary(storeFileURL)
         } catch {
@@ -127,8 +146,7 @@ public final class CoreDataStack {
             persistentStoreOptions: persistentStoreOptions) { coordinatorResult in
                 switch coordinatorResult {
                 case .success(let coordinator):
-                    let stack = CoreDataStack(modelName : modelName,
-                                              bundle: bundle,
+                    let stack = CoreDataStack(model:model,
                                               persistentStoreCoordinator: coordinator,
                                               storeType: .sqLite(storeURL: storeFileURL))
                     callbackQueue.async {
@@ -163,9 +181,25 @@ public final class CoreDataStack {
     public static func constructInMemoryStack(modelName: String,
                                               in bundle: Bundle = Bundle.main) throws -> CoreDataStack {
         let model = bundle.managedObjectModel(name: modelName)
+        return try self.constructInMemoryStack(model: model)
+    }
+
+
+    /**
+     Creates an in-memory Core Data stack for a given model.
+
+     This stack is configured with the same concurrency and persistence model as the `SQLite` stack, but everything is in-memory.
+
+     - parameter model: The data model.
+
+     - throws: Any error produced from `NSPersistentStoreCoordinator`'s `addPersistentStoreWithType`
+
+     - returns: CoreDataStack: Newly created In-Memory `CoreDataStack`
+     */
+    public static func constructInMemoryStack(model:NSManagedObjectModel) throws -> CoreDataStack {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
         try coordinator.addPersistentStore(ofType: NSInMemoryStoreType, configurationName: nil, at: nil, options: nil)
-        let stack = CoreDataStack(modelName: modelName, bundle: bundle, persistentStoreCoordinator: coordinator, storeType: .inMemory)
+        let stack = CoreDataStack(model:model, persistentStoreCoordinator: coordinator, storeType: .inMemory)
         return stack
     }
 
