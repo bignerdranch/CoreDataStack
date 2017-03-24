@@ -129,7 +129,7 @@ public final class CoreDataStack {
                                             at desiredStoreURL: URL? = nil,
                                             persistentStoreOptions: [AnyHashable : Any]? = NSPersistentStoreCoordinator.stockSQLiteStoreOptions,
                                             on callbackQueue: DispatchQueue? = nil,
-                                            callback: @escaping SetupCallback){
+                                            callback: @escaping SetupCallback) {
         let storeFileURL = desiredStoreURL ?? URL(string: "database.sqlite", relativeTo: documentsDirectory!)!
         do {
             try createDirectoryIfNecessary(storeFileURL)
@@ -184,7 +184,6 @@ public final class CoreDataStack {
         return try self.constructInMemoryStack(model: model)
     }
 
-
     /**
      Creates an in-memory Core Data stack for a given model.
 
@@ -196,7 +195,7 @@ public final class CoreDataStack {
 
      - returns: CoreDataStack: Newly created In-Memory `CoreDataStack`
      */
-    public static func constructInMemoryStack(model:NSManagedObjectModel) throws -> CoreDataStack {
+    public static func constructInMemoryStack(model: NSManagedObjectModel) throws -> CoreDataStack {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
         try coordinator.addPersistentStore(ofType: NSInMemoryStoreType, configurationName: nil, at: nil, options: nil)
         let stack = CoreDataStack(model:model, persistentStoreCoordinator: coordinator, storeType: .inMemory)
