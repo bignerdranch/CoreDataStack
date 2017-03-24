@@ -111,14 +111,15 @@ public final class CoreDataStack {
                                             callback: @escaping SetupCallback) {
 
         let model = bundle.managedObjectModel(name: modelName)
-        self.constructSQLiteStack(model: model, at: desiredStoreURL, fileName:modelName, persistentStoreOptions: persistentStoreOptions, on: callbackQueue, callback: callback)
+        let storeFileURL = desiredStoreURL ?? URL(string: modelName, relativeTo: documentsDirectory!)!
+        self.constructSQLiteStack(model: model, at: storeFileURL, persistentStoreOptions: persistentStoreOptions, on: callbackQueue, callback: callback)
     }
 
     /**
      Creates a `SQLite` backed Core Data stack for a given model.
 
      - parameter model: The data model.
-     - parameter at: Optional URL to use for storing the `SQLite` file. Defaults to "(modelName).sqlite" in the Documents directory.
+     - parameter at: Optional URL to use for storing the `SQLite` file. Defaults to "database.sqlite" in the Documents directory.
      - parameter persistentStoreOptions: Custom options for persistent store. Default value is stockSQLiteStoreOptions
      - parameter on: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
      - parameter callback: The `SQLite` persistent store coordinator will be setup asynchronously.
@@ -126,11 +127,10 @@ public final class CoreDataStack {
      */
     public static func constructSQLiteStack(model: NSManagedObjectModel,
                                             at desiredStoreURL: URL? = nil,
-                                            fileName:String = "db",
                                             persistentStoreOptions: [AnyHashable : Any]? = NSPersistentStoreCoordinator.stockSQLiteStoreOptions,
                                             on callbackQueue: DispatchQueue? = nil,
                                             callback: @escaping SetupCallback){
-        let storeFileURL = desiredStoreURL ?? URL(string: fileName, relativeTo: documentsDirectory!)!
+        let storeFileURL = desiredStoreURL ?? URL(string: "database.sqlite", relativeTo: documentsDirectory!)!
         do {
             try createDirectoryIfNecessary(storeFileURL)
         } catch {
