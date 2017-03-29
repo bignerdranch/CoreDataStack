@@ -111,7 +111,7 @@ public final class CoreDataStack {
                                             callback: @escaping SetupCallback) {
 
         let model = bundle.managedObjectModel(name: modelName)
-        let storeFileURL = desiredStoreURL ?? URL(string: modelName, relativeTo: documentsDirectory!)!
+        let storeFileURL = desiredStoreURL ?? URL(string: "\(modelName).sqlite", relativeTo: documentsDirectory!)!
         self.constructSQLiteStack(model: model, at: storeFileURL, persistentStoreOptions: persistentStoreOptions, on: callbackQueue, callback: callback)
     }
 
