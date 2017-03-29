@@ -16,26 +16,25 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "BNRCoreDataStack"
-  s.version      = "2.1.0"
+  s.version      = "2.2.0"
   s.summary      = "The Big Nerd Ranch Core Data stack."
 
   s.description  = <<-DESC
-The BNR Core Data stack provides what we consider best practices for using
-Core Data in our applications.
+  The BNR Core Data stack provides what we consider best practices for using
+  Core Data in our applications.
 
-It takes the place of the boilerplate setup code from Xcode's template and
-focuses on efficient performance and change management.
-DESC
+  It takes the place of the boilerplate setup code from Xcode's template and
+  focuses on efficient performance and change management.
+  DESC
 
   s.homepage     = "https://github.com/bignerdranch/CoreDataStack"
   s.license      = "MIT"
 
-  s.authors              = ["Robert Edwards", "John Gallagher", "Brian Hardy", "Zachary Waldowski"]
+  s.authors      = ["Robert Edwards", "John Gallagher", "Brian Hardy", "Zachary Waldowski"]
 
   s.ios.deployment_target = "8.0"
   s.tvos.deployment_target = "9.0"
   s.osx.deployment_target = "10.10"
-
 
   s.source       = { :git => "https://github.com/bignerdranch/CoreDataStack.git", :tag => "v#{s.version}" }
 
