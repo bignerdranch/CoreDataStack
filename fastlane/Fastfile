@@ -37,8 +37,8 @@ end
 desc "Runs all the tests"
 lane :test do
     # iOS
-    scan(scheme: IOS_SCHEME,
-        destination: "platform=iOS Simulator,name=#{LATEST_IPHONE_DEVICE}")
+    echo("Building on device: #{LATEST_IPHONE_DEVICE}")
+    scan(scheme: IOS_SCHEME, device: LATEST_IPHONE_DEVICE)
 
     # macOS
     scan(scheme: MACOS_SCHEME,
