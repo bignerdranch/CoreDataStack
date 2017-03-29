@@ -15,7 +15,11 @@ clone_project() {
     if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
         BRANCH_NAME=$TRAVIS_PULL_REQUEST_BRANCH
         echo "Testing Pull Request Branch: \"$TRAVIS_PULL_REQUEST_BRANCH\""
-    else
+        if [ "$TRAVIS_PULL_REQUEST_SLUG" != "$TRAVIS_REPO_SLUG" ]; then
+          echo "Testing a fork. Skip Carthage validation."
+          exit 0
+        fi
+      else
         BRANCH_NAME=$TRAVIS_BRANCH
         echo "Testing Branch: \"$TRAVIS_BRANCH\""
     fi
