@@ -37,6 +37,87 @@ class CoreDataModelableTests: TempDirectoryTestCase {
         let book = Book(managedObjectContext: stack.mainQueueContext)
         XCTAssertNotNil(book)
     }
+    
+    func testCreateNewObject() {
+        let title = "Swift Programming: The Big Nerd Ranch Guide"
+        let book = Book.createInContext(stack.mainQueueContext) {
+            $0.title = title
+        }
+        XCTAssertEqual(book.title, title)
+    }
+    
+    func testUpdateObject() {
+        let iOSBook = Book(managedObjectContext: stack.mainQueueContext)
+        iOSBook.title = "iOS Programming: The Big Nerd Ranch Guide"
+        
+        let swiftBook = Book(managedObjectContext: stack.mainQueueContext)
+        swiftBook.title = "Swift Programming: The Big Nerd Ranch Guide"
+        
+        let warAndPeace = Book(managedObjectContext: stack.mainQueueContext)
+        warAndPeace.title = "War and Peace"
+        
+        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", "The Big Nerd Ranch Guide")
+        
+        do {
+            let updatedBooks = try Book.updateInContext(stack.mainQueueContext, predicate: predicate) {
+                $0.title = ($0.title ?? "") + " - UPDATED"
+            }
+            
+            XCTAssertEqual(updatedBooks.count, 2)
+            
+            let updatedBooksTitles = updatedBooks.flatMap { $0.title }
+            let updatedBooksTitlesExpectation = [
+                "iOS Programming: The Big Nerd Ranch Guide - UPDATED",
+                "Swift Programming: The Big Nerd Ranch Guide - UPDATED"
+            ]
+            XCTAssertEqual(updatedBooksTitles.sort(), updatedBooksTitlesExpectation.sort())
+        } catch {
+            failingOn(error)
+        }
+    }
+    
+    func testUpdateOrCreateNewObjectShouldCreate() {
+        do {
+            let createdBooks = try Book.updateOrCreateInContext(stack.mainQueueContext, predicate: nil) {
+                $0.title = "iOS Programming: The Big Nerd Ranch Guide"
+            }
+            
+            XCTAssertEqual(createdBooks.count, 1)
+            XCTAssertEqual(createdBooks.first?.title, "iOS Programming: The Big Nerd Ranch Guide")
+        } catch {
+            failingOn(error)
+        }
+    }
+    
+    func testUpdateOrCreateNewObjectShouldUpdate() {
+        let iOSBook = Book(managedObjectContext: stack.mainQueueContext)
+        iOSBook.title = "iOS Programming: The Big Nerd Ranch Guide"
+        
+        let swiftBook = Book(managedObjectContext: stack.mainQueueContext)
+        swiftBook.title = "Swift Programming: The Big Nerd Ranch Guide"
+        
+        let warAndPeace = Book(managedObjectContext: stack.mainQueueContext)
+        warAndPeace.title = "War and Peace"
+        
+        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", "The Big Nerd Ranch Guide")
+        
+        do {
+            let updatedBooks = try Book.updateOrCreateInContext(stack.mainQueueContext, predicate: predicate) {
+                $0.title = ($0.title ?? "") + " - UPDATED"
+            }
+            
+            XCTAssertEqual(updatedBooks.count, 2)
+            
+            let updatedBooksTitles = updatedBooks.flatMap { $0.title }
+            let updatedBooksTitlesExpectation = [
+                "iOS Programming: The Big Nerd Ranch Guide - UPDATED",
+                "Swift Programming: The Big Nerd Ranch Guide - UPDATED"
+            ]
+            XCTAssertEqual(updatedBooksTitles.sort(), updatedBooksTitlesExpectation.sort())
+        } catch {
+            failingOn(error)
+        }
+    }
 
     func testFindFirst() {
         do {
