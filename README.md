@@ -48,18 +48,6 @@ For questions specific to the Core Data Stack, please
 
 
 
-## Deprecations
-<!-- GitHub does this "fun" thing where it omits section fragment IDs on
-mobile, so we provide our own ID to work around that. -->
-<a id="sec:deprecations"></a>
-### iOS 10.0 / macOS 10.12
-- **Deprecated:** The [CoreDataStack](./Sources/CoreDataStack.swift) class itself.
-    - **Replacement:** Use Apple's [NSPersistentContainer](https://developer.apple.com/reference/coredata/nspersistentcontainer) instead. The [Container Example](./Container Example/README.md) demonstrates how to use `NSPersistentContainer` with the BNR Core Data Stack.
-- **Deprecated:** The [CoreDataModelable](./Sources/CoreDataModelable.swift) protocol.
-    - **Replacement:** Use the type method [`NSManagedObject.entity()`](https://developer.apple.com/reference/coredata/nsmanagedobject/1640588-entity). Many of the convenience methods formerly available on `CoreDataModelable` are now offered by BNR Core Data Stack as extension methods on `NSManagedObject` as [`FetchHelpers`](./Sources/NSManagedObject+FetchHelpers.swift).
-
-
-
 ## Minimum Requirements
 ### Runtime:
 Apps using BNR Core Data Stack can be used on devices running these versions
@@ -216,3 +204,15 @@ CoreDataStack.constructSQLiteStack(
         }
     }
 ```
+
+
+
+## Deprecations
+<!-- GitHub does this "fun" thing where it omits section fragment IDs on
+mobile, so we provide our own ID to work around that. -->
+<a id="sec:deprecations"></a>
+### iOS 10.0 / macOS 10.12
+- **Deprecated:** The [CoreDataStack](./Sources/CoreDataStack.swift) class itself.
+    - **Replacement:** Use Apple's [NSPersistentContainer](https://developer.apple.com/reference/coredata/nspersistentcontainer) instead. The [Container Example](./Container Example/README.md) demonstrates how to use `NSPersistentContainer` with the BNR Core Data Stack.
+- **Deprecated:** The [CoreDataModelable](./Sources/CoreDataModelable.swift) protocol.
+    - **Replacement:** Use the type method [`NSManagedObject.entity()`](https://developer.apple.com/reference/coredata/nsmanagedobject/1640588-entity). Many of the convenience methods formerly available on `CoreDataModelable` are now offered by BNR Core Data Stack as extension methods on `NSManagedObject` as [`FetchHelpers`](./Sources/NSManagedObject+FetchHelpers.swift).
