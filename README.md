@@ -170,7 +170,7 @@ try moc.saveContextToStoreAndWait()
 Check out the [documentation!](http://bignerdranch.github.io/CoreDataStack/index.html)
 
 For more details on the design methodology,
-read [Introducing the Big Nerd Ranch Core Data Stack](https://www.bignerdranch.com/blog/introducing-the-big-nerd-ranch-core-data-stack/)
+read ["Introducing the Big Nerd Ranch Core Data Stack."](https://www.bignerdranch.com/blog/introducing-the-big-nerd-ranch-core-data-stack/)
 
 
 **Why "Stack"?**
@@ -200,7 +200,7 @@ For questions specific to the Core Data Stack, please
 
 
 ## Minimum Requirements
-### Runtime:
+### Running
 Apps using BNR Core Data Stack can be used on devices running these versions
 or later:
 
@@ -208,7 +208,7 @@ or later:
 - tvOS 9.0
 - iOS 8.0
 
-### Build Time:
+### Building
 To build an app using BNR Core Data Stack, you'll need:
 
 - Xcode 8.0
@@ -294,7 +294,7 @@ In your code, import the framework as `BNRCoreDataStack`.
 
 ## Contributing
 
-Please see our [guide to contributing to the CoreDataStack](https://github.com/bignerdranch/CoreDataStack/tree/master/.github/CONTRIBUTING.md)
+Please see our [guide to contributing to the CoreDataStack](https://github.com/bignerdranch/CoreDataStack/tree/master/.github/CONTRIBUTING.md).
 
 
 
