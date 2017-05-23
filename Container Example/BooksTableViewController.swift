@@ -79,12 +79,12 @@ class BooksTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "GenericReuseCell", for: indexPath)
 
         guard let sections = fetchedResultsController.sections else {
-            fatalError("Sections missing")
+            fatalError("FetchedResultsController \(fetchedResultsController) should have sections, but found nil")
         }
 
         let section = sections[indexPath.section]
         guard let itemsInSection = section.objects as? [Book] else {
-            fatalError("Missing items")
+            fatalError("Section \(indexPath.section) of FetchedResultsController \(fetchedResultsController) should have Book objects, but found: \(String(describing: section.objects))")
         }
 
         let book = itemsInSection[indexPath.row]
@@ -146,8 +146,10 @@ class BooksFetchedResultsControllerDelegate: NSObject, NSFetchedResultsControlle
         switch type {
         case .insert:
             tableView?.insertSections(IndexSet(integer: sectionIndex), with: .automatic)
+
         case .delete:
             tableView?.deleteSections(IndexSet(integer: sectionIndex), with: .automatic)
+
         case .move, .update:
             tableView?.reloadSections(IndexSet(integer: sectionIndex), with: .automatic)
         }
