@@ -145,8 +145,22 @@ Extension methods on `ManagedObjectContext` ensure
 saves happen on the right queue
 and make your life easier:
 
-  [src:frc]: ./Sources/FetchedResultsController.swift
-  [src:em]: ./Sources/EntityMonitor.swift
+```swift
+// Gotta catch 'em all
+let allBooks = try Book.allInContext(moc)
+
+// Or at least one of 'em
+let anyBook = try Book.findFirstInContext(moc)
+
+// Ah, forget it. Rocks fall, everyone dies.
+try Book.removeAllInContext(moc)
+
+
+// Blocking save, including up through parent contexts,
+// on the appropriate queue.
+try moc.saveContextToStoreAndWait()
+```
+
 
 
 ## Interested?
