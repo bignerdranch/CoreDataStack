@@ -98,13 +98,13 @@ contradicts the documentation, like this one:
 
 ```
 // Work around a bug in Xcode 7.0 and 7.1 when running on iOS 8 - updated objects
-// sometimes result in both an Update *and* and Insert call to didChangeObject,
+// sometimes result in both an Update *and* an Insert call to didChangeObject,
 // … (explanation continues) …
 ```
 
 
 ## Convenient store change listening
-Our `EntityMonitor<ManagedObjectType>`][src:em]
+Our `EntityMonitor<ManagedObjectType>`
 makes it easy to listen to all changes for a given `ManagedObjectType`:
 
 ```swift
