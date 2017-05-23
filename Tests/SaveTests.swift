@@ -208,8 +208,13 @@ class EmptyFRCDelegate: NSObject, NSFetchedResultsControllerDelegate {
         // nothing
     }
 
-    private func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: AnyObject,
-        at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+    private func controller(
+        _ controller: NSFetchedResultsController<NSFetchRequestResult>,
+        didChange anObject: AnyObject,
+        at indexPath: IndexPath?,
+        for type: NSFetchedResultsChangeType,
+        newIndexPath: IndexPath?
+    ) {
         // nothing
     }
 }

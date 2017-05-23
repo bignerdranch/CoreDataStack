@@ -291,15 +291,19 @@ import CoreData
             fatalError()
         }
 
-        func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
-                                didChange anObject: Any, at indexPath: IndexPath?,
-                                for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        func controller(
+            _ controller: NSFetchedResultsController<NSFetchRequestResult>,
+            didChange anObject: Any, at indexPath: IndexPath?,
+            for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?
+        ) {
             fatalError()
         }
 
-        func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
-                              didChange sectionInfo: NSFetchedResultsSectionInfo,
-                              atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        func controller(
+            _ controller: NSFetchedResultsController<NSFetchRequestResult>,
+            didChange sectionInfo: NSFetchedResultsSectionInfo,
+            atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType
+        ) {
             fatalError()
         }
 
@@ -327,18 +331,22 @@ import CoreData
             delegate?.fetchedResultsControllerDidChangeContent(owner)
         }
 
-        override func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
-                        didChange anObject: Any, at indexPath: IndexPath?,
-                        for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        override func controller(
+            _ controller: NSFetchedResultsController<NSFetchRequestResult>,
+            didChange anObject: Any, at indexPath: IndexPath?,
+            for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?
+        ) {
             guard let object = anObject as? Delegate.T else { return }
             guard let change = FetchedResultsObjectChange<Delegate.T>(object: object, indexPath: indexPath,
                                                                       changeType: type, newIndexPath: newIndexPath) else { return }
             delegate?.fetchedResultsController(owner, didChangeObject: change)
         }
 
-        override func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
-                                 didChange sectionInfo: NSFetchedResultsSectionInfo,
-                                 atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        override func controller(
+            _ controller: NSFetchedResultsController<NSFetchRequestResult>,
+            didChange sectionInfo: NSFetchedResultsSectionInfo,
+            atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType
+        ) {
             let change = FetchedResultsSectionChange<Delegate.T>(section: sectionInfo, index: sectionIndex, changeType: type)
             delegate?.fetchedResultsController(owner, didChangeSection: change)
         }

@@ -72,7 +72,10 @@ public typealias BatchContextCallback = (CoreDataStack.BatchContextResult) -> Vo
 
  # Working with Managed Object Contexts
  ## Private Persisting/Coordinator Connected Context
- This is the root level context with a `PrivateQueueConcurrencyType` for asynchronous saving to the `NSPersistentStore`. Fetching, Inserting, Deleting or Updating managed objects should occur on a child of this context rather than directly.
+ This is the root level context with a `PrivateQueueConcurrencyType`
+ for asynchronous saving to the `NSPersistentStore`.
+ Fetching, Inserting, Deleting or Updating managed objects
+ should occur on a child of this context rather than directly.
 
  ```swift
  myCoreDataStack.privateQueueContext
@@ -80,7 +83,15 @@ public typealias BatchContextCallback = (CoreDataStack.BatchContextResult) -> Vo
 
  ## Main Queue / UI Layer Context
 
- This is our `MainQueueConcurrencyType` context with its parent being the [private persisting context](#persisting_moc). This context should be used for any main queue or UI related tasks. Examples include setting up an `NSFetchedResultsController`, performing quick fetches, making UI related updates like a bookmark or favoriting an object. Performing a save() call on this context will automatically trigger a save on its parent via `NSNotification`.
+ This is our `MainQueueConcurrencyType` context
+ with its parent being the [private persisting context](#persisting_moc).
+ 
+ This context should be used for any main queue or UI related tasks.
+ Examples include setting up an `NSFetchedResultsController`,
+ performing quick fetches, making UI related updates like a bookmark
+ or favoriting an object.
+ 
+ Performing a save() call on this context will automatically trigger a save on its parent via `NSNotification`.
 
  ```swift
  myCoreDataStack.mainQueueContext
@@ -88,7 +99,12 @@ public typealias BatchContextCallback = (CoreDataStack.BatchContextResult) -> Vo
 
  ## Creating a Worker Context
 
- Calling `newChildContext()` will vend us a `PrivateQueueConcurrencyType` child context of the [main queue context](#main_moc). Useful for any longer running task, such as inserting or updating data from a web service. Calling save() on this managed object context will automatically trigger a save on its parent context via `NSNotification`.
+ Calling `newChildContext()` will vend us a `PrivateQueueConcurrencyType` child context of the [main queue context](#main_moc).
+ 
+ Useful for any longer running task, such as inserting or updating data from a web service.
+ 
+ Calling save() on this managed object context will automatically trigger a save
+ on its parent context via `NSNotification`.
 
  ```swift
  let workerContext = myCoreDataStack.newChildContext()
@@ -101,7 +117,12 @@ public typealias BatchContextCallback = (CoreDataStack.BatchContextResult) -> Vo
 
  ## Large Import Operation Context
 
- In most cases, offloading your longer running work to a [background worker context](#worker_moc) will be sufficient in alleviating performance woes. If you find yourself inserting or updating thousands of objects then perhaps opting for a stand alone managed object context with a discrete persistent store like so would be the best option:
+ In most cases, offloading your longer running work to a [background worker context](#worker_moc)
+ will be sufficient in alleviating performance woes.
+ If you find yourself inserting or updating thousands of objects,
+ then perhaps opting for a standalone managed object context
+ with a discrete persistent store would be the best option,
+ like so:
 
  ```swift
  myCoreDataStack.newBatchOperationContext() { result in
@@ -116,8 +137,11 @@ public typealias BatchContextCallback = (CoreDataStack.BatchContextResult) -> Vo
  ```
 
  ## Resetting The Stack
- At times it can be necessary to completely reset your Core Data store and remove the file from disk, for example when a user logs out of your application. An instance of `CoreDataStack` can be reset by using the function
- `resetStore(resetCallback: CoreDataStackStoreResetCallback)`.
+ At times it can be necessary to completely reset your Core Data store
+ and remove the file from disk,
+ for example, when a user logs out of your application.
+ An instance of `CoreDataStack` can be reset by using the function
+ `resetStore(resetCallback: CoreDataStackStoreResetCallback)`:
 
 
  ```swift

@@ -84,7 +84,8 @@ class BooksTableViewController: UITableViewController {
 
         let section = sections[indexPath.section]
         guard let itemsInSection = section.objects as? [Book] else {
-            fatalError("Section \(indexPath.section) of FetchedResultsController \(fetchedResultsController) should have Book objects, but found: \(String(describing: section.objects))")
+            fatalError("Section \(indexPath.section) of FetchedResultsController \(fetchedResultsController) should have Book objects, "
+                + "but found: \(String(describing: section.objects))")
         }
 
         let book = itemsInSection[indexPath.row]
