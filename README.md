@@ -21,9 +21,24 @@ both easier and safer to use Core Data. It does this by providing:
   [src:frc]: ./Sources/FetchedResultsController.swift
   [src:em]: ./Sources/EntityMonitor.swift
 
+[![Big Nerd Ranch](https://raw.githubusercontent.com/bignerdranch/CoreDataStack/master/Resources/logo.png)](http://bignerdranch.com)
+
 For more details on the design methodology see: [Introducing the Big Nerd Ranch Core Data Stack](https://www.bignerdranch.com/blog/introducing-the-big-nerd-ranch-core-data-stack/)
 
 For complete source documentation see: [Documentation](http://bignerdranch.github.io/CoreDataStack/index.html)
+
+
+## Support
+Big Nerd Ranch can [help you develop your app][bnr:dev],
+or [train you or your team][bnr:teach] in Swift, iOS, and more.
+We share what we learn here on GitHub and in [bookstores near you][bnr:books].
+
+  [bnr:dev]: https://www.bignerdranch.com/work/
+  [bnr:teach]: https://www.bignerdranch.com/training/
+  [bnr:books]: https://www.bignerdranch.com/books/
+
+For questions specific to the Core Data Stack, please
+[open an issue](https://github.com/bignerdranch/CoreDataStack/issues/new).
 
 
 ## Deprecations
@@ -258,15 +273,3 @@ CoreDataStack.constructSQLiteStack(withModelName: "MyModel", withStoreURL: store
 }
 
 ```
-
-## About
-
-[![Big Nerd Ranch](https://raw.githubusercontent.com/bignerdranch/CoreDataStack/master/Resources/logo.png)](http://bignerdranch.com)
-
-- We [Develop][develop] custom apps for clients around the world.
-- We [Teach][teach] immersive development bootcamps.
-- We [Write][write] best-selling Big Nerd Ranch Guides.
-
-[develop]: https://www.bignerdranch.com/we-develop/
-[teach]: https://www.bignerdranch.com/we-teach/
-[write]: https://www.bignerdranch.com/we-write/
