@@ -252,32 +252,54 @@ To validate that you are honoring all of the threading rules it's common to add 
 
 This will throw an exception if you happen to break a threading rule. For more on setting up Launch Arguments check out this [article by NSHipster](http://nshipster.com/launch-arguments-and-environment-variables/).
 
-## iCloud and iTunes Backup Considerations
 
-By default the CoreData store URL can be included in the backup of a device to both iCloud and local disk backups via iTunes. For sensitive information such as health records or other personally identifiable information, you should supply a `URL` to the constructor that has been flagged as excluded from backup.
 
-Example:
+## Excluding sensitive data from iCloud and iTunes backups
+The default store location will be backed up.
+If you're storing sensitive information such as health records,
+and perhaps if you're storing any personally identifiable information,
+you should exclude the store from backup by flagging the URL on disk:
 
 ```swift
-// Setup your URL
-let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-var storeFileURL = URL(string: "MyModel.sqlite", relativeTo: documentsDirectory)!
-do {
-    var resources = URLResourceValues()
-    resources.isExcludedFromBackup = true
-    try storeFileURL.setResourceValues(resources)
-} catch {
-    //handle error ...
-}
+/* EXAMPLE: EXCLUDING A FILE FROM BACKUP */
+var excludeFromBackup = URLResourceValues()
+excludeFromBackup.isExcludedFromBackup = true
 
-// Create your stack
-CoreDataStack.constructSQLiteStack(withModelName: "MyModel", withStoreURL: storeFileURL) { result in
-	switch result {
-    case .success(let stack):
-		// Use your new stack
-    case .failure(let error):
-        //handle error ...
+let someParentDirectoryURL: URL = …
+var storeFileURL = URL(
+    string: "MyModel.sqlite",
+    relativeTo: someParentDirectoryURL)!
+try! storeFileURL.setResourceValues(excludeFromBackup)
+```
+
+You then need to point your persistent container at that location:
+
+```swift
+/* EXAMPLE: AIMING YOUR CONTAINER AT A SPECIFIC URL */
+// Ensure parent directory exists
+try! FileManager.default.createDirectory(
+    at: storeFileURL.deletingLastPathComponent(),
+    withIntermediateDirectories: true)
+
+// Configure the persistent container to use the specific URL
+container.persistentStoreDescriptions = [
+    NSPersistentStoreDescription(url: storeFileURL),
+    ]
+```
+
+Prior to `NSPersistentContainer`, this would be done with Core Data Stack by:
+
+```
+/* EXAMPLE: DEPRECATED CORE DATA STACK WITH STORE URL */
+CoreDataStack.constructSQLiteStack(
+    withModelName: "MyModel",
+    withStoreURL: storeFileURL) { result in
+        switch result {
+        case .success(let stack):
+            // Use your new stack
+
+        case .failure(let error):
+            //handle error ...
+        }
     }
-}
-
 ```
