@@ -128,7 +128,7 @@ class BooksFetchedResultsControllerDelegate: NSObject, NSFetchedResultsControlle
                     newIndexPath: IndexPath?) {
         switch type {
         case .insert:
-            tableView?.insertRows(at: [indexPath!], with: .automatic)
+            tableView?.insertRows(at: [newIndexPath!], with: .automatic)
 
         case .delete:
             tableView?.deleteRows(at: [indexPath!], with: .automatic)
