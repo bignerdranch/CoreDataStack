@@ -27,10 +27,15 @@ For more details on the design methodology see: [Introducing the Big Nerd Ranch 
 
 For complete source documentation see: [Documentation](http://bignerdranch.github.io/CoreDataStack/index.html)
 
+**Why "Stack"?**
 Previously, the Core Data Stack provided a full, ready-made Core Data stack.
 Apple now provide that themselves in `NSPersistentContainer`,
 so we're free to focus on the other benefits listed above,
 and we have [deprecated][#sec:deprecations] our own stack in favor of Apple's.
+
+**Swift-Only:**
+Note that the Core Data Stack is intended to be used from Swift.
+Any use you can make of it from Objective-C is by luck, not design.
 
 
 
