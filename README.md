@@ -33,8 +33,8 @@ For complete source documentation see: [Documentation](http://bignerdranch.githu
 - **Deprecated:** The [CoreDataModelable](./Sources/CoreDataModelable.swift) protocol.
     - **Replacement:** Use the type method [`NSManagedObject.entity()`](https://developer.apple.com/reference/coredata/nsmanagedobject/1640588-entity). Many of the convenience methods formerly available on `CoreDataModelable` are now offered by BNR Core Data Stack as extension methods on `NSManagedObject` as [`FetchHelpers`](./Sources/NSManagedObject+FetchHelpers.swift).
 
-## Minimum Requirements
 
+## Minimum Requirements
 ### Runtime:
 - macOS 10.10
 - tvOS 9.0
@@ -44,8 +44,8 @@ For complete source documentation see: [Documentation](http://bignerdranch.githu
 - Xcode 8.0
 - Swift 3.0
 
-## Installation
 
+## Installation
 ### [Carthage]
 
 [Carthage]: https://github.com/Carthage/Carthage
@@ -62,6 +62,7 @@ Follow the current instructions in [Carthage's README][carthage-installation]
 for up to date installation instructions.
 
 [carthage-installation]: https://github.com/Carthage/Carthage/blob/master/README.md
+
 
 ### [CocoaPods]
 
@@ -80,6 +81,7 @@ use_frameworks!
 ```
 
 Then run `pod install`.
+
 
 ## <a id="usage"></a> Usage
 
