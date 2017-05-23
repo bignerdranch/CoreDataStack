@@ -5,17 +5,11 @@
 [![Build Status](https://travis-ci.org/bignerdranch/CoreDataStack.svg)](https://travis-ci.org/bignerdranch/CoreDataStack)
 
 
-The BNR Core Data Stack is a small framework, written in Swift, that makes it easy to quickly set up a multi-threading ready Core Data stack.
+The BNR Core Data Stack is a small framework, written in Swift, that provides a typesafe `FetchedResultsController<ManagedObjectType>` and allows easily subscribing to model changes through `EntityMonitor<ManagedObjectType>`.
 
 For more details on the design methodology see: [Introducing the Big Nerd Ranch Core Data Stack](https://www.bignerdranch.com/blog/introducing-the-big-nerd-ranch-core-data-stack/)
 
 For complete source documentation see: [Documentation](http://bignerdranch.github.io/CoreDataStack/index.html)
-
-## Deprecations
-
-With the introduction of Apple's [NSPersistentContainer](https://developer.apple.com/reference/coredata/nspersistentcontainer), in iOS 10/macOS 10.12, BNR has chosen to deprecate the [CoreDataStack](./Sources/CoreDataStack.swift) class. See [container example](./Container Example) for tips on using an `NSPersistentContainer`
-
-Apple has also added a type method [`entity()`](https://developer.apple.com/reference/coredata/nsmanagedobject/1640588-entity) to `NSManagedObject` allowing us to deprecate [CoreDataModelable](./Sources/CoreDataModelable.swift) and migrate many of those same convenience functions to an extension of [`NSManagedObject`](./Sources/NSManagedObject+FetchHelpers.swift).
 
 While Apple also [introduced some type safety](https://developer.apple.com/reference/coredata/nsfetchedresultscontroller/1622282-init) to their `NSFetchedResultsController`, we believe our [FetchedResultsController](./Sources/FetchedResultsController.swift) provides a better API by:
 
@@ -23,7 +17,14 @@ While Apple also [introduced some type safety](https://developer.apple.com/refer
 * providing a [type-safe delegate](./Sources/FetchedResultsController.swift#L74)
 * [guarding against invalid index paths](./Sources/FetchedResultsController.swift#L220) in Inserts, Deletes, Moves, and Updates
 
-Similarly our [EnittyMonitor](./Sources/EntityMonitor.swift) still serves a niche not covered by built in CoreData objects. See [Entity Monitor](#entity_monitor)
+Similarly our [EntityMonitor](./Sources/EntityMonitor.swift) still serves a niche not covered by built in CoreData objects. See [Entity Monitor](#entity_monitor)
+
+## Deprecations
+### iOS 10.0 / macOS 10.12
+- **Deprecated:** The [CoreDataStack](./Sources/CoreDataStack.swift) class itself.
+    - **Replacement:** Use Apple's [NSPersistentContainer](https://developer.apple.com/reference/coredata/nspersistentcontainer) instead. The [Container Example](./Container Example/) gives some tips on using an `NSPersistentContainer`.
+- **Deprecated:** The [CoreDataModelable](./Sources/CoreDataModelable.swift) protocol.
+    - **Replacement:** Use the type method [`NSManagedObject.entity()`](https://developer.apple.com/reference/coredata/nsmanagedobject/1640588-entity). Many of the convenience methods formerly available on `CoreDataModelable` are now offered by BNR Core Data Stack as extension methods on `NSManagedObject` as [`FetchHelpers`](./Sources/NSManagedObject+FetchHelpers.swift).
 
 ## Minimum Requirements
 
