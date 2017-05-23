@@ -7,25 +7,154 @@
 [![Big Nerd Ranch](https://raw.githubusercontent.com/bignerdranch/CoreDataStack/master/Resources/logo.png)](http://bignerdranch.com)
 
 
-The BNR Core Data Stack is a small framework, written in Swift, that makes it
-both easier and safer to use Core Data. It does this by providing:
+The BNR Core Data Stack is a small Swift framework
+that makes it both easier and safer to use Core Data.
 
-- [`FetchedResultsController<ManagedObjectType>`][src:frc] with:
-    - A delegate having matching `ManagedObjectType`
-    - Change events are an enum with associated data rather than a mess of
-      optionals you have to unpack yourself
-        - This includes workarounds for some misbehavior of Core Data that
-          contradicts the documentation.
-- An [`EntityMonitor<ManagedObjectType>`][src:em] that makes it easy to listen
-  to all changes for a given `ManagedObjectType`.
-- Extension methods on `ManagedObjectContext` that ensure saves happen on the right queue and that simplify various sorts of common interactions with the context.
+
+## A better fetched results controller delegate
+Our `FetchedResultsController<ManagedObjectType>`
+sends Swifty delegate messages, rather than a mess of optionals.
+
+Turn this:
+
+```swift
+func controller(
+    _ controller: NSFetchedResultsController<NSFetchRequestResult>,
+    didChange anObject: Any,
+    at indexPath: IndexPath?,
+    for type: NSFetchedResultsChangeType,
+    newIndexPath: IndexPath?
+) {
+    guard let book = anObject as? Book else {
+        preconditionFailure("Why is this thing an Any anyway? WTH!")
+    }
+
+    switch type {
+    case .insert:
+        guard let newIndexPath = newIndexPath else {
+            preconditionFailure("Insertion to nowheresville? WHY IS THIS OPTIONAL?")
+        }
+
+        print("We have a new book! \(book.title)")
+        tableView?.insertRows(at: [newIndexPath], with: .automatic)
+
+    case .delete:
+        guard let indexPath = indexPath else {
+            preconditionFailure("Deletion you say? Where? WHY IS THIS OPTIONAL?")
+        }
+
+        tableView?.deleteRows(at: [indexPath], with: .automatic)
+
+    case .move:
+        guard let newIndexPath = newIndexPath else {
+            preconditionFailure("It moved to NOWHERE! WHY IS THIS OPTIONAL?")
+        }
+        guard let indexPath = indexPath else {
+            preconditionFailure("It moved from NOWHERE?! WHY IS THIS OPTIONAL!")
+        }
+
+        tableView?.moveRow(at: indexPath, to: newIndexPath)
+
+    case .update:
+        guard let indexPath = indexPath else {
+            preconditionFailure("I give up! Remind me, why are we using Swift, again?")
+        }
+
+        tableView?.reloadRows(at: [indexPath!], with: .automatic)
+    }
+}
+```
+
+Into this:
+
+```swift
+func fetchedResultsController(
+    _ controller: FetchedResultsController<Book>,
+    didChangeObject change: FetchedResultsObjectChange<Book>
+) {
+    switch change {
+    case let .insert(book, indexPath):
+        print("Hey look, it's not an Any! A new book: \(book.title)")
+        tableView?.insertRows(at: [indexPath], with: .automatic)
+
+    case let .delete(_ /*book*/, indexPath):
+        print("A deletion, and it has a from-where? Finally!")
+        tableView?.deleteRows(at: [indexPath], with: .automatic)
+
+    case let .move(_ /*book*/, fromIndexPath, toIndexPath):
+        print("Whoah, wait, I actually HAVE index paths? Both of them? Yay!")
+        tableView?.moveRow(at: fromIndexPath, to: toIndexPath)
+
+    case let .update(_ /*book*/, indexPath):
+        print("It's almost like I'm actually using Swift and not Obj-C!")
+        tableView?.reloadRows(at: [indexPath], with: .automatic)
+    }
+}
+```
+
+As a bonus, you get our workarounds
+for some misbehavior of Core Data that
+contradicts the documentation, like this one:
+
+```
+// Work around a bug in Xcode 7.0 and 7.1 when running on iOS 8 - updated objects
+// sometimes result in both an Update *and* and Insert call to didChangeObject,
+// … (explanation continues) …
+```
+
+
+## Convenient store change listening
+Our `EntityMonitor<ManagedObjectType>`][src:em]
+makes it easy to listen to all changes for a given `ManagedObjectType`:
+
+```swift
+/* EXAMPLE: NOTIFYING WHEN A MOC SAVES AUTHOR CHANGES */
+let authorMonitor = EntityMonitor<Author>(context: moc, entity: authorEntityDescription, frequency: .onSave)
+let authorMonitorDelegate = AuthorMonitorDelegate()
+authorMonitor.setDelegate(authorMonitorDelegate)
+
+
+/* EXAMPLE: AUTHOR MONITOR DELEGATE */
+class AuthorMonitorDelegate: EntityMonitorDelegate {
+    func entityMonitorObservedInserts(
+        _ monitor: EntityMonitor<Author>,
+        entities: Set<Author>
+    ) {
+        print("inserted authors:", entities)
+    }
+
+    func entityMonitorObservedModifications(
+        _ monitor: EntityMonitor<Author>,
+        entities: Set<Author>
+    ) {
+        print("modified authors:", entities)
+    }
+
+    func entityMonitorObservedDeletions(
+        _ monitor: EntityMonitor<Author>,
+        entities: Set<Author>
+    ) {
+        print("deleted authors:", entities)
+    }
+}
+```
+
+
+## A friendlier managed object context
+Extension methods on `ManagedObjectContext` ensure
+saves happen on the right queue
+and make your life easier:
 
   [src:frc]: ./Sources/FetchedResultsController.swift
   [src:em]: ./Sources/EntityMonitor.swift
 
-For more details on the design methodology see: [Introducing the Big Nerd Ranch Core Data Stack](https://www.bignerdranch.com/blog/introducing-the-big-nerd-ranch-core-data-stack/)
 
-For complete source documentation see: [Documentation](http://bignerdranch.github.io/CoreDataStack/index.html)
+## Interested?
+Check out the [documentation!](http://bignerdranch.github.io/CoreDataStack/index.html)
+
+For more details on the design methodology,
+read [Introducing the Big Nerd Ranch Core Data Stack](https://www.bignerdranch.com/blog/introducing-the-big-nerd-ranch-core-data-stack/)
+
 
 **Why "Stack"?**
 Previously, the Core Data Stack provided a full, ready-made Core Data stack.
