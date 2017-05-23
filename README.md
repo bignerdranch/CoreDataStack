@@ -344,7 +344,7 @@ container.persistentStoreDescriptions = [
 
 Prior to `NSPersistentContainer`, this would be done with Core Data Stack by:
 
-```
+```swift
 /* EXAMPLE: DEPRECATED CORE DATA STACK WITH STORE URL */
 CoreDataStack.constructSQLiteStack(
     withModelName: "MyModel",
