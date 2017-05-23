@@ -27,6 +27,11 @@ For more details on the design methodology see: [Introducing the Big Nerd Ranch 
 
 For complete source documentation see: [Documentation](http://bignerdranch.github.io/CoreDataStack/index.html)
 
+Previously, the Core Data Stack provided a full, ready-made Core Data stack.
+Apple now provide that themselves in `NSPersistentContainer`,
+so we're free to focus on the other benefits listed above,
+and we have [deprecated][#sec:deprecations] our own stack in favor of Apple's.
+
 
 ## Support
 Big Nerd Ranch can [help you develop your app][bnr:dev],
@@ -42,6 +47,9 @@ For questions specific to the Core Data Stack, please
 
 
 ## Deprecations
+<!-- GitHub does this "fun" thing where it omits section fragment IDs on
+mobile, so we provide our own ID to work around that. -->
+<a id="sec:deprecations"></a>
 ### iOS 10.0 / macOS 10.12
 - **Deprecated:** The [CoreDataStack](./Sources/CoreDataStack.swift) class itself.
     - **Replacement:** Use Apple's [NSPersistentContainer](https://developer.apple.com/reference/coredata/nspersistentcontainer) instead. The [Container Example](./Container Example/README.md) demonstrates how to use `NSPersistentContainer` with the BNR Core Data Stack.
