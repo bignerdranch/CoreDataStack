@@ -65,45 +65,6 @@ To build an app using BNR Core Data Stack, you'll need:
 
 
 
-## Installation
-### Installing with [Carthage]
-
-[Carthage]: https://github.com/Carthage/Carthage
-
-Add the following to your Cartfile:
-
-```ruby
-github "BigNerdRanch/CoreDataStack"
-```
-
-Then run `carthage update`.
-
-Follow the current instructions in [Carthage's README][carthage-installation]
-for up to date installation instructions.
-
-[carthage-installation]: https://github.com/Carthage/Carthage/blob/master/README.md
-
-
-### Installing with [CocoaPods]
-
-[CocoaPods]: http://cocoapods.org
-
-Add the following to your [Podfile](http://guides.cocoapods.org/using/the-podfile.html):
-
-```ruby
-pod 'BNRCoreDataStack'
-```
-
-You will also need to make sure you're opting into using frameworks:
-
-```ruby
-use_frameworks!
-```
-
-Then run `pod install`.
-
-
-
 ## <a id="usage"></a> Usage
 
 ### Type Safe Monitors
@@ -135,6 +96,48 @@ let anyBook = try Book.findFirstInContext(moc)
 try Book.removeAllInContext(moc)
 ```
 
+
+
+## Installation
+### Installing with [Carthage]
+
+[Carthage]: https://github.com/Carthage/Carthage
+
+Add the following to your Cartfile:
+
+```ruby
+github "BigNerdRanch/CoreDataStack"
+```
+
+Then run `carthage update`.
+
+In your code, import the framework as `CoreDataStack`.
+
+Follow the current instructions in [Carthage's README][carthage-installation]
+for up to date installation instructions.
+
+[carthage-installation]: https://github.com/Carthage/Carthage/blob/master/README.md
+
+
+### Installing with [CocoaPods]
+
+[CocoaPods]: http://cocoapods.org
+
+Add the following to your [Podfile](http://guides.cocoapods.org/using/the-podfile.html):
+
+```ruby
+pod 'BNRCoreDataStack'
+```
+
+You will also need to make sure you're opting into using frameworks:
+
+```ruby
+use_frameworks!
+```
+
+Then run `pod install`.
+
+In your code, import the framework as `BNRCoreDataStack`.
 
 
 
