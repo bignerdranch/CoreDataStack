@@ -33,6 +33,7 @@ so we're free to focus on the other benefits listed above,
 and we have [deprecated][#sec:deprecations] our own stack in favor of Apple's.
 
 
+
 ## Support
 Big Nerd Ranch can [help you develop your app][bnr:dev],
 or [train you or your team][bnr:teach] in Swift, iOS, and more.
@@ -46,6 +47,7 @@ For questions specific to the Core Data Stack, please
 [open an issue](https://github.com/bignerdranch/CoreDataStack/issues/new).
 
 
+
 ## Deprecations
 <!-- GitHub does this "fun" thing where it omits section fragment IDs on
 mobile, so we provide our own ID to work around that. -->
@@ -57,19 +59,26 @@ mobile, so we provide our own ID to work around that. -->
     - **Replacement:** Use the type method [`NSManagedObject.entity()`](https://developer.apple.com/reference/coredata/nsmanagedobject/1640588-entity). Many of the convenience methods formerly available on `CoreDataModelable` are now offered by BNR Core Data Stack as extension methods on `NSManagedObject` as [`FetchHelpers`](./Sources/NSManagedObject+FetchHelpers.swift).
 
 
+
 ## Minimum Requirements
 ### Runtime:
+Apps using BNR Core Data Stack can be used on devices running these versions
+or later:
+
 - macOS 10.10
 - tvOS 9.0
 - iOS 8.0
 
 ### Build Time:
+To build an app using BNR Core Data Stack, you'll need:
+
 - Xcode 8.0
 - Swift 3.0
 
 
+
 ## Installation
-### [Carthage]
+### Installing with [Carthage]
 
 [Carthage]: https://github.com/Carthage/Carthage
 
@@ -87,7 +96,7 @@ for up to date installation instructions.
 [carthage-installation]: https://github.com/Carthage/Carthage/blob/master/README.md
 
 
-### [CocoaPods]
+### Installing with [CocoaPods]
 
 [CocoaPods]: http://cocoapods.org
 
@@ -104,6 +113,7 @@ use_frameworks!
 ```
 
 Then run `pod install`.
+
 
 
 ## <a id="usage"></a> Usage
@@ -137,112 +147,15 @@ let anyBook = try Book.findFirstInContext(moc)
 try Book.removeAllInContext(moc)
 ```
 
-### Constructing Your Stack
-
-#### Import Framework
-
-via: Carthage
-
-```swift
-import CoreDataStack
-```
-
-or via CocoaPods
-
-```swift
-import BNRCoreDataStack
-```
-
-#### <a id="sqlite_construct"></a> Standard SQLite Backed
-
-```swift
-CoreDataStack.constructSQLiteStack(withModelName: "TestModel") { result in
-	switch result {
-	case .success(let stack):
-		self.myCoreDataStack = stack
-		print("Success")
-	case .failure(let error):
-		print(error)
-	}
-}
-```
-
-#### In-Memory Only
-
-```swift
-do {
-	myCoreDataStack = try CoreDataStack.constructInMemoryStack(withModelName: "TestModel")
-} catch {
-	print(error)
-}
-```
-
-### Working with Managed Object Contexts
-
-#### <a id="persisting_moc"></a> Private Persisting/Coordinator Connected Context
-
-This is the root level context with a `PrivateQueueConcurrencyType` for asynchronous saving to the `NSPersistentStore`. Fetching, Inserting, Deleting or Updating managed objects should occur on a child of this context rather than directly.
-
-```swift
-myCoreDataStack.privateQueueContext
-```
-
-#### <a id="main_moc"></a> Main Queue / UI Layer Context
-
-This is our `MainQueueConcurrencyType` context with its parent being the [private persisting context](#persisting_moc). This context should be used for any main queue or UI related tasks. Examples include setting up an `NSFetchedResultsController`, performing quick fetches, making UI related updates like a bookmark or favoriting an object. Performing a save() call on this context will automatically trigger a save on its parent via `NSNotification`.
-
-```swift
-myCoreDataStack.mainQueueContext
-``` 
-
-#### <a id="worker_moc"></a> Creating a Worker Context
-
-Calling `newChildContext()` will vend us a `PrivateQueueConcurrencyType` child context of the [main queue context](#main_moc). Useful for any longer running task, such as inserting or updating data from a web service. Calling save() on this managed object context will automatically trigger a save on its parent context via `NSNotification`.
-
-```swift
-let workerContext = myCoreDataStack.newChildContext()
-workerContext.performBlock() {
-    // fetch data from web-service
-    // update local data
-    workerContext.saveContext()
-}
-```
-
-#### Large Import Operation Context
-
-In most cases, offloading your longer running work to a [background worker context](#worker_moc) will be sufficient in alleviating performance woes. If you find yourself inserting or updating thousands of objects then perhaps opting for a stand alone managed object context with a discrete persistent store like so would be the best option:
-
-```swift
-myCoreDataStack.newBatchOperationContext() { result in
-    switch result {
-    case .success(let batchContext):
-        // my big import operation
-    case .failure(let error):
-        print(error)
-    }
-}
-```
-
-### Resetting The Stack
-
-At times it can be necessary to completely reset your Core Data store and remove the file from disk, for example when a user logs out of your application. An instance of `CoreDataStack` can be reset by using the function 
-`resetStore(resetCallback: CoreDataStackStoreResetCallback)`.
 
 
-```swift
-myCoreDataStack.resetStore() { result in
-    switch result {
-    case .success:
-        // proceed with fresh Core Data Stack
-    case .failure(let error):
-        print(error)
-    }
-}
-```
 
 ## Contributing
 
 Please see our [guide to contributing to the CoreDataStack](https://github.com/bignerdranch/CoreDataStack/tree/master/.github/CONTRIBUTING.md)
+
+
+
 
 ## Debugging Tips
 
