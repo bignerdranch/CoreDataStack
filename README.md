@@ -4,6 +4,8 @@
 [![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](./LICENSE)
 [![Build Status](https://travis-ci.org/bignerdranch/CoreDataStack.svg)](https://travis-ci.org/bignerdranch/CoreDataStack)
 
+[![Big Nerd Ranch](https://raw.githubusercontent.com/bignerdranch/CoreDataStack/master/Resources/logo.png)](http://bignerdranch.com)
+
 
 The BNR Core Data Stack is a small framework, written in Swift, that makes it
 both easier and safer to use Core Data. It does this by providing:
@@ -20,8 +22,6 @@ both easier and safer to use Core Data. It does this by providing:
 
   [src:frc]: ./Sources/FetchedResultsController.swift
   [src:em]: ./Sources/EntityMonitor.swift
-
-[![Big Nerd Ranch](https://raw.githubusercontent.com/bignerdranch/CoreDataStack/master/Resources/logo.png)](http://bignerdranch.com)
 
 For more details on the design methodology see: [Introducing the Big Nerd Ranch Core Data Stack](https://www.bignerdranch.com/blog/introducing-the-big-nerd-ranch-core-data-stack/)
 
