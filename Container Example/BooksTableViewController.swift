@@ -89,6 +89,7 @@ class BooksTableViewController: UITableViewController {
 
         let book = itemsInSection[indexPath.row]
         cell.textLabel?.text = book.title
+        cell.isUserInteractionEnabled = false
 
         return cell
     }
