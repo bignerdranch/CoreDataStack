@@ -11,7 +11,7 @@ import Foundation
 import CoreData
 
 /**
- Protocol extension to `NSFetchRequestResult` that allow for convenience
+ Extends `NSFetchRequestResult` with
  methods that make fetching, inserting, deleting, and change management easier.
  */
 @available(iOS, introduced: 10.0)
