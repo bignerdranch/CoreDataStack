@@ -76,7 +76,7 @@ class BooksTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "GenericReuseCell") ?? UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: "GenericReuseCell", for: indexPath)
 
         guard let sections = fetchedResultsController.sections else {
             fatalError("Sections missing")
