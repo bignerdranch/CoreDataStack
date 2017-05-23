@@ -45,6 +45,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func seedInitialData() {
         let moc = persistentContainer.newBackgroundContext()
         moc.performAndWait() {
+            // `countInContext` is a convenience extension
+            // provided by BNR Core Data Stack.
             if try! Book.countInContext(moc) == 0 {
                 let books = StubbedBookData.books
                 for bookTitle in books {
