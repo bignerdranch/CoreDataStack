@@ -5,19 +5,26 @@
 [![Build Status](https://travis-ci.org/bignerdranch/CoreDataStack.svg)](https://travis-ci.org/bignerdranch/CoreDataStack)
 
 
-The BNR Core Data Stack is a small framework, written in Swift, that provides a typesafe `FetchedResultsController<ManagedObjectType>` and allows easily subscribing to model changes through `EntityMonitor<ManagedObjectType>`.
+The BNR Core Data Stack is a small framework, written in Swift, that makes it
+both easier and safer to use Core Data. It does this by providing:
+
+- [`FetchedResultsController<ManagedObjectType>`][src:frc] with:
+    - A delegate having matching `ManagedObjectType`
+    - Change events are an enum with associated data rather than a mess of
+      optionals you have to unpack yourself
+        - This includes workarounds for some misbehavior of Core Data that
+          contradicts the documentation.
+- An [`EntityMonitor<ManagedObjectType>`][src:em] that makes it easy to listen
+  to all changes for a given `ManagedObjectType`.
+- Extension methods on `ManagedObjectContext` that ensure saves happen on the right queue and that simplify various sorts of common interactions with the context.
+
+  [src:frc]: ./Sources/FetchedResultsController.swift
+  [src:em]: ./Sources/EntityMonitor.swift
 
 For more details on the design methodology see: [Introducing the Big Nerd Ranch Core Data Stack](https://www.bignerdranch.com/blog/introducing-the-big-nerd-ranch-core-data-stack/)
 
 For complete source documentation see: [Documentation](http://bignerdranch.github.io/CoreDataStack/index.html)
 
-While Apple also [introduced some type safety](https://developer.apple.com/reference/coredata/nsfetchedresultscontroller/1622282-init) to their `NSFetchedResultsController`, we believe our [FetchedResultsController](./Sources/FetchedResultsController.swift) provides a better API by:
-
-* including type-safety in our [section info](./Sources/FetchedResultsController.swift#L121)
-* providing a [type-safe delegate](./Sources/FetchedResultsController.swift#L74)
-* [guarding against invalid index paths](./Sources/FetchedResultsController.swift#L220) in Inserts, Deletes, Moves, and Updates
-
-Similarly our [EntityMonitor](./Sources/EntityMonitor.swift) still serves a niche not covered by built in CoreData objects. See [Entity Monitor](#entity_monitor)
 
 ## Deprecations
 ### iOS 10.0 / macOS 10.12
