@@ -122,11 +122,13 @@ class BooksFetchedResultsControllerDelegate: NSObject, NSFetchedResultsControlle
         tableView?.endUpdates()
     }
 
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
-                    didChange anObject: Any,
-                    at indexPath: IndexPath?,
-                    for type: NSFetchedResultsChangeType,
-                    newIndexPath: IndexPath?) {
+    func controller(
+        _ controller: NSFetchedResultsController<NSFetchRequestResult>,
+        didChange anObject: Any,
+        at indexPath: IndexPath?,
+        for type: NSFetchedResultsChangeType,
+        newIndexPath: IndexPath?
+    ) {
         switch type {
         case .insert:
             tableView?.insertRows(at: [newIndexPath!], with: .automatic)
