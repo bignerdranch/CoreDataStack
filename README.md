@@ -11,7 +11,7 @@ The BNR Core Data Stack is a small Swift framework
 that makes it both easier and safer to use Core Data.
 
 
-## A better fetched results controller delegate
+## A better fetched results controller and delegate
 Our `FetchedResultsController<ManagedObjectType>`
 sends Swifty delegate messages, rather than a mess of optionals.
 
@@ -92,7 +92,10 @@ func fetchedResultsController(
 }
 ```
 
-As a bonus, you get our workarounds
+It also has properly typed sections and subscripting operators.
+Because, we are writing Swift, are we not?
+
+As a further bonus, you get our workarounds
 for some misbehavior of Core Data that
 contradicts the documentation, like this one:
 
