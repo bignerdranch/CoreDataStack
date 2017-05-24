@@ -16,15 +16,14 @@ import CoreDataStack
 class BooksTableViewController: UITableViewController {
 
     private var persistentContainer: NSPersistentContainer!
-    private lazy var fetchedResultsController: NSFetchedResultsController<Book> = {
+    private lazy var fetchedResultsController: FetchedResultsController<Book> = {
         let fetchRequest = NSFetchRequest<Book>()
         fetchRequest.entity = Book.entity()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest,
-                                             managedObjectContext: self.persistentContainer.viewContext,
-                                             sectionNameKeyPath: "firstInitial",
-                                             cacheName: nil)
-        frc.delegate = self.frcDelegate
+        let frc = FetchedResultsController<Book>(fetchRequest: fetchRequest,
+                                                 managedObjectContext: self.persistentContainer.viewContext,
+                                                 sectionNameKeyPath: "firstInitial")
+        frc.setDelegate(self.frcDelegate)
         return frc
     }()
 
@@ -72,7 +71,7 @@ class BooksTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return fetchedResultsController.sections?[section].numberOfObjects ?? 0
+        return fetchedResultsController.sections?[section].objects.count ?? 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -83,12 +82,7 @@ class BooksTableViewController: UITableViewController {
         }
 
         let section = sections[indexPath.section]
-        guard let itemsInSection = section.objects as? [Book] else {
-            fatalError("Section \(indexPath.section) of FetchedResultsController \(fetchedResultsController) should have Book objects, "
-                + "but found: \(String(describing: section.objects))")
-        }
-
-        let book = itemsInSection[indexPath.row]
+        let book = section.objects[indexPath.row]
         cell.textLabel?.text = book.title
         cell.isUserInteractionEnabled = false
 
@@ -104,7 +98,7 @@ class BooksTableViewController: UITableViewController {
     }
 }
 
-class BooksFetchedResultsControllerDelegate: NSObject, NSFetchedResultsControllerDelegate {
+class BooksFetchedResultsControllerDelegate: NSObject, FetchedResultsControllerDelegate {
 
     private weak var tableView: UITableView?
 
@@ -114,48 +108,43 @@ class BooksFetchedResultsControllerDelegate: NSObject, NSFetchedResultsControlle
         self.tableView = tableView
     }
 
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+    func fetchedResultsControllerDidPerformFetch(_ controller: FetchedResultsController<Book>) {
+        tableView?.reloadData()
+    }
+
+    func fetchedResultsControllerWillChangeContent(_ controller: FetchedResultsController<Book>) {
         tableView?.beginUpdates()
     }
 
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+    func fetchedResultsControllerDidChangeContent(_ controller: FetchedResultsController<Book>) {
         tableView?.endUpdates()
     }
 
-    func controller(
-        _ controller: NSFetchedResultsController<NSFetchRequestResult>,
-        didChange anObject: Any,
-        at indexPath: IndexPath?,
-        for type: NSFetchedResultsChangeType,
-        newIndexPath: IndexPath?
-    ) {
-        switch type {
-        case .insert:
-            tableView?.insertRows(at: [newIndexPath!], with: .automatic)
+    func fetchedResultsController(_ controller: FetchedResultsController<Book>, didChangeObject change: FetchedResultsObjectChange<Book>) {
+        guard let tableView = tableView else { return }
+        switch change {
+        case let .insert(_, indexPath):
+            tableView.insertRows(at: [indexPath], with: .automatic)
 
-        case .delete:
-            tableView?.deleteRows(at: [indexPath!], with: .automatic)
+        case let .delete(_, indexPath):
+            tableView.deleteRows(at: [indexPath], with: .automatic)
 
-        case .move:
-            tableView?.moveRow(at: indexPath!, to: newIndexPath!)
+        case let .move(_, fromIndexPath, toIndexPath):
+            tableView.moveRow(at: fromIndexPath, to: toIndexPath)
 
-        case .update:
-            tableView?.reloadRows(at: [indexPath!], with: .automatic)
+        case let .update(_, indexPath):
+            tableView.reloadRows(at: [indexPath], with: .automatic)
         }
     }
 
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
-                    didChange sectionInfo: NSFetchedResultsSectionInfo,
-                    atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-        switch type {
-        case .insert:
-            tableView?.insertSections(IndexSet(integer: sectionIndex), with: .automatic)
+    func fetchedResultsController(_ controller: FetchedResultsController<Book>, didChangeSection change: FetchedResultsSectionChange<Book>) {
+        guard let tableView = tableView else { return }
+        switch change {
+        case let .insert(_, index):
+            tableView.insertSections(IndexSet(integer: index), with: .automatic)
 
-        case .delete:
-            tableView?.deleteSections(IndexSet(integer: sectionIndex), with: .automatic)
-
-        case .move, .update:
-            tableView?.reloadSections(IndexSet(integer: sectionIndex), with: .automatic)
+        case let .delete(_, index):
+            tableView.deleteSections(IndexSet(integer: index), with: .automatic)
         }
     }
 }
