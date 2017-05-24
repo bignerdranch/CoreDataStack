@@ -1,7 +1,20 @@
 disabled_rules:
+  # We have documented what we intend documented.
   - valid_docs
+
   - conditional_binding_cascade
   - empty_parentheses_with_trailing_closure
+
+  # Prevent griping about: let _ = …
+  # Having the |let| makes giving it a name in debugging easier.
+  - redundant_discardable_let
+
+  # Prevent griping about: let _ = …
+  # Having the |let| makes giving it a name in debugging easier,
+  # plus, it phrases it as a positive test rather than a negative one,
+  # which is especially valuable in an effectively
+  # already-negated-once guard clause.
+  - unused_optional_binding
 
 included:
 

@@ -153,6 +153,7 @@ private class BaseEntityMonitorDelegate<T: NSManagedObject>: NSObject where T: N
 
     final func removeObservers() {
         NotificationCenter.default.removeObserver(self)
+        // swiftlint:disable:previous notification_center_detachment
     }
 
     @objc final func evaluateChangeNotification(_ notification: Notification) {

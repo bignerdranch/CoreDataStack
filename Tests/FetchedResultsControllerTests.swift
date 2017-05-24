@@ -23,13 +23,17 @@ class SampleFetchedResultsControllerDelegate: FetchedResultsControllerDelegate {
     var didChangeContentCount = 0
     var didPerformFetchCount = 0
 
-    func fetchedResultsController(_ controller: FetchedResultsController<Book>,
-        didChangeObject change: FetchedResultsObjectChange<Book>) {
+    func fetchedResultsController(
+        _ controller: FetchedResultsController<Book>,
+        didChangeObject change: FetchedResultsObjectChange<Book>
+    ) {
             didChangeObjectCalls.append(change)
     }
 
-    func fetchedResultsController(_ controller: FetchedResultsController<Book>,
-        didChangeSection change: FetchedResultsSectionChange<Book>) {
+    func fetchedResultsController(
+        _ controller: FetchedResultsController<Book>,
+        didChangeSection change: FetchedResultsSectionChange<Book>
+    ) {
             didChangeSectionCalls.append(change)
     }
 

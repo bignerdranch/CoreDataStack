@@ -11,7 +11,7 @@ import Swift
 
 extension NSManagedObjectContext {
     /**
-     Synchronously exexcutes a given function on the receiver’s queue.
+     Synchronously executes a given function on the receiver’s queue.
 
      You use this method to safely address managed objects on a concurrent
      queue.

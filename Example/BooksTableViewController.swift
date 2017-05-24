@@ -119,25 +119,29 @@ class BooksFetchedResultsControllerDelegate: FetchedResultsControllerDelegate {
         tableView?.endUpdates()
     }
 
-    func fetchedResultsController(_ controller: FetchedResultsController<Book>,
-        didChangeObject change: FetchedResultsObjectChange<Book>) {
-            switch change {
-            case let .insert(_, indexPath):
-                tableView?.insertRows(at: [indexPath], with: .automatic)
+    func fetchedResultsController(
+        _ controller: FetchedResultsController<Book>,
+        didChangeObject change: FetchedResultsObjectChange<Book>
+    ) {
+        switch change {
+        case let .insert(_, indexPath):
+            tableView?.insertRows(at: [indexPath], with: .automatic)
 
-            case let .delete(_, indexPath):
-                tableView?.deleteRows(at: [indexPath], with: .automatic)
+        case let .delete(_, indexPath):
+            tableView?.deleteRows(at: [indexPath], with: .automatic)
 
-            case let .move(_, fromIndexPath, toIndexPath):
-                tableView?.moveRow(at: fromIndexPath, to: toIndexPath)
+        case let .move(_, fromIndexPath, toIndexPath):
+            tableView?.moveRow(at: fromIndexPath, to: toIndexPath)
 
-            case let .update(_, indexPath):
-                tableView?.reloadRows(at: [indexPath], with: .automatic)
-            }
+        case let .update(_, indexPath):
+            tableView?.reloadRows(at: [indexPath], with: .automatic)
+        }
     }
 
-    func fetchedResultsController(_ controller: FetchedResultsController<Book>,
-        didChangeSection change: FetchedResultsSectionChange<Book>) {
+    func fetchedResultsController(
+        _ controller: FetchedResultsController<Book>,
+        didChangeSection change: FetchedResultsSectionChange<Book>
+    ) {
             switch change {
             case let .insert(_, index):
                 tableView?.insertSections(IndexSet(integer: index), with: .automatic)

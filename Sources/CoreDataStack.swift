@@ -26,6 +26,135 @@ public typealias BatchContextCallback = (CoreDataStack.BatchContextResult) -> Vo
  * A method for spawning many background worker contexts that are children of the main queue context
 
  Calling `save()` on any `NSMangedObjectContext` belonging to the stack will automatically bubble the changes all the way to the `NSPersistentStore`
+
+
+ # Constructing Your Stack
+
+ ## Import Framework
+
+ via: Carthage
+
+ ```swift
+ import CoreDataStack
+ ```
+
+ or via CocoaPods
+
+ ```swift
+ import BNRCoreDataStack
+ ```
+
+ ## Standard SQLite Backed
+
+ ```
+ CoreDataStack.constructSQLiteStack(withModelName: "TestModel") { result in
+	switch result {
+	case .success(let stack):
+         self.myCoreDataStack = stack
+         print("Success")
+
+	case .failure(let error):
+         print(error)
+	}
+ }
+ ```
+
+ ## In-Memory Only
+
+ ```swift
+ do {
+	myCoreDataStack = try CoreDataStack.constructInMemoryStack(
+         withModelName: "TestModel")
+ } catch {
+	print(error)
+ }
+ ```
+
+ # Working with Managed Object Contexts
+ ## Private Persisting/Coordinator Connected Context
+ This is the root level context with a `PrivateQueueConcurrencyType`
+ for asynchronous saving to the `NSPersistentStore`.
+ Fetching, Inserting, Deleting or Updating managed objects
+ should occur on a child of this context rather than directly.
+
+ ```swift
+ myCoreDataStack.privateQueueContext
+ ```
+
+ ## Main Queue / UI Layer Context
+
+ This is our `MainQueueConcurrencyType` context
+ with its parent being the [private persisting context](#persisting_moc).
+ 
+ This context should be used for any main queue or UI related tasks.
+ Examples include setting up an `NSFetchedResultsController`,
+ performing quick fetches, making UI related updates like a bookmark
+ or favoriting an object.
+ 
+ Performing a save() call on this context will automatically trigger a save on its parent via `NSNotification`.
+
+ ```swift
+ myCoreDataStack.mainQueueContext
+ ```
+
+ ## Creating a Worker Context
+
+ Calling `newChildContext()` will vend us a `PrivateQueueConcurrencyType` child context of the [main queue context](#main_moc).
+ 
+ Useful for any longer running task, such as inserting or updating data from a web service.
+ 
+ Calling save() on this managed object context will automatically trigger a save
+ on its parent context via `NSNotification`.
+
+ ```swift
+ let workerContext = myCoreDataStack.newChildContext()
+ workerContext.performBlock() {
+     // fetch data from web-service
+     // update local data
+     workerContext.saveContext()
+ }
+ ```
+
+ ## Large Import Operation Context
+
+ In most cases, offloading your longer running work to a [background worker context](#worker_moc)
+ will be sufficient in alleviating performance woes.
+ If you find yourself inserting or updating thousands of objects,
+ then perhaps opting for a standalone managed object context
+ with a discrete persistent store would be the best option,
+ like so:
+
+ ```swift
+ myCoreDataStack.newBatchOperationContext() { result in
+     switch result {
+     case .success(let batchContext):
+         // my big import operation
+
+     case let .failure(error):
+         print(error)
+     }
+ }
+ ```
+
+ ## Resetting The Stack
+ At times it can be necessary to completely reset your Core Data store
+ and remove the file from disk,
+ for example, when a user logs out of your application.
+ An instance of `CoreDataStack` can be reset by using the function
+ `resetStore(resetCallback: CoreDataStackStoreResetCallback)`:
+
+
+ ```swift
+ myCoreDataStack.resetStore() { result in
+     switch result {
+     case .success:
+         // proceed with fresh Core Data Stack
+
+     case let .failure(error):
+         print(error)
+     }
+ }
+ ```
  */
 @available(iOS, introduced: 8.0, deprecated: 10.0, message: "Use NSPersistentContainer")
 @available(OSX, introduced: 10.10, deprecated: 10.12, message: "Use NSPersistentContainer")

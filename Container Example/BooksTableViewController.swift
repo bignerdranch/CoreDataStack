@@ -76,19 +76,21 @@ class BooksTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "GenericReuseCell") ?? UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: "GenericReuseCell", for: indexPath)
 
         guard let sections = fetchedResultsController.sections else {
-            fatalError("Sections missing")
+            fatalError("FetchedResultsController \(fetchedResultsController) should have sections, but found nil")
         }
 
         let section = sections[indexPath.section]
         guard let itemsInSection = section.objects as? [Book] else {
-            fatalError("Missing items")
+            fatalError("Section \(indexPath.section) of FetchedResultsController \(fetchedResultsController) should have Book objects, "
+                + "but found: \(String(describing: section.objects))")
         }
 
         let book = itemsInSection[indexPath.row]
         cell.textLabel?.text = book.title
+        cell.isUserInteractionEnabled = false
 
         return cell
     }
@@ -120,14 +122,16 @@ class BooksFetchedResultsControllerDelegate: NSObject, NSFetchedResultsControlle
         tableView?.endUpdates()
     }
 
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
-                    didChange anObject: Any,
-                    at indexPath: IndexPath?,
-                    for type: NSFetchedResultsChangeType,
-                    newIndexPath: IndexPath?) {
+    func controller(
+        _ controller: NSFetchedResultsController<NSFetchRequestResult>,
+        didChange anObject: Any,
+        at indexPath: IndexPath?,
+        for type: NSFetchedResultsChangeType,
+        newIndexPath: IndexPath?
+    ) {
         switch type {
         case .insert:
-            tableView?.insertRows(at: [indexPath!], with: .automatic)
+            tableView?.insertRows(at: [newIndexPath!], with: .automatic)
 
         case .delete:
             tableView?.deleteRows(at: [indexPath!], with: .automatic)
@@ -146,8 +150,10 @@ class BooksFetchedResultsControllerDelegate: NSObject, NSFetchedResultsControlle
         switch type {
         case .insert:
             tableView?.insertSections(IndexSet(integer: sectionIndex), with: .automatic)
+
         case .delete:
             tableView?.deleteSections(IndexSet(integer: sectionIndex), with: .automatic)
+
         case .move, .update:
             tableView?.reloadSections(IndexSet(integer: sectionIndex), with: .automatic)
         }
