@@ -56,7 +56,7 @@ class StoreTeardownTests: TempDirectoryTestCase {
 
         // The reset function will wait for all changes to bubble up before removing the store file.
         weak var callbackExpectation = expectation(description: "callback")
-        expectation(forNotification: Notification.Name.NSManagedObjectContextDidSave.rawValue,
+        expectation(forNotification: NSNotification.Name(rawValue: Notification.Name.NSManagedObjectContextDidSave.rawValue),
                     object: sqlStack.privateQueueContext, handler: nil)
 
         sqlStack.resetStore() { result in
