@@ -141,7 +141,7 @@ import CoreData
     /**
      A type safe wrapper around an `NSFetchedResultsController`
      */
-    public class FetchedResultsController<T: NSManagedObject> where T: NSFetchRequestResult {
+    public class FetchedResultsController<T: NSManagedObject> {
 
         /// The `NSFetchRequest` being used by the `FetchedResultsController`
         public var fetchRequest: NSFetchRequest<T> { return internalController.fetchRequest }

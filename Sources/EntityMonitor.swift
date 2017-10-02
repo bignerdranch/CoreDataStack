@@ -23,7 +23,7 @@ public enum FireFrequency {
 public protocol EntityMonitorDelegate: class { // : class for weak capture
     /// Type of object being monitored. Must inheirt from `NSManagedObject` and implement `NSFetchRequestResult`
     // swiftlint:disable type_name
-    associatedtype T: NSManagedObject, NSFetchRequestResult, Hashable
+    associatedtype T: NSManagedObject
 
     /**
      Callback for when objects matching the predicate have been inserted
@@ -54,7 +54,7 @@ public protocol EntityMonitorDelegate: class { // : class for weak capture
  Class for monitoring changes within a given `NSManagedObjectContext`
     to a specific Core Data Entity with optional filtering via an `NSPredicate`.
  */
-public class EntityMonitor<T: NSManagedObject> where T: Hashable {
+public class EntityMonitor<T: NSManagedObject> {
 
     // MARK: - Public Properties
 
@@ -123,7 +123,7 @@ public class EntityMonitor<T: NSManagedObject> where T: Hashable {
     }
 }
 
-private class BaseEntityMonitorDelegate<T: NSManagedObject>: NSObject where T: NSFetchRequestResult, T: Hashable {
+private class BaseEntityMonitorDelegate<T: NSManagedObject>: NSObject {
 
     private let changeObserverSelectorName = #selector(BaseEntityMonitorDelegate<T>.evaluateChangeNotification(_:))
 
