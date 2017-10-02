@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "BNRCoreDataStack"
-  s.version      = "2.2.1"
+  s.version      = "2.3.1"
   s.summary      = "The Big Nerd Ranch Core Data stack."
 
   s.description  = <<-DESC
@@ -50,6 +50,6 @@ Pod::Spec.new do |s|
   s.source_files  = "Sources"
 
   s.frameworks = "CoreData"
-  s.pod_target_xcconfig = { 'SWIFT_VERSION' => '3.0' }
+  s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.0' }
 
 end
