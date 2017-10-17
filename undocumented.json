@@ -1,0 +1,26 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/travis/build/bignerdranch/CoreDataStack/Sources/EntityMonitor.swift",
+      "line": 26,
+      "symbol": "EntityMonitorDelegate.T",
+      "symbol_kind": "source.lang.swift.decl.associatedtype",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/travis/build/bignerdranch/CoreDataStack/Sources/FetchedResultsController.swift",
+      "line": 25,
+      "symbol": "FetchedResultsObjectChange.insert",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/travis/build/bignerdranch/CoreDataStack/Sources/FetchedResultsController.swift",
+      "line": 79,
+      "symbol": "FetchedResultsControllerDelegate.T",
+      "symbol_kind": "source.lang.swift.decl.associatedtype",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/travis/build/bignerdranch/CoreDataStack"
+}

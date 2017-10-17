@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>CoreDataModelable Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    <meta property="og:site_name" content="Core Data Stack Programming Guide">
+<meta property="og:description" content="The BNR Core Data Stack is a small framework, written in Swift, that makes it easy to quickly set up a multi-threading ready Core Data stack.">
+<meta property="og:image" content="//www.bignerdranch.com/img/bnr-logo-square.png">
+<link rel="shortcut icon" type="image/x-icon" href="//www.bignerdranch.com/favicon.png">
+
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Protocol/CoreDataModelable" class="dashAnchor"></a>
+
+    <a title="CoreDataModelable Protocol Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="../index.html">
+          CoreDataStack Docs
+        </a>
+         (96% documented)
+      </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/bignerdranch/CoreDataStack">
+            <img class="header-icon" src="../img/gh.png"/>
+            View on GitHub
+          </a>
+        </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="dash-feed://http%3A%2F%2Fbignerdranch%2Egithub%2Eio%2FCoreDataStack%2Fdocsets%2FCoreDataStack%2Exml">
+            <img class="header-icon" src="../img/dash.png"/>
+            Install in Dash
+          </a>
+        </p>
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="../index.html">CoreDataStack Reference</a>
+      <img class="carat" src="../img/carat.png" />
+      CoreDataModelable Protocol Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Type Safe Monitors.html">Type Safe Monitors</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/EntityMonitor.html">EntityMonitor</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/EntityMonitorDelegate.html">EntityMonitorDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/FetchedResultsController.html">FetchedResultsController</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/FetchedResultsControllerDelegate.html">FetchedResultsControllerDelegate</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/NSFetchRequestResult.html">NSFetchRequestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/NSManagedObjectContext.html">NSManagedObjectContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/NSPersistentStoreCoordinator.html">NSPersistentStoreCoordinator</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/Bundle.html">Bundle</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Supporting Structs and Enums.html">Supporting Structs and Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/FetchedResultsObjectChange.html">FetchedResultsObjectChange</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/FetchedResultsSectionChange.html">FetchedResultsSectionChange</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/FetchedResultsSectionInfo.html">FetchedResultsSectionInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/FireFrequency.html">FireFrequency</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Deprecated.html">Deprecated</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/CoreDataStack.html">CoreDataStack</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/CoreDataStack/Error.html">– Error</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/CoreDataStack/CoordinatorResult.html">– CoordinatorResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/CoreDataStack/BatchContextResult.html">– BatchContextResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/CoreDataStack/SetupResult.html">– SetupResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/CoreDataStack/SuccessResult.html">– SuccessResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CoreDataModelable.html">CoreDataModelable</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content">
+            <h1>CoreDataModelable</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">@objc</span> <span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">CoreDataModelable</span><span class="p">:</span> <span class="kt">NSFetchRequestResult</span></code></pre>
+
+                </div>
+              </div>
+            <p>Protocol to be conformed to by <code>NSManagedObject</code> subclasses that allow for convenience
+   methods that make fetching, inserting, deleting, and change management easier.</p>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@CoreDataStack@objc(pl)CoreDataModelable(cpy)entityName"></a>
+                    <a name="//apple_ref/swift/Variable/entityName" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@CoreDataStack@objc(pl)CoreDataModelable(cpy)entityName">entityName</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The name of your <code>NSManagedObject</code>&lsquo;s entity within the <code>XCDataModel</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">static</span> <span class="k">var</span> <span class="nv">entityName</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Creating%20Objects"></a>
+                <a name="//apple_ref/swift/Section/Creating Objects" class="dashAnchor"></a>
+                <a href="#/Creating%20Objects">
+                  <h3 class="section-name">Creating Objects</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13CoreDataStack0aB9ModelablePAASo15NSManagedObjectCRbzAaBRzlExSo0eF7ContextC07managedfG0_tcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(managedObjectContext:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13CoreDataStack0aB9ModelablePAASo15NSManagedObjectCRbzAaBRzlExSo0eF7ContextC07managedfG0_tcfc">init(managedObjectContext:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a new instance of the Entity within the specified <code>NSManagedObjectContext</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">managedObjectContext</span><span class="p">:</span> <span class="kt">NSManagedObjectContext</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Finding%20Objects"></a>
+                <a name="//apple_ref/swift/Section/Finding Objects" class="dashAnchor"></a>
+                <a href="#/Finding%20Objects">
+                  <h3 class="section-name">Finding Objects</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13CoreDataStack0aB9ModelablePAASo15NSManagedObjectCRbzAaBRzlE17entityDescriptionSQySo08NSEntityH0CGSo0eF7ContextC2in_tFZ"></a>
+                    <a name="//apple_ref/swift/Method/entityDescription(in:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13CoreDataStack0aB9ModelablePAASo15NSManagedObjectCRbzAaBRzlE17entityDescriptionSQySo08NSEntityH0CGSo0eF7ContextC2in_tFZ">entityDescription(in:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates an <code>NSEntityDescription</code> of the <code>CoreDataModelable</code> entity using the <code><a href="../Protocols/CoreDataModelable.html#/c:@M@CoreDataStack@objc(pl)CoreDataModelable(cpy)entityName">entityName</a></code></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">static</span> <span class="kd">public</span> <span class="kd">func</span> <span class="nf">entityDescription</span><span class="p">(</span><span class="k">in</span> <span class="nv">context</span><span class="p">:</span> <span class="kt">NSManagedObjectContext</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">NSEntityDescription</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13CoreDataStack0aB9ModelablePAASo15NSManagedObjectCRbzAaBRzlE21fetchRequestForEntitySo07NSFetchH0CyxGSo0eF7ContextC02inL0_tFZ"></a>
+                    <a name="//apple_ref/swift/Method/fetchRequestForEntity(inContext:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13CoreDataStack0aB9ModelablePAASo15NSManagedObjectCRbzAaBRzlE21fetchRequestForEntitySo07NSFetchH0CyxGSo0eF7ContextC02inL0_tFZ">fetchRequestForEntity(inContext:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a new fetch request for the <code>CoreDataModelable</code> entity.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">static</span> <span class="kd">public</span> <span class="kd">func</span> <span class="nf">fetchRequestForEntity</span><span class="p">(</span><span class="n">inContext</span> <span class="nv">context</span><span class="p">:</span> <span class="kt">NSManagedObjectContext</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">NSFetchRequest</span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13CoreDataStack0aB9ModelablePAASo15NSManagedObjectCRbzAaBRzlE18findFirstInContextxSgSo0efJ0C_So11NSPredicateCSg9predicatetKFZ"></a>
+                    <a name="//apple_ref/swift/Method/findFirstInContext(_:predicate:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13CoreDataStack0aB9ModelablePAASo15NSManagedObjectCRbzAaBRzlE18findFirstInContextxSgSo0efJ0C_So11NSPredicateCSg9predicatetKFZ">findFirstInContext(_:predicate:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Fetches the first Entity that matches the optional predicate within the specified <code>NSManagedObjectContext</code>.</p>
+
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <p>Any error produced from <code>executeFetchRequest</code></p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">static</span> <span class="kd">public</span> <span class="kd">func</span> <span class="nf">findFirstInContext</span><span class="p">(</span><span class="n">_</span> <span class="nv">context</span><span class="p">:</span> <span class="kt">NSManagedObjectContext</span><span class="p">,</span> <span class="nv">predicate</span><span class="p">:</span> <span class="kt">NSPredicate</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="k">Self</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13CoreDataStack0aB9ModelablePAASo15NSManagedObjectCRbzAaBRzlE12allInContextSayxGSo0efI0C_So11NSPredicateCSg9predicateSaySo16NSSortDescriptorCGSg15sortDescriptorstKFZ"></a>
+                    <a name="//apple_ref/swift/Method/allInContext(_:predicate:sortDescriptors:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13CoreDataStack0aB9ModelablePAASo15NSManagedObjectCRbzAaBRzlE12allInContextSayxGSo0efI0C_So11NSPredicateCSg9predicateSaySo16NSSortDescriptorCGSg15sortDescriptorstKFZ">allInContext(_:predicate:sortDescriptors:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Fetches all Entities within the specified <code>NSManagedObjectContext</code>.</p>
+
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <p>Any error produced from <code>executeFetchRequest</code></p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">static</span> <span class="kd">public</span> <span class="kd">func</span> <span class="nf">allInContext</span><span class="p">(</span><span class="n">_</span> <span class="nv">context</span><span class="p">:</span> <span class="kt">NSManagedObjectContext</span><span class="p">,</span> <span class="nv">predicate</span><span class="p">:</span> <span class="kt">NSPredicate</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">sortDescriptors</span><span class="p">:</span> <span class="p">[</span><span class="kt">NSSortDescriptor</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="k">Self</span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Counting%20Objects"></a>
+                <a name="//apple_ref/swift/Section/Counting Objects" class="dashAnchor"></a>
+                <a href="#/Counting%20Objects">
+                  <h3 class="section-name">Counting Objects</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13CoreDataStack0aB9ModelablePAASo15NSManagedObjectCRbzAaBRzlE14countInContextSiSo0efI0C_So11NSPredicateCSg9predicatetKFZ"></a>
+                    <a name="//apple_ref/swift/Method/countInContext(_:predicate:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13CoreDataStack0aB9ModelablePAASo15NSManagedObjectCRbzAaBRzlE14countInContextSiSo0efI0C_So11NSPredicateCSg9predicatetKFZ">countInContext(_:predicate:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns count of Entities that matches the optional predicate within the specified <code>NSManagedObjectContext</code>.</p>
+
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <p>Any error produced from <code>countForFetchRequest</code></p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">static</span> <span class="kd">public</span> <span class="kd">func</span> <span class="nf">countInContext</span><span class="p">(</span><span class="n">_</span> <span class="nv">context</span><span class="p">:</span> <span class="kt">NSManagedObjectContext</span><span class="p">,</span> <span class="nv">predicate</span><span class="p">:</span> <span class="kt">NSPredicate</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Removing%20Objects"></a>
+                <a name="//apple_ref/swift/Section/Removing Objects" class="dashAnchor"></a>
+                <a href="#/Removing%20Objects">
+                  <h3 class="section-name">Removing Objects</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13CoreDataStack0aB9ModelablePAASo15NSManagedObjectCRbzAaBRzlE18removeAllInContextySo0efJ0CKFZ"></a>
+                    <a name="//apple_ref/swift/Method/removeAllInContext(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13CoreDataStack0aB9ModelablePAASo15NSManagedObjectCRbzAaBRzlE18removeAllInContextySo0efJ0CKFZ">removeAllInContext(_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Removes all entities from within the specified <code>NSManagedObjectContext</code>.</p>
+
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <p>Any error produced from <code>executeFetchRequest</code></p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">static</span> <span class="kd">public</span> <span class="kd">func</span> <span class="nf">removeAllInContext</span><span class="p">(</span><span class="n">_</span> <span class="nv">context</span><span class="p">:</span> <span class="kt">NSManagedObjectContext</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13CoreDataStack0aB9ModelablePAASo15NSManagedObjectCRbzAaBRzlE18removeAllInContextySo0efJ0C_SayxG6excepttKFZ"></a>
+                    <a name="//apple_ref/swift/Method/removeAllInContext(_:except:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13CoreDataStack0aB9ModelablePAASo15NSManagedObjectCRbzAaBRzlE18removeAllInContextySo0efJ0C_SayxG6excepttKFZ">removeAllInContext(_:except:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Removes all entities from within the specified <code>NSManagedObjectContext</code> excluding a supplied array of entities.</p>
+
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <p>Any error produced from <code>executeFetchRequest</code></p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">static</span> <span class="kd">public</span> <span class="kd">func</span> <span class="nf">removeAllInContext</span><span class="p">(</span><span class="n">_</span> <span class="nv">context</span><span class="p">:</span> <span class="kt">NSManagedObjectContext</span><span class="p">,</span> <span class="n">except</span> <span class="nv">toKeep</span><span class="p">:</span> <span class="p">[</span><span class="k">Self</span><span class="p">])</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>© 2014-2016 <a class="link" href="//www.bignerdranch.com" target="_blank" rel="external">Big Nerd Ranch</a> under <a class="link" href="https://raw.githubusercontent.com/bignerdranch/CoreDataStack/master/LICENSE" target="_blank" rel="external">MIT license</a>.</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>
