@@ -9,6 +9,7 @@
 import Foundation
 
 extension Book {
+    @objc
     var firstInitial: String? {
         willAccessValue(forKey: "title")
         defer { didAccessValue(forKey: "title") }
